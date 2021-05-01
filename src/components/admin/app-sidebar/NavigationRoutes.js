@@ -40,14 +40,14 @@ export const navigationRoutes = {
       },
     },
     {
-      name: 'appReleases',
+      name: 'app-releases',
       displayName: 'menu.appReleases',
       meta: {
         iconClass: 'fa fa-code-fork',
       },
     },
     {
-      name: 'discordBot',
+      name: 'discord-bot',
       displayName: 'menu.discordBot',
       meta: {
         iconClass: 'fa fa-drivers-license',

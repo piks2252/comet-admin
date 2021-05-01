@@ -38,6 +38,54 @@ export default new Router({
       ],
     },
     {
+      name: 'Base',
+      path: '/',
+      component: AppLayout,
+      children: [
+        {
+          name: 'dashboard',
+          path: 'dashboard',
+          component: () => import('../components/dashboard/Dashboard.vue'),
+          default: true,
+        },
+        {
+          name: 'mangas',
+          path: 'mangas',
+          component: EmptyParentComponent,
+        },
+        {
+          name: 'users',
+          path: 'users',
+          component: EmptyParentComponent,
+        },
+        {
+          name: 'authors',
+          path: 'authors',
+          component: EmptyParentComponent,
+        },
+        {
+          name: 'genres',
+          path: 'genres',
+          component: EmptyParentComponent,
+        },
+        {
+          name: 'app-releases',
+          path: 'app-releases',
+          component: EmptyParentComponent,
+        },
+        {
+          name: 'discord-bot',
+          path: 'discord-bot',
+          component: EmptyParentComponent,
+        },
+        {
+          name: 'settings',
+          path: 'settings',
+          component: EmptyParentComponent,
+        },
+      ],
+    },
+    {
       name: '404',
       path: '/404',
       component: () => import('../components/404-page'),
@@ -48,7 +96,7 @@ export default new Router({
       component: AppLayout,
       children: [
         {
-          name: 'dashboard',
+          name: 'dashboard2',
           path: 'dashboard',
           component: () => import('../components/dashboard/Dashboard.vue'),
           default: true,
