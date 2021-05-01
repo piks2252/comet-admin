@@ -1,20 +1,16 @@
 <template>
-  <va-page-not-found class="va-page-not-found-simple">
-    <va-icon-vuestic slot="image"/>
-  </va-page-not-found>
+  <va-page-not-found class="va-page-not-found-simple"> </va-page-not-found>
 </template>
 
 <script>
-import VaIconVuestic from '../../../iconset/VaIconVuestic'
-import VaPageNotFound from './VaPageNotFound'
+import VaPageNotFound from './VaPageNotFound';
 
 export default {
   name: 'vuestic-page-not-found-simple',
   components: {
     VaPageNotFound,
-    VaIconVuestic,
   },
-}
+};
 </script>
 
 <style lang="scss">
