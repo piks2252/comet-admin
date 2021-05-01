@@ -2,16 +2,8 @@
   <div class="dashboard">
     <dashboard-info-block />
     <dashboard-charts />
-    <div class="row">
-      <div class="flex xs12">
-        <dashboard-table />
-      </div>
-    </div>
     <div class="row row-equal">
-      <div class="flex xs12 lg6">
-        <dashboard-tabs @submit="addAddressToMap" />
-      </div>
-      <div class="flex xs12 lg6">
+      <div class="flex xs12">
         <dashboard-map ref="dashboardMap" />
       </div>
     </div>
@@ -21,8 +13,6 @@
 <script>
 import DashboardCharts from './DashboardCharts';
 import DashboardInfoBlock from './DashboardInfoBlock';
-import DashboardTable from './DashboardTable';
-import DashboardTabs from './DashboardTabs';
 import DashboardMap from './DashboardMap';
 
 export default {
@@ -30,14 +20,7 @@ export default {
   components: {
     DashboardCharts,
     DashboardInfoBlock,
-    DashboardTable,
-    DashboardTabs,
     DashboardMap,
-  },
-  methods: {
-    addAddressToMap({ city, country }) {
-      this.$refs.dashboardMap.addAddress({ city: city.text, country });
-    },
   },
 };
 </script>
