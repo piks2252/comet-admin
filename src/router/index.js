@@ -390,19 +390,6 @@ export default new Router({
             },
           ],
         },
-        {
-          name: 'pages',
-          path: 'pages',
-          component: EmptyParentComponent,
-          children: [
-            {
-              name: '404-pages',
-              path: '404-pages',
-              component: () =>
-                import('../components/pages/404-pages/404PagesPage'),
-            },
-          ],
-        },
       ],
     },
   ],
