@@ -18,7 +18,10 @@
         >
           {{ contributor.contributions }} {{ 'chapters' }}
         </va-progress-bar>
-        <p class="mt-2">{{ contributor.login }}</p>
+        <p class="mt-2 user-container">
+          <img class="user-avatar" :src="contributor.avatar_url" />
+          {{ contributor.login }}
+        </p>
       </div>
     </va-inner-loading>
   </va-card>
@@ -74,6 +77,19 @@ export default {
 
   .inner-loading {
     height: 100%;
+  }
+
+  .user-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .user-avatar {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 1px solid #d6dbe0;
+    margin-right: 10px;
   }
 }
 </style>
