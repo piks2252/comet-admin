@@ -39,7 +39,7 @@
     </div>
 
     <div class="flex xs12 md6 xl3">
-      <dashboard-contributors-chart />
+      <dashboard-readers-list />
     </div>
   </div>
 </template>
@@ -47,11 +47,11 @@
 <script>
 import { getDonutChartData } from '../../data/charts/DonutChartData';
 import { getLineChartData } from '../../data/charts/LineChartData';
-import DashboardContributorsChart from './DashboardContributorsList';
+import DashboardReadersList from './DashboardReadersList';
 
 export default {
   name: 'dashboard-charts',
-  components: { DashboardContributorsChart },
+  components: { DashboardReadersList },
   data() {
     return {
       lineChartData: getLineChartData(this.$themes),
