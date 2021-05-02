@@ -1,7 +1,7 @@
 <template>
   <div class="row row-equal">
     <div class="flex xs12 xl6">
-      <va-card :title="$t('dashboard.charts.trendyTrends')">
+      <va-card title="Downloads">
         <va-button
           small
           slot="actions"
