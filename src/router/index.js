@@ -71,17 +71,17 @@ export default new Router({
         {
           name: 'app-releases',
           path: 'app-releases',
-          component: EmptyParentComponent,
+          component: () => import('../components/app-releases'),
         },
         {
           name: 'discord-bot',
           path: 'discord-bot',
-          component: EmptyParentComponent,
+          component: () => import('../components/discord-bot'),
         },
         {
           name: 'settings',
           path: 'settings',
-          component: EmptyParentComponent,
+          component: () => import('../components/settings'),
         },
       ],
     },
