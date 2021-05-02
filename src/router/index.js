@@ -51,7 +51,7 @@ export default new Router({
         {
           name: 'mangas',
           path: 'mangas',
-          component: () => import('../components/mangas'),
+          component: () => import('../components/mangas/AddMangaModal'),
         },
         {
           name: 'users',
