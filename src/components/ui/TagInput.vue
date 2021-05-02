@@ -3,6 +3,7 @@
     v-model="tagText"
     :tags="tagsLocal"
     @tags-changed="newTags => (tagsLocal = newTags)"
+    :placeholder="placeholder"
   />
 </template>
 
@@ -13,6 +14,9 @@ export default {
   props: {
     tags: {
       type: Array,
+    },
+    placeholder: {
+      type: String,
     },
   },
   model: {

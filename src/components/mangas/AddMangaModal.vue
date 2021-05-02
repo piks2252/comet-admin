@@ -15,13 +15,16 @@
               <div class="flex md4 sm6 xs12">
                 <va-input v-model="manga.title" placeholder="Title" />
                 <br />
-                <tag-input v-model="manga.alternativeTitles" />
+                <tag-input
+                  v-model="manga.alternativeTitles"
+                  placeholder="Alternative titles"
+                />
                 <br />
               </div>
               <div class="flex md5 sm6 xs12">
-                <va-input v-model="manga.authors" placeholder="Authors" />
+                <tag-input v-model="manga.authors" placeholder="Authors" />
                 <br />
-                <va-input v-model="manga.artist" placeholder="Artists" /> <br />
+                <tag-input v-model="manga.artists" placeholder="Artists" />
               </div>
               <div class="flex md4 sm6 xs12">
                 <va-input v-model="withButton" placeholder="Input With Button">
