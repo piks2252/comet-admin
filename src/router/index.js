@@ -56,17 +56,17 @@ export default new Router({
         {
           name: 'users',
           path: 'users',
-          component: EmptyParentComponent,
+          component: () => import('../components/users'),
         },
         {
           name: 'authors',
           path: 'authors',
-          component: EmptyParentComponent,
+          component: () => import('../components/authors'),
         },
         {
           name: 'genres',
           path: 'genres',
-          component: EmptyParentComponent,
+          component: () => import('../components/genres'),
         },
         {
           name: 'app-releases',

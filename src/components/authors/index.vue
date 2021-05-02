@@ -2,59 +2,15 @@
   <va-card>
     <div class="row align--center">
       <div class="flex xs4">
-        <va-button @click="showModal = true">Add Manga</va-button>
+        <va-button @click="showModal = true">Add Author</va-button>
         <va-modal
           v-model="showModal"
           size="large"
-          title="Add new manga"
+          :title="$t('modal.largeTitle')"
+          :message="$t('modal.message')"
           :okText="$t('modal.confirm')"
           :cancelText="$t('modal.cancel')"
-        >
-          <div class="flex xs12">
-            <form>
-              <div class="row">
-                <div class="flex xs12 sm6 md4">
-                  <va-input v-model="simple" placeholder="Title" />&nbsp;
-                </div>
-              </div>
-              <div class="row">
-                <div class="flex md4 sm6 xs12">
-                  <va-input
-                    v-model="successfulEmail"
-                    type="email"
-                    label="Email (Validated with success)"
-                    success
-                  >
-                  </va-input>
-                </div>
-                <div class="flex md4 sm6 xs12">
-                  <va-input
-                    v-model="clearableText"
-                    placeholder="Input With Clear Button"
-                    removable
-                  />
-                </div>
-                <div class="flex md4 sm6 xs12">
-                  <va-input
-                    v-model="wrongEmail"
-                    type="email"
-                    label="Email (Validated)"
-                    error
-                    :error-messages="errorMessages"
-                  >
-                  </va-input>
-                </div>
-                <div class="flex md4 sm6 xs12">
-                  <va-input
-                    v-model="withDescription"
-                    placeholder="Text Input (with description)"
-                    :messages="messages"
-                  />
-                </div>
-              </div>
-            </form>
-          </div>
-        </va-modal>
+        />
       </div>
     </div>
     <div class="row align--center">
