@@ -59,9 +59,6 @@ export default {
       lineChartFirstMonthIndex: 0,
     };
   },
-  mounted() {
-    console.log(this.donutChartData);
-  },
   watch: {
     '$themes.primary'() {
       this.lineChartData = getLineChartData(this.$themes);
