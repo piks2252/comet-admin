@@ -25,6 +25,9 @@
         <div class="flex xs12 md6">
           <va-card>
             <div class="row row-separated">
+              <p class="display-5">Today's stats</p>
+            </div>
+            <div class="row row-separated">
               <div class="flex xs4">
                 <p
                   class="display-2 mb-1 text--center"
