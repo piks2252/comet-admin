@@ -71,6 +71,13 @@
                 </va-input>
               </div>
               <div class="flex md4 sm6 xs12">
+                <fieldset>
+                  <va-checkbox label="Post to reddit" />
+                  <va-checkbox label="Update on discord channel" />
+                  <va-checkbox label="Update on playstore" />
+                </fieldset>
+              </div>
+              <div class="flex md4 sm6 xs12">
                 <va-input
                   v-model="successfulEmail"
                   type="email"
