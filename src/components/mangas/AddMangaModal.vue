@@ -5,7 +5,7 @@
         <va-card title="New Manga">
           <form>
             <div class="row">
-              <div class="flex md3 sm4 xs4">
+              <div class="flex md5 sm4 xs4">
                 <img
                   src="http://fmcdn.mfcdn.net/store/manga/24095/cover.jpg"
                   class="manga-thumb"
@@ -13,26 +13,30 @@
                 />
               </div>
               <div class="flex md4 sm6 xs12">
+                <p class="display-5">Manga Info</p>
+                <br />
                 <va-input v-model="manga.title" placeholder="Title" />
                 <br />
+                <p class="title">Alternative titles</p>
                 <tag-input
                   v-model="manga.alternativeTitles"
                   placeholder="Alternative titles"
                 />
                 <br />
-              </div>
-              <div class="flex md5 sm6 xs12">
+                <p class="title">Authors</p>
                 <tag-input v-model="manga.authors" placeholder="Authors" />
                 <br />
+                <p class="title">Artists</p>
                 <tag-input v-model="manga.artists" placeholder="Artists" />
               </div>
-              <div class="flex md4 sm6 xs12">
-                <va-input v-model="withButton" placeholder="Input With Button">
-                  <va-button slot="append" style="margin-right: 0;" small>
-                    UPLOAD
-                  </va-button>
-                </va-input>
+              <div class="flex md3 sm6 xs12">
+                <p class="display-6">Other sources</p>
+                <br />
+                <va-input v-model="manga.anilistID" placeholder="Anilist ID" />
+                <va-input v-model="manga.anilistID" placeholder="MAL ID" />
+                <va-input v-model="manga.anilistID" placeholder="MangaDex ID" />
               </div>
+              <div class="flex md4 sm6 xs12"></div>
               <div class="flex md4 sm6 xs12">
                 <va-input
                   v-model="successfulEmail"
@@ -392,8 +396,7 @@ export default {
 
 <style lang="scss">
 .manga-thumb {
-  height: 320px;
-  width: 240px;
+  width: 100%;
   border: 1px solid #e8e5e5;
   border-radius: 10px;
 }
