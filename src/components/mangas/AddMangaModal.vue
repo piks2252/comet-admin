@@ -347,7 +347,7 @@ export default {
         size: {
           fontSize: 1,
           height: 2,
-          width: 18.5,
+          width: 20,
         },
         items: {
           preSelected: 'unknown',
