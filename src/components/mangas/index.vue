@@ -3,7 +3,6 @@
     <div class="row align--center">
       <div class="flex xs4">
         <va-button @click="showModal = true">Add Manga</va-button>
-        <add-manga-modal :showModal="showModal" />
       </div>
     </div>
     <div class="row align--center">

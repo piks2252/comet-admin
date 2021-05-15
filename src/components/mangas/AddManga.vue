@@ -112,8 +112,7 @@ import TagInput from '../ui/TagInput';
 import ToggleSwitch from 'vuejs-toggle-switch';
 
 export default {
-  name: 'add-manga-modal',
-  props: ['showModal'],
+  name: 'add-manga',
   components: { TagInput, ToggleSwitch },
   data() {
     return {
