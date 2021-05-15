@@ -51,7 +51,19 @@ export default new Router({
         {
           name: 'mangas',
           path: 'mangas',
-          component: () => import('../components/mangas'),
+          component: EmptyParentComponent,
+          children: [
+            {
+              name: 'base',
+              path: '/',
+              component: () => import('../components/mangas'),
+            },
+            {
+              name: 'add',
+              path: 'add',
+              component: () => import('../components/mangas/AddManga.vue'),
+            },
+          ],
         },
         {
           name: 'users',

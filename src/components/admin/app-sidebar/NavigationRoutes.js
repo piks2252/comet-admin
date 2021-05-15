@@ -17,6 +17,16 @@ export const navigationRoutes = {
       meta: {
         iconClass: 'fa fa-book',
       },
+      children: [
+        {
+          name: 'base',
+          displayName: 'menu.mangas',
+        },
+        {
+          name: 'add',
+          displayName: 'menu.addManga',
+        },
+      ],
     },
     {
       name: 'users',

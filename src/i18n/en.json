@@ -283,7 +283,8 @@
   "menu": {
     "dashboard": "Dashboard",
     "mangas": "Mangas",
-    "add-manga": "Add Manga",
+    "addManga": "Add Manga",
+    "viewManga": "Edit Manga",
     "users": "Users",
     "authors": "Authors",
     "genres": "Genres",
