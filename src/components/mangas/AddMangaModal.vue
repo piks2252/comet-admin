@@ -32,9 +32,9 @@
                 <p class="title">Manga status</p>
                 <toggle-switch
                   :options="toggleSwitchOptions"
-                  @change="updateMap($event.value)"
-                  @selected="selectedMethod()"
-                  :value="selectedMapOption"
+                  @change="updateMangaState($event)"
+                  @selected="selectedMangaState()"
+                  :value="toggleSwitchOptions.items"
                 />
               </div>
               <div class="flex md3 sm6 xs12">
@@ -434,12 +434,32 @@ export default {
       },
     };
   },
-  mounted() {
-    console.log(this.$themes);
-  },
   methods: {
     echoSystem() {
       alert(JSON.stringify(this.manga));
+    },
+    updateMangaState(val) {
+      switch (val.toLowercase()) {
+        case 'on going':
+          this.manga.status = 1;
+          break;
+        case 'completed':
+          this.manga.status = 2;
+          break;
+        case 'dropped':
+          this.manga.status = 3;
+          break;
+      }
+    },
+    selectedMangaState() {
+      switch (this.manga.status) {
+        case 1:
+          return 'On going';
+        case 2:
+          return 'Completed';
+        case 3:
+          return 'Dropped';
+      }
     },
   },
 };
