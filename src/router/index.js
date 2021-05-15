@@ -51,7 +51,7 @@ export default new Router({
         {
           name: 'mangas',
           path: 'mangas',
-          component: () => import('../components/mangas/ViewManga'),
+          component: () => import('../components/mangas'),
         },
         {
           name: 'users',
