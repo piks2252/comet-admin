@@ -36,6 +36,12 @@
                   @selected="selectedMangaState()"
                   :value="toggleSwitchOptions.items"
                 />
+                <br />
+                <p class="title">Description</p>
+                <textarea
+                  class="manga-description"
+                  v-model="manga.description"
+                />
               </div>
               <div class="flex md3 sm6 xs12">
                 <p class="display-6">Other sources</p>
@@ -474,5 +480,14 @@ export default {
 
 .row.row-inside {
   max-width: none;
+}
+
+.manga-description {
+  flex: 1;
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 10px;
+  height: 150px;
+  max-height: 150px;
 }
 </style>
