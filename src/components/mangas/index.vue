@@ -64,13 +64,10 @@
 
 <script>
 import { debounce } from 'lodash';
-import AddMangaModal from './AddMangaModal';
 import users from '../../data/users.json';
 
 export default {
-  components: {
-    AddMangaModal,
-  },
+  components: {},
   data() {
     return {
       term: null,
