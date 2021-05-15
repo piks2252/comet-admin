@@ -5,8 +5,9 @@
       :tags="tagsLocal"
       @tags-changed="newTags => (tagsLocal = newTags)"
       :placeholder="placeholder"
+      :disabled="disabled"
     />
-    <div slot="append" class="flex-center" @click="clearTags">
+    <div slot="append" class="flex-center" @click="clearTags" v-if="!disabled">
       <va-icon name="fa fa-window-close" class="pointer" />
     </div>
   </va-input-wrapper>
@@ -22,6 +23,9 @@ export default {
     },
     placeholder: {
       type: String,
+    },
+    disabled: {
+      type: Boolean,
     },
   },
   model: {
