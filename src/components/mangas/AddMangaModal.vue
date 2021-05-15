@@ -42,6 +42,8 @@
                   class="manga-description"
                   v-model="manga.description"
                 />
+                <p class="title">Tags</p>
+                <tag-input v-model="manga.tags" placeholder="Tags" />
               </div>
               <div class="flex md3 sm6 xs12">
                 <p class="display-6">Other sources</p>
@@ -59,7 +61,15 @@
                 <va-checkbox label="Hentai" v-model="manga.hentai" />
                 <va-checkbox label="Adult" v-model="manga.is_adult" />
                 <br />
+                <p class="title">Select theme</p>
+                <tag-input v-model="manga.themes" placeholder="Themes" />
                 <p class="title">Select genres</p>
+                <tag-input v-model="manga.genres" placeholder="Genres" />
+                <p class="title">Select demographics</p>
+                <tag-input
+                  v-model="manga.demographics"
+                  placeholder="Demographics"
+                />
               </div>
             </div>
           </form>
@@ -246,8 +256,8 @@ export default {
   width: 100%;
   border: 1px solid gray;
   border-radius: 10px;
-  height: 150px;
-  max-height: 150px;
+  height: 100px;
+  max-height: 100px;
   padding: 2px;
 }
 </style>
