@@ -19,7 +19,7 @@
                 <br />
                 <p class="title">Alternative titles</p>
                 <tag-input
-                  v-model="manga.alternativeTitles"
+                  v-model="manga.alternative_titles"
                   placeholder="Alternative titles"
                 />
                 <br />
@@ -49,260 +49,17 @@
                 <va-input v-model="manga.anilistID" placeholder="Anilist ID" />
                 <va-input v-model="manga.anilistID" placeholder="MAL ID" />
                 <va-input v-model="manga.anilistID" placeholder="MangaDex ID" />
-              </div>
-              <div class="flex md4 sm6 xs12"></div>
-              <div class="flex md4 sm6 xs12">
-                <va-input
-                  v-model="successfulEmail"
-                  type="email"
-                  label="Email (Validated with success)"
-                  success
-                >
-                </va-input>
-              </div>
-              <div class="flex md4 sm6 xs12">
-                <va-input
-                  v-model="clearableText"
-                  placeholder="Input With Clear Button"
-                  removable
-                />
-              </div>
-              <div class="flex md4 sm6 xs12">
-                <va-input
-                  v-model="wrongEmail"
-                  type="email"
-                  label="Email (Validated)"
-                  error
-                  :error-messages="errorMessages"
-                >
-                </va-input>
-              </div>
-              <div class="flex md4 sm6 xs12">
-                <va-input
-                  v-model="withDescription"
-                  placeholder="Text Input (with description)"
-                  :messages="messages"
-                />
-              </div>
-            </div>
-          </form>
-        </va-card>
-      </div>
-
-      <div class="flex xs12">
-        <va-card :title="$t('forms.dateTimePicker.title')">
-          <form>
-            <div class="row overflow--hidden">
-              <div class="flex md8">
-                <div class="row row-inside">
-                  <div class="flex xs12 sm6">
-                    <va-date-picker
-                      :label="$t('forms.dateTimePicker.basic')"
-                      v-model="datepicker.simple"
-                    />
-                  </div>
-                  <div class="flex xs12 sm6">
-                    <va-date-picker
-                      :label="$t('forms.dateTimePicker.time')"
-                      :config="{ enableTime: true }"
-                      v-model="datepicker.time"
-                    />
-                  </div>
-                  <div class="flex xs12 sm6">
-                    <va-date-picker
-                      :label="$t('forms.dateTimePicker.customFirstDay')"
-                      :config="{ locale: { firstDayOfWeek: 1 } }"
-                      v-model="datepicker.customFirstDay"
-                      weekDays
-                    />
-                  </div>
-                  <div class="flex xs12 sm6">
-                    <va-date-picker
-                      :label="$t('forms.dateTimePicker.disabled')"
-                      disabled
-                      v-model="datepicker.disabled"
-                    />
-                  </div>
-                  <div class="flex xs12 sm6">
-                    <va-date-picker
-                      :label="$t('forms.dateTimePicker.multiple')"
-                      :config="{ mode: 'multiple' }"
-                      v-model="datepicker.multiple"
-                    />
-                  </div>
-                  <div class="flex xs12 sm6">
-                    <va-date-picker
-                      :label="$t('forms.dateTimePicker.customDateFormat')"
-                      :config="{ dateFormat: 'Y-M-d' }"
-                      v-model="datepicker.customDate"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex xs12 md4">
-                <va-date-picker
-                  :label="$t('forms.dateTimePicker.range')"
-                  :config="{ mode: 'range', inline: true }"
-                  v-model="datepicker.range"
-                />
-              </div>
-            </div>
-          </form>
-        </va-card>
-      </div>
-
-      <div class="flex xs12">
-        <va-card :title="$t('forms.selects.title')">
-          <form>
-            <div class="row">
-              <div class="flex md6 xs12">
-                <va-select
-                  :label="$t('forms.selects.simple')"
-                  v-model="simpleSelectModel"
-                  textBy="description"
-                  :options="simpleOptions"
-                />
-              </div>
-              <div class="flex md6 xs12">
-                <va-select
-                  :label="$t('forms.selects.multi')"
-                  v-model="multiSelectModel"
-                  textBy="description"
-                  multiple
-                  :options="simpleOptions"
-                />
-              </div>
-              <div class="flex md6 xs12">
-                <va-select
-                  :label="$t('forms.selects.country')"
-                  v-model="chosenCountry"
-                  :options="countriesList"
-                />
-              </div>
-              <div class="flex md6 xs12">
-                <va-select
-                  :label="$t('forms.selects.countryMulti')"
-                  v-model="multiSelectCountriesModel"
-                  multiple
-                  :options="countriesList"
-                />
-              </div>
-              <div class="flex md6 xs12">
-                <va-select
-                  :label="$t('forms.selects.searchable')"
-                  v-model="searchableSelectModel"
-                  searchable
-                  textBy="description"
-                  :options="simpleOptions"
-                />
-              </div>
-              <div class="flex md6 xs12">
-                <va-select
-                  :label="$t('forms.selects.searchableMulti')"
-                  v-model="multiSearchableSelectModel"
-                  textBy="description"
-                  searchable
-                  multiple
-                  :options="countriesList"
-                />
-              </div>
-            </div>
-          </form>
-        </va-card>
-      </div>
-
-      <div class="flex xs12">
-        <va-card :title="$t('forms.controls.title')">
-          <form>
-            <div class="row">
-              <div class="flex md3">
-                <fieldset>
-                  <va-checkbox
-                    :label="$t('forms.controls.unselected')"
-                    v-model="checkbox.unselected"
-                  />
-                  <va-checkbox
-                    :label="$t('forms.controls.selected')"
-                    v-model="checkbox.selected"
-                  />
-                  <va-checkbox
-                    :label="$t('forms.controls.readonly')"
-                    v-model="checkbox.readonly"
-                    :readonly="true"
-                  />
-                  <va-checkbox
-                    :label="$t('forms.controls.disabled')"
-                    :disabled="true"
-                    v-model="checkbox.disabled"
-                  />
-                  <va-checkbox
-                    :label="$t('forms.controls.error')"
-                    error
-                    v-model="checkbox.error"
-                  />
-                  <va-checkbox
-                    :label="$t('forms.controls.errorMessage')"
-                    :error-messages="errorMessages"
-                    :errorCount="2"
-                    v-model="checkbox.errorMessages"
-                  />
-                </fieldset>
-              </div>
-              <div class="flex md3">
-                <fieldset>
-                  <va-radio-button
-                    option="option1"
-                    v-model="radioSelectedOption"
-                    label="Radio"
-                  />
-                  <va-radio-button
-                    option="option2"
-                    v-model="radioSelectedOption"
-                    label="Radio"
-                  />
-                </fieldset>
-                <fieldset>
-                  <va-radio-button
-                    option="option1"
-                    disabled
-                    v-model="radioSelectedDisableOption"
-                    label="Disabled Radio"
-                  />
-                  <va-radio-button
-                    option="option2"
-                    disabled
-                    v-model="radioSelectedDisableOption"
-                    label="Disabled Radio"
-                  />
-                </fieldset>
-              </div>
-              <div class="flex mb3">
-                <fieldset>
-                  <va-toggle
-                    v-model="toggles.selected"
-                    label="Selected toggle"
-                  />
-                  <va-toggle
-                    v-model="toggles.unselected"
-                    label="Unselected toggle"
-                  />
-                  <va-toggle
-                    v-model="toggles.disabled"
-                    disable
-                    label="Disabled toggle"
-                  />
-                  <va-toggle
-                    v-model="toggles.disabled"
-                    small
-                    label="Small toggle"
-                  />
-                  <va-toggle
-                    v-model="toggles.disabled"
-                    large
-                    label="Large toggle"
-                  />
-                </fieldset>
+                <br />
+                <p class="title">Publishing date</p>
+                <va-date-picker v-model="manga.published_date" />
+                <br />
+                <p class="display-6">Genres and Demographics</p>
+                <br />
+                <p class="title">Hentai and adult</p>
+                <va-checkbox label="Hentai" v-model="manga.hentai" />
+                <va-checkbox label="Adult" v-model="manga.is_adult" />
+                <br />
+                <p class="title">Select genres</p>
               </div>
             </div>
           </form>
@@ -324,19 +81,21 @@ export default {
     return {
       manga: {
         title: '',
-        alternativeTitles: [],
-        coverImage: null,
+        alternative_titles: [],
+        cover: null,
         description: '',
+        published_date: new Date(),
         artist: [],
         authors: [],
         status: 1,
+        hentai: 0,
+        is_adult: 0,
+        otherLinks: [],
+        isbn_code: '',
         genres: [],
         demographics: [],
         themes: [],
-        lastChapter: null,
-        hentai: 0,
-        isAdult: 0,
-        otherLinks: [],
+        tags: [],
       },
       toggleSwitchOptions: {
         layout: {
@@ -489,5 +248,6 @@ export default {
   border-radius: 10px;
   height: 150px;
   max-height: 150px;
+  padding: 2px;
 }
 </style>
