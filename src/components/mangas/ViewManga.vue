@@ -22,6 +22,11 @@
                   src="http://fmcdn.mfcdn.net/store/manga/24095/cover.jpg"
                   class="manga-thumb"
                 />
+                <va-file-upload
+                  type="gallery"
+                  file-types=".png, .jpg, .jpeg"
+                  v-model="tempFiles"
+                />
               </div>
               <div class="flex md4 sm6 xs12">
                 <p class="display-5">Manga Info</p>
@@ -221,7 +226,8 @@ export default {
           ],
         },
       },
-      view: true,
+      tempFiles: [],
+      view: false,
       apiLoading: false,
     };
   },
@@ -251,6 +257,7 @@ export default {
       };
     },
     async submitForm() {
+      console.log(this.tempFiles);
       console.log('Submitting form');
     },
     updateMangaState(val) {
@@ -289,6 +296,7 @@ export default {
   width: 100%;
   border: 1px solid #e8e5e5;
   border-radius: 10px;
+  transition: 100ms;
 }
 
 .row.row-inside {
