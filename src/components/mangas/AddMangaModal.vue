@@ -28,6 +28,14 @@
                 <br />
                 <p class="title">Artists</p>
                 <tag-input v-model="manga.artists" placeholder="Artists" />
+                <br />
+                <p class="title">Manga status</p>
+                <toggle-switch
+                  :options="toggleSwitchOptions"
+                  @change="updateMap($event.value)"
+                  @selected="selectedMethod()"
+                  :value="selectedMapOption"
+                />
               </div>
               <div class="flex md3 sm6 xs12">
                 <p class="display-6">Other sources</p>
@@ -300,11 +308,12 @@
 
 <script>
 import TagInput from '../ui/TagInput';
+import ToggleSwitch from 'vuejs-toggle-switch';
 
 export default {
   name: 'add-manga-modal',
   props: ['showModal'],
-  components: { TagInput },
+  components: { TagInput, ToggleSwitch },
   data() {
     return {
       manga: {
@@ -322,6 +331,45 @@ export default {
         hentai: 0,
         isAdult: 0,
         otherLinks: [],
+      },
+      toggleSwitchOptions: {
+        layout: {
+          color: 'black',
+          backgroundColor: this.$themes.secondary,
+          selectedColor: 'white',
+          borderColor: this.$themes.gray,
+          squareCorners: false,
+          noBorder: false,
+          fontFamily: 'Arial',
+          fontWeight: 'normal',
+          fontWeightSelected: 'bold',
+        },
+        size: {
+          fontSize: 1,
+          height: 2,
+          width: 18.5,
+        },
+        items: {
+          preSelected: 'unknown',
+          disabled: false,
+          labels: [
+            {
+              name: 'On going',
+              color: 'white',
+              backgroundColor: this.$themes.success,
+            },
+            {
+              name: 'Completed',
+              color: 'white',
+              backgroundColor: this.$themes.info,
+            },
+            {
+              name: 'Dropped',
+              color: 'white',
+              backgroundColor: this.$themes.gray,
+            },
+          ],
+        },
       },
       apiLoading: false,
       isMale: true,
@@ -385,6 +433,9 @@ export default {
         customDate: '2017-Dec-06',
       },
     };
+  },
+  mounted() {
+    console.log(this.$themes);
   },
   methods: {
     echoSystem() {
