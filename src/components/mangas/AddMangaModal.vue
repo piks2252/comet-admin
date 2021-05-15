@@ -5,11 +5,18 @@
         <va-card title="New Manga">
           <form>
             <div class="row">
+              <div class="flex xs12 button-container">
+                <va-button color="danger" @click="resetForm"> Reset</va-button>
+                <va-button color="success" @click="submitForm">
+                  Add manga</va-button
+                >
+              </div>
+            </div>
+            <div class="row">
               <div class="flex md5 sm4 xs4">
                 <img
                   src="http://fmcdn.mfcdn.net/store/manga/24095/cover.jpg"
                   class="manga-thumb"
-                  @click="echoSystem()"
                 />
               </div>
               <div class="flex md4 sm6 xs12">
@@ -48,9 +55,22 @@
               <div class="flex md3 sm6 xs12">
                 <p class="display-6">Other sources</p>
                 <br />
-                <va-input v-model="manga.anilistID" placeholder="Anilist ID" />
-                <va-input v-model="manga.anilistID" placeholder="MAL ID" />
-                <va-input v-model="manga.anilistID" placeholder="MangaDex ID" />
+                <va-input
+                  v-model="manga.other_sources.isbn_code"
+                  placeholder="ISBN code"
+                />
+                <va-input
+                  v-model="manga.other_sources.anilist_id"
+                  placeholder="Anilist ID"
+                />
+                <va-input
+                  v-model="manga.other_sources.mal_id"
+                  placeholder="MAL ID"
+                />
+                <va-input
+                  v-model="manga.other_sources.mangadex_id"
+                  placeholder="Mangadex ID"
+                />
                 <br />
                 <p class="title">Publishing date</p>
                 <va-date-picker v-model="manga.published_date" />
@@ -100,8 +120,12 @@ export default {
         status: 1,
         hentai: 0,
         is_adult: 0,
-        otherLinks: [],
-        isbn_code: '',
+        other_sources: {
+          isbn_code: '',
+          anilist_id: '',
+          mal_id: '',
+          mangadex_id: '',
+        },
         genres: [],
         demographics: [],
         themes: [],
@@ -150,8 +174,28 @@ export default {
     };
   },
   methods: {
-    echoSystem() {
-      alert(JSON.stringify(this.manga));
+    resetForm() {
+      this.manga = {
+        title: '',
+        alternative_titles: [],
+        cover: null,
+        description: '',
+        published_date: new Date(),
+        artist: [],
+        authors: [],
+        status: 1,
+        hentai: 0,
+        is_adult: 0,
+        otherLinks: [],
+        isbn_code: '',
+        genres: [],
+        demographics: [],
+        themes: [],
+        tags: [],
+      };
+    },
+    async submitForm() {
+      console.log('Submitting form');
     },
     updateMangaState(val) {
       switch (val.toLowercase()) {
@@ -181,6 +225,10 @@ export default {
 </script>
 
 <style lang="scss">
+.button-container {
+  text-align: right;
+}
+
 .manga-thumb {
   width: 100%;
   border: 1px solid #e8e5e5;
@@ -196,8 +244,8 @@ export default {
   width: 100%;
   border: 1px solid gray;
   border-radius: 10px;
-  height: 100px;
-  max-height: 100px;
+  height: 150px;
+  max-height: 150px;
   padding: 2px;
 }
 </style>
