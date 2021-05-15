@@ -1,10 +1,15 @@
 <template>
-  <vue-tags-input
-    v-model="tagText"
-    :tags="tagsLocal"
-    @tags-changed="newTags => (tagsLocal = newTags)"
-    :placeholder="placeholder"
-  />
+  <va-input-wrapper>
+    <vue-tags-input
+      v-model="tagText"
+      :tags="tagsLocal"
+      @tags-changed="newTags => (tagsLocal = newTags)"
+      :placeholder="placeholder"
+    />
+    <div slot="append" class="flex-center" @click="clearTags">
+      <va-icon name="fa fa-window-close" class="pointer" />
+    </div>
+  </va-input-wrapper>
 </template>
 
 <script>
@@ -42,5 +47,19 @@ export default {
       tagText: '',
     };
   },
+  methods: {
+    clearTags() {
+      this.$emit(
+        'tagschange',
+        [].map(t => t.text)
+      );
+    },
+  },
 };
 </script>
+
+<style lang="scss">
+.pointer {
+  cursor: pointer;
+}
+</style>
