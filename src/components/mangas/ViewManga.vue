@@ -36,13 +36,22 @@
                 <tag-input
                   v-model="manga.alternative_titles"
                   placeholder="Alternative titles"
+                  :disabled="view"
                 />
                 <br />
                 <p class="title">Authors</p>
-                <tag-input v-model="manga.authors" placeholder="Authors" />
+                <tag-input
+                  v-model="manga.authors"
+                  placeholder="Authors"
+                  :disabled="view"
+                />
                 <br />
                 <p class="title">Artists</p>
-                <tag-input v-model="manga.artists" placeholder="Artists" />
+                <tag-input
+                  v-model="manga.artists"
+                  placeholder="Artists"
+                  :disabled="view"
+                />
                 <br />
                 <p class="title">Manga status</p>
                 <toggle-switch
@@ -59,7 +68,11 @@
                   :disabled="view"
                 />
                 <p class="title">Tags</p>
-                <tag-input v-model="manga.tags" placeholder="Tags" />
+                <tag-input
+                  v-model="manga.tags"
+                  placeholder="Tags"
+                  :disabled="view"
+                />
               </div>
               <div class="flex md3 sm6 xs12">
                 <va-toggle
@@ -111,13 +124,22 @@
                 />
                 <br />
                 <p class="title">Select theme</p>
-                <tag-input v-model="manga.themes" placeholder="Themes" />
+                <tag-input
+                  v-model="manga.themes"
+                  placeholder="Themes"
+                  :disabled="view"
+                />
                 <p class="title">Select genres</p>
-                <tag-input v-model="manga.genres" placeholder="Genres" />
+                <tag-input
+                  v-model="manga.genres"
+                  placeholder="Genres"
+                  :disabled="view"
+                />
                 <p class="title">Select demographics</p>
                 <tag-input
                   v-model="manga.demographics"
                   placeholder="Demographics"
+                  :disabled="view"
                 />
               </div>
             </div>
