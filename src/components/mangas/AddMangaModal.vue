@@ -6,10 +6,14 @@
           <form>
             <div class="row">
               <div class="flex xs12 button-container">
-                <va-button color="danger" @click="resetForm"> Reset</va-button>
-                <va-button color="success" @click="submitForm">
-                  Add manga</va-button
-                >
+                <div class="flex mb3">
+                  <va-button color="danger" @click="resetForm">
+                    Reset</va-button
+                  >
+                  <va-button color="success" @click="submitForm">
+                    Add manga</va-button
+                  >
+                </div>
               </div>
             </div>
             <div class="row">
@@ -53,6 +57,10 @@
                 <tag-input v-model="manga.tags" placeholder="Tags" />
               </div>
               <div class="flex md3 sm6 xs12">
+                <va-toggle
+                  v-model="manga.enabled"
+                  :label="manga.enabled ? 'Disable manga' : 'Enable manga'"
+                />
                 <p class="display-6">Other sources</p>
                 <br />
                 <va-input
@@ -113,6 +121,7 @@ export default {
         title: '',
         alternative_titles: [],
         cover: null,
+        enabled: true,
         description: '',
         published_date: new Date(),
         artist: [],
@@ -178,6 +187,7 @@ export default {
       this.manga = {
         title: '',
         alternative_titles: [],
+        enabled: true,
         cover: null,
         description: '',
         published_date: new Date(),
