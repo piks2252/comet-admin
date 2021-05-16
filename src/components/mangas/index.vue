@@ -2,7 +2,7 @@
   <va-card>
     <div class="row align--center">
       <div class="flex xs4">
-        <va-button @click="showModal = true">Add Manga</va-button>
+        <va-button @click="navigateToAddManga()">Add Manga</va-button>
       </div>
     </div>
     <div class="row align--center">
@@ -145,6 +145,9 @@ export default {
     search: debounce(function(term) {
       this.term = term;
     }, 400),
+    navigateToAddManga() {
+      this.$router.push({ name: 'add-manga' });
+    },
   },
 };
 </script>
