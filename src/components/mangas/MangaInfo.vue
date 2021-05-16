@@ -152,6 +152,9 @@
         </va-card>
       </div>
     </div>
+    <div class="row" v-if="manga_id">
+      Here chapters will be displayed
+    </div>
   </div>
 </template>
 
