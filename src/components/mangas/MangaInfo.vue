@@ -164,6 +164,7 @@ export default {
   components: { TagInput, ToggleSwitch },
   data() {
     return {
+      manga_id: this.$route.params.id,
       manga: {
         title: 'Nartuo',
         alternative_titles: ['Naruto the fox', 'nine tails'],
@@ -206,7 +207,7 @@ export default {
         },
         items: {
           preSelected: 'unknown',
-          disabled: false,
+          disabled: this.$route.name === 'view-manga',
           labels: [
             {
               name: 'On going',
@@ -227,12 +228,9 @@ export default {
         },
       },
       tempFiles: [],
-      view: false,
+      view: this.$route.name === 'view-manga',
       apiLoading: false,
     };
-  },
-  mounted() {
-    this.toggleSwitchOptions.items.disabled = this.view;
   },
   methods: {
     resetForm() {

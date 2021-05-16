@@ -51,12 +51,30 @@ export default new Router({
         {
           name: 'mangas',
           path: 'mangas',
-          component: () => import('../components/mangas'),
+          component: EmptyParentComponent,
           children: [
+            {
+              name: 'base-manga',
+              path: '/',
+              component: () => import('../components/mangas'),
+              default: true,
+            },
             {
               name: 'add-manga',
               path: 'add',
-              component: () => import('../components/mangas/AddManga.vue'),
+              component: () => import('../components/mangas/MangaInfo.vue'),
+            },
+            {
+              name: 'view-manga',
+              path: 'view/:id',
+              component: () => import('../components/mangas/MangaInfo.vue'),
+              props: true,
+            },
+            {
+              name: 'edit-manga',
+              path: 'edit/:id',
+              component: () => import('../components/mangas/MangaInfo.vue'),
+              props: true,
             },
           ],
         },

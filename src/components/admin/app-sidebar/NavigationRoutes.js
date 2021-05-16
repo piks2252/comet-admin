@@ -12,7 +12,7 @@ export const navigationRoutes = {
       },
     },
     {
-      name: 'mangas',
+      name: 'base-manga',
       displayName: 'menu.mangas',
       meta: {
         iconClass: 'fa fa-book',
