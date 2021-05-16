@@ -2,7 +2,7 @@
   <div class="form-elements">
     <div class="row">
       <div class="flex xs12">
-        <va-card :title="view ? manga.title : 'New Manga'">
+        <va-card :title="manga_id ? manga.title : 'New Manga'">
           <form>
             <div class="row">
               <div class="flex xs12 button-container">
@@ -159,35 +159,40 @@
 import TagInput from '../ui/TagInput';
 import ToggleSwitch from 'vuejs-toggle-switch';
 
+const DEFAULT_MANGA = {
+  title: '',
+  alternative_titles: [],
+  cover: null,
+  enabled: true,
+  description: '',
+  published_date: new Date().getUTCDate(),
+  authors: [],
+  artists: [],
+  status: 1,
+  hentai: false,
+  is_adult: false,
+  other_sources: {
+    isbn_code: '',
+    anilist_id: '',
+    mal_id: '',
+    mangadex_id: '',
+  },
+  genres: [],
+  demographics: [],
+  themes: [],
+  tags: [],
+};
+
 export default {
-  name: 'add-manga',
+  name: 'manga-info',
   components: { TagInput, ToggleSwitch },
   data() {
     return {
-      manga_id: this.$route.params.id,
-      manga: {
-        title: 'Nartuo',
-        alternative_titles: ['Naruto the fox', 'nine tails'],
-        cover: null,
-        enabled: true,
-        description: 'some random text about firefox and other things',
-        published_date: new Date(),
-        authors: ['The great friend of ODA'],
-        artists: ['daea', 'adaefeaf', 'adfaed'],
-        status: 1,
-        hentai: 0,
-        is_adult: 0,
-        other_sources: {
-          isbn_code: 'ranadom nbpx',
-          anilist_id: '235',
-          mal_id: '45754',
-          mangadex_id: '658768',
-        },
-        genres: [],
-        demographics: [],
-        themes: [],
-        tags: [],
-      },
+      manga_id:
+        this.$route.params.id && this.$route.params.id != ''
+          ? this.$route.params.id
+          : null,
+      manga: DEFAULT_MANGA,
       toggleSwitchOptions: {
         layout: {
           color: 'black',
@@ -232,34 +237,21 @@ export default {
       apiLoading: false,
     };
   },
+  mounted() {
+    if (this.manga_id) {
+      console.log('Refreshing api here');
+    }
+  },
   methods: {
     resetForm() {
-      this.manga = {
-        title: '',
-        alternative_titles: [],
-        enabled: true,
-        cover: null,
-        description: '',
-        published_date: new Date(),
-        artist: [],
-        authors: [],
-        status: 1,
-        hentai: 0,
-        is_adult: 0,
-        otherLinks: [],
-        isbn_code: '',
-        genres: [],
-        demographics: [],
-        themes: [],
-        tags: [],
-      };
+      this.manga = DEFAULT_MANGA;
     },
     async submitForm() {
       console.log(this.tempFiles);
       console.log('Submitting form');
     },
     updateMangaState(val) {
-      switch (val.toLowercase()) {
+      switch (val.toLowerCase()) {
         case 'on going':
           this.manga.status = 1;
           break;
