@@ -89,9 +89,7 @@
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
+  "gitHooks": {},
   "license": "MIT",
   "lint-staged": {
     "*.js": [
