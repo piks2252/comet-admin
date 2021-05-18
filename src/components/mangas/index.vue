@@ -51,6 +51,26 @@
           @input="toggleEnableManga(props.rowData.id)"
         />
       </template>
+      <template slot="actions" slot-scope="props">
+        <va-icon
+          name="fa fa-eye"
+          :size="21"
+          class="action-icon pointer"
+          @click="navigateToViewManga(props.rowData.id)"
+        />
+        <va-icon
+          name="fa fa-pencil-square-o"
+          :size="21"
+          class="action-icon pointer"
+          @click="navigateToEditManga(props.rowData.id)"
+        />
+        <va-icon
+          name="fa fa-trash-o"
+          :size="21"
+          class="action-icon pointer"
+          @click="deleteManga(props.rowData.id)"
+        />
+      </template>
     </va-data-table>
   </va-card>
 </template>
@@ -208,12 +228,17 @@ export default {
         {
           name: '__slot:status',
           title: 'Status',
-          width: '20%',
+          width: '10%',
         },
         {
           name: '__slot:enabled',
           title: 'Enabled',
           width: '10%',
+        },
+        {
+          name: '__slot:actions',
+          title: 'Actions',
+          width: '15%',
         },
       ];
     },
@@ -252,7 +277,10 @@ export default {
       this.$router.push({ name: 'add-manga' });
     },
     navigateToEditManga(manga_id) {},
-    navigateToViewManga(manga_id) {},
+    navigateToViewManga(manga_id) {
+      console.log(':afaef');
+    },
+    deleteManga(manga_id) {},
   },
 };
 </script>
@@ -263,5 +291,9 @@ export default {
   height: 40px;
   border: 1px solid gray;
   border-radius: 50%;
+}
+
+.action-icon {
+  margin: 5px;
 }
 </style>
