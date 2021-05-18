@@ -38,7 +38,7 @@
       <template slot="status" slot-scope="props">
         <va-select
           :options="statusOptions"
-          :value="getSelectedOption(props.rowData.id)"
+          :value="getSelectedOption(props.rowData.status)"
           clearable="false"
           @input="toggleMangaStatus(props.rowData.id)"
         />
@@ -239,7 +239,8 @@ export default {
       this.term = term;
     }, 400),
     getSelectedOption(status_id) {
-      return this.statusOptions.find(e => e.id === status_id);
+      const val = this.statusOptions.find(e => e.id === status_id);
+      return val;
     },
     toggleEnableManga(manga_id) {
       console.log('manga id ', manga_id);
