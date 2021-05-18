@@ -31,31 +31,25 @@
       :fields="fields"
       :data="filteredData"
       :per-page="parseInt(perPage)"
-      @row-clicked="showUser"
-      clickable
     >
-      <template slot="trend" slot-scope="props">
-        <va-icon
-          :name="getTrendIcon(props.rowData)"
-          :color="getTrendColor(props.rowData)"
+      <template slot="cover" slot-scope="props">
+        <img class="manga-row-thumb" :src="props.rowData.cover" />
+      </template>
+      <template slot="status" slot-scope="props">
+        <va-select
+          :options="statusOptions"
+          :value="getSelectedOption(props.rowData.id)"
+          clearable="false"
+          @input="toggleMangaStatus(props.rowData.id)"
         />
       </template>
-
-      <template slot="status" slot-scope="props">
-        <va-badge :color="props.rowData.color">
-          {{ props.rowData.status }}
-        </va-badge>
-      </template>
-
-      <template slot="actions" slot-scope="props">
-        <va-button
-          v-if="props.rowData.hasReport"
+      <template slot="enabled" slot-scope="props">
+        <va-toggle
+          :value="props.rowData.enabled"
           small
-          color="danger"
-          class="ma-0"
-        >
-          {{ $t('tables.report') }}
-        </va-button>
+          :color="props.rowData.enabled ? 'success' : 'danger'"
+          @input="toggleEnableManga(props.rowData.id)"
+        />
       </template>
     </va-data-table>
   </va-card>
@@ -63,7 +57,129 @@
 
 <script>
 import { debounce } from 'lodash';
-import users from '../../data/users.json';
+
+const DUMMY_ROWS = [
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+  {
+    id: 'adada',
+    title: 'Naruto',
+    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
+    enabled: true,
+    status: 1,
+  },
+];
 
 export default {
   components: {},
@@ -72,7 +188,7 @@ export default {
       term: null,
       perPage: '20',
       perPageOptions: ['10', '20', '30', '40'],
-      mangas: users,
+      mangas: DUMMY_ROWS,
       showModal: false,
     };
   },
@@ -80,29 +196,24 @@ export default {
     fields() {
       return [
         {
-          name: '__slot:trend',
-          width: '30px',
-          height: '45px',
+          name: '__slot:cover',
+          width: '40px',
+          height: '40px',
           dataClass: 'text-center',
         },
         {
-          name: 'fullName',
-          title: this.$t('tables.headings.name'),
-          width: '30%',
+          name: 'title',
+          title: 'Title',
         },
         {
           name: '__slot:status',
-          title: this.$t('tables.headings.status'),
+          title: 'Status',
           width: '20%',
         },
         {
-          name: 'email',
-          title: this.$t('tables.headings.email'),
-          width: '30%',
-        },
-        {
-          name: '__slot:actions',
-          dataClass: 'text-right',
+          name: '__slot:enabled',
+          title: 'Enabled',
+          width: '10%',
         },
       ];
     },
@@ -112,42 +223,44 @@ export default {
       }
 
       return this.mangas.filter(item => {
-        return item.fullName.toLowerCase().startsWith(this.term.toLowerCase());
+        return item.title.toLowerCase().startsWith(this.term.toLowerCase());
       });
+    },
+    statusOptions() {
+      return [
+        { id: 1, text: 'On going' },
+        { id: 2, text: 'Completed' },
+        { id: 3, text: 'Dropped' },
+      ];
     },
   },
   methods: {
-    getTrendIcon(user) {
-      if (user.trend === 'up') {
-        return 'fa fa-caret-up';
-      }
-
-      if (user.trend === 'down') {
-        return 'fa fa-caret-down';
-      }
-
-      return 'fa fa-minus';
-    },
-    getTrendColor(user) {
-      if (user.trend === 'up') {
-        return 'primary';
-      }
-
-      if (user.trend === 'down') {
-        return 'danger';
-      }
-
-      return 'grey';
-    },
-    showUser(user) {
-      alert(JSON.stringify(user));
-    },
     search: debounce(function(term) {
       this.term = term;
     }, 400),
+    getSelectedOption(status_id) {
+      return this.statusOptions.find(e => e.id === status_id);
+    },
+    toggleEnableManga(manga_id) {
+      console.log('manga id ', manga_id);
+    },
+    toggleMangaStatus(manga_id) {
+      console.log('manga id ', manga_id);
+    },
     navigateToAddManga() {
       this.$router.push({ name: 'add-manga' });
     },
+    navigateToEditManga(manga_id) {},
+    navigateToViewManga(manga_id) {},
   },
 };
 </script>
+
+<style lang="scss">
+.manga-row-thumb {
+  width: 40px;
+  height: 40px;
+  border: 1px solid gray;
+  border-radius: 50%;
+}
+</style>
