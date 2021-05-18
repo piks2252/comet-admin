@@ -52,24 +52,23 @@
         />
       </template>
       <template slot="actions" slot-scope="props">
-        <va-icon
-          name="fa fa-eye"
-          :size="21"
-          class="action-icon pointer"
-          @click="navigateToViewManga(props.rowData.id)"
-        />
-        <va-icon
-          name="fa fa-pencil-square-o"
-          :size="21"
-          class="action-icon pointer"
-          @click="navigateToEditManga(props.rowData.id)"
-        />
-        <va-icon
-          name="fa fa-trash-o"
-          :size="21"
-          class="action-icon pointer"
-          @click="deleteManga(props.rowData.id)"
-        />
+        <a @click="navigateToViewManga(props.rowData.id)">
+          <va-icon name="fa fa-eye" :size="21" class="action-icon pointer" />
+        </a>
+        <a @click="navigateToEditManga(props.rowData.id)">
+          <va-icon
+            name="fa fa-pencil-square-o"
+            :size="21"
+            class="action-icon pointer"
+          />
+        </a>
+        <a @click="deleteManga(props.rowData.id)">
+          <va-icon
+            name="fa fa-trash-o"
+            :size="21"
+            class="action-icon pointer"
+          />
+        </a>
       </template>
     </va-data-table>
   </va-card>
@@ -295,5 +294,6 @@ export default {
 
 .action-icon {
   margin: 5px;
+  color: 'black';
 }
 </style>
