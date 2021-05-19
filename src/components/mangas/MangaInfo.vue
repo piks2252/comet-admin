@@ -2,20 +2,8 @@
   <div class="form-elements">
     <div class="row">
       <div class="flex xs12">
-        <va-card :title="manga_id ? manga.title : 'New Manga'">
+        <va-card>
           <form>
-            <div class="row">
-              <div class="flex xs12 button-container">
-                <div class="flex mb3" v-if="!view">
-                  <va-button color="danger" @click="resetForm">
-                    Reset</va-button
-                    >
-                  <va-button color="success" @click="submitForm">
-                    Add manga</va-button
-                  >
-                </div>
-              </div>
-            </div>
             <div class="row">
               <div class="flex md5 sm4 xs4">
                 <img
@@ -148,6 +136,33 @@
                 />
               </div>
             </div>
+            <div class="row">
+              <div class="flex xs12 button-container">
+                <div class="flex mb3" v-if="!view">
+                  <va-button color="warning" @click="resetForm">
+                    Reset</va-button
+                    >
+                  <va-button
+                    color="success"
+                    @click="updateManga"
+                    v-if="manga_id"
+                  >
+                    Update manga</va-button
+                  >
+                  <va-button color="success" @click="submitForm" v-else>
+                    Add manga</va-button
+                  >
+
+                  <va-button
+                    color="danger"
+                    @click="updateManga"
+                    v-if="manga_id"
+                  >
+                    Delete manga</va-button
+                  >
+                </div>
+              </div>
+            </div>
           </form>
         </va-card>
       </div>
@@ -163,7 +178,7 @@ import TagInput from '../ui/TagInput';
 import ToggleSwitch from 'vuejs-toggle-switch';
 
 const DEFAULT_MANGA = {
-  title: '',
+  title: 'ss',
   alternative_titles: [],
   cover: null,
   enabled: true,
@@ -238,6 +253,7 @@ export default {
       tempFiles: [],
       view: this.$route.name === 'view-manga',
       apiLoading: false,
+      unsavedChanges: false,
     };
   },
   mounted() {
@@ -246,7 +262,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if (false) {
+    if (this.unsavedChanges) {
       const answer = window.confirm(
         'Do you really want to leave? you have unsaved changes!',
       );
@@ -262,6 +278,10 @@ export default {
       this.manga = DEFAULT_MANGA;
     },
     async submitForm() {
+      console.log(this.tempFiles);
+      console.log('Submitting form');
+    },
+    async updateManga() {
       console.log(this.tempFiles);
       console.log('Submitting form');
     },
