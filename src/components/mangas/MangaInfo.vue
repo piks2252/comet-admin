@@ -9,7 +9,7 @@
                 <div class="flex mb3" v-if="!view">
                   <va-button color="danger" @click="resetForm">
                     Reset</va-button
-                  >
+                    >
                   <va-button color="success" @click="submitForm">
                     Add manga</va-button
                   >
@@ -243,6 +243,18 @@ export default {
   mounted() {
     if (this.manga_id) {
       console.log('Refreshing api here');
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    if (false) {
+      const answer = window.confirm(
+        'Do you really want to leave? you have unsaved changes!',
+      );
+      if (answer) {
+        next();
+      } else {
+        next(false);
+      }
     }
   },
   methods: {
