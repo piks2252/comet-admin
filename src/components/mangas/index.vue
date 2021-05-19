@@ -275,9 +275,11 @@ export default {
     navigateToAddManga() {
       this.$router.push({ name: 'add-manga' });
     },
-    navigateToEditManga(manga_id) {},
+    navigateToEditManga(manga_id) {
+      this.$router.push({ name: 'edit-manga', params: { id: manga_id } });
+    },
     navigateToViewManga(manga_id) {
-      console.log(':afaef');
+      this.$router.push({ name: 'view-manga', params: { id: manga_id } });
     },
     deleteManga(manga_id) {},
   },
