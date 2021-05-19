@@ -266,12 +266,11 @@ export default {
       const answer = window.confirm(
         'Do you really want to leave? you have unsaved changes!',
       );
-      if (answer) {
-        next();
-      } else {
+      if (!answer) {
         next(false);
       }
     }
+    next();
   },
   methods: {
     resetForm() {
