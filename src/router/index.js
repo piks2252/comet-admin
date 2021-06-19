@@ -412,16 +412,6 @@ export default new Router({
           component: EmptyParentComponent,
           children: [
             {
-              name: 'google-maps',
-              path: 'google-maps',
-              component: () =>
-                import('../components/maps/google-maps/GoogleMapsPage'),
-              meta: {
-                wikiLink:
-                  'https://github.com/epicmaxco/vuestic-admin/wiki/Maps',
-              },
-            },
-            {
               name: 'yandex-maps',
               path: 'yandex-maps',
               component: () =>
