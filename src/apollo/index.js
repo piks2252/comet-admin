@@ -40,9 +40,9 @@ const link = split(
 );
 
 // Create the apollo client
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   link: ApolloLink.from([link]),
-  cache: new InMemoryCache(),
+  // cache: new InMemoryCache(),
   connectToDevTools: true,
 });
 
