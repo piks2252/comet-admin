@@ -13,6 +13,7 @@ import { VuesticPlugin } from '../services/vuestic-ui/components';
 import '../i18n/index';
 import YmapPlugin from 'vue-yandex-maps';
 import VueClipboard from 'vue-clipboard2';
+import VueMoment from 'vue-moment';
 
 import '../registerServiceWorker';
 
@@ -23,6 +24,7 @@ consoleBuildInfo();
 Vue.use(VuesticPlugin);
 Vue.use(YmapPlugin);
 Vue.use(VueClipboard);
+Vue.use(VueMoment);
 
 Vue.use(ColorThemePlugin, {
   // override colors here.

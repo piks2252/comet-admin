@@ -26,31 +26,43 @@
       :fields="fields"
       :data="filteredData"
       :per-page="parseInt(perPage)"
-      @row-clicked="showUser"
-      clickable
     >
-      <template slot="trend" slot-scope="props">
-        <va-icon
-          :name="getTrendIcon(props.rowData)"
-          :color="getTrendColor(props.rowData)"
+      <template slot="profile" slot-scope="props">
+        <img
+          :src="props.rowData.profilePic | profileImage"
+          class="profile-pic"
         />
       </template>
 
-      <template slot="status" slot-scope="props">
+      <template slot="subscription" slot-scope="props">
+        <va-select
+          :options="getUserSubscriptionLevel"
+          :value="selectedSubscriptionLevel(props.rowData.subscribedLevel)"
+        />
+      </template>
+      <template slot="verification" slot-scope="props">
         <va-badge :color="props.rowData.color">
-          {{ props.rowData.status }}
+          {{ props.rowData.verified ? 'Verified' : 'Unverified' }}
         </va-badge>
       </template>
-
-      <template slot="actions" slot-scope="props">
-        <va-button
-          v-if="props.rowData.hasReport"
+      <template slot="status" slot-scope="props">
+        <va-toggle
+          :value="props.rowData.disabled"
+          @input="disableToggle(props.rowData.id)"
           small
-          color="danger"
-          class="ma-0"
+        />
+        <blockquote
+          class="va-blockquote"
+          :style="{ borderColor: $themes.primary }"
+          v-if="props.rowData.disabled"
         >
-          {{ $t('tables.report') }}
-        </va-button>
+          <p>
+            {{ props.rowData.disabledReason }}
+          </p>
+        </blockquote>
+      </template>
+      <template slot="createdAt" slot-scope="props">
+        {{ new Date(props.rowData.createdAt) | moment('DD-MM-YYYY HH:mm:ss') }}
       </template>
     </va-data-table>
   </va-card>
@@ -58,57 +70,90 @@
 
 <script>
 import { debounce } from 'lodash';
-import users from '../../data/users.json';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       term: null,
       perPage: '20',
-      perPageOptions: ['10', '20', '30', '40'],
-      mangas: users,
+      perPageOptions: ['20', '30', '40', '50'],
       showModal: false,
     };
   },
+  filters: {
+    profileImage: value => {
+      if (!value) {
+        return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
+      }
+      value = value.toString();
+      return value.toUpperCase();
+    },
+  },
   computed: {
+    getUserSubscriptionLevel() {
+      return [0, 1, 2].map(e => {
+        return {
+          id: e,
+          text: `Level ${e}`,
+        };
+      });
+    },
     fields() {
       return [
         {
-          name: '__slot:trend',
+          name: '__slot:profile',
           width: '30px',
           height: '45px',
           dataClass: 'text-center',
         },
         {
-          name: 'fullName',
+          name: 'name',
           title: this.$t('tables.headings.name'),
           width: '30%',
         },
         {
-          name: '__slot:status',
-          title: this.$t('tables.headings.status'),
+          name: '__slot:subscription',
+          title: 'Subscribed Level',
           width: '20%',
         },
         {
-          name: 'email',
-          title: this.$t('tables.headings.email'),
-          width: '30%',
+          name: '__slot:verification',
+          title: 'Verification',
+          width: '20%',
         },
         {
-          name: '__slot:actions',
+          name: '__slot:status',
+          title: 'Status',
+          width: '10%',
+        },
+        {
+          name: '__slot:createdAt',
+          title: 'Created At',
+          width: '30%',
           dataClass: 'text-right',
         },
       ];
     },
     filteredData() {
       if (!this.term || this.term.length < 1) {
-        return this.mangas;
+        return this.users;
       }
 
-      return this.mangas.filter(item => {
-        return item.fullName.toLowerCase().startsWith(this.term.toLowerCase());
+      return this.users.filter(item => {
+        return item.name.toLowerCase().startsWith(this.term.toLowerCase());
       });
     },
+    ...mapState({
+      users: state => state.USERS.users,
+    }),
+  },
+  mounted() {
+    this.$store.dispatch('fetchUsers', {
+      limit: parseInt(this.perPage),
+      skip: 0,
+      sortBy: '-id',
+    });
   },
   methods: {
     getTrendIcon(user) {
@@ -132,6 +177,14 @@ export default {
       }
 
       return 'grey';
+    },
+    selectedSubscriptionLevel(id) {
+      return this.getUserSubscriptionLevel.find(e => e.id === id);
+    },
+    disableToggle(userId) {
+      // Toggle user with given user id
+      alert(userId);
+      console.log(this.users);
     },
     showUser(user) {
       alert(JSON.stringify(user));

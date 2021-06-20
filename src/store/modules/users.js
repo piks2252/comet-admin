@@ -24,8 +24,12 @@ const mutations = {
 };
 
 const actions = {
-  async fetchUsers({ commit }) {
-    const { data } = await apolloClient.query({ query: QUERIES.USERS() });
+  async fetchUsers({ commit }, variables) {
+    const { data } = await apolloClient.query({
+      query: QUERIES.USERS,
+      variables,
+    });
+
     commit('fetchUsers', data.readersList);
   },
   // async fetchTodos({ commit }) {
