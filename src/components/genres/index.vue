@@ -2,7 +2,7 @@
   <va-card>
     <div class="row align--center">
       <div class="flex xs12 md6">
-        <va-button @click="showModal = true">Add Genre</va-button>
+        <add-genre-modal />
       </div>
       <div class="flex xs12 md3 offset--md3">
         <va-input
@@ -38,7 +38,6 @@
         />
       </template>
     </va-data-table>
-    <add-genre-modal :showModal="showModal" />
   </va-card>
 </template>
 
@@ -61,7 +60,6 @@ export default {
     return {
       term: null,
       genres: [],
-      showModal: false,
     };
   },
   computed: {

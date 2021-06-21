@@ -1,17 +1,20 @@
 <template>
-  <va-modal
-    v-model="showModal"
-    size="medium"
-    title="Create Genre"
-    :okText="$t('modal.confirm')"
-    :cancelText="$t('modal.cancel')"
-    @ok="submitGenre"
-    @cancel="resetForm"
-  >
-    <va-input v-model="genre.name" placeholder="Genre name" removable />
-    <va-select :options="GENRE_GROUPS" v-model="genre.groupType" />
-    <input type="file" accept="image/*" @change="uploadPhoto" />
-  </va-modal>
+  <div>
+    <va-button @click="showModal = true">Add Genre</va-button>
+    <va-modal
+      v-model="showModal"
+      size="medium"
+      title="Create Genre"
+      :okText="$t('modal.confirm')"
+      :cancelText="$t('modal.cancel')"
+      @ok="submitGenre"
+      @cancel="resetForm"
+    >
+      <va-input v-model="genre.name" placeholder="Genre name" removable />
+      <va-select :options="GENRE_GROUPS" v-model="genre.groupType" />
+      <input type="file" accept="image/*" @change="uploadPhoto" />
+    </va-modal>
+  </div>
 </template>
 
 <script>
@@ -19,7 +22,6 @@ import { createGenre } from '../../apollo/api/genres';
 const GENRE_GROUPS_ARRAY = ['genre', 'theme', 'demographics', 'format'];
 
 export default {
-  props: { showModal: Boolean },
   data() {
     return {
       genre: {
@@ -27,6 +29,7 @@ export default {
         groupType: '',
         thumbnail: null,
       },
+      showModal: false,
     };
   },
   computed: {
