@@ -1,19 +1,6 @@
 <template>
   <va-card>
     <div class="row align--center">
-      <div class="flex xs4">
-        <va-button @click="showModal = true">Add Genre</va-button>
-        <va-modal
-          v-model="showModal"
-          size="large"
-          :title="$t('modal.largeTitle')"
-          :message="$t('modal.message')"
-          :okText="$t('modal.confirm')"
-          :cancelText="$t('modal.cancel')"
-        />
-      </div>
-    </div>
-    <div class="row align--center">
       <div class="flex xs12 md6">
         <va-input
           :value="term"
@@ -24,46 +11,25 @@
           <va-icon name="fa fa-search" slot="prepend" />
         </va-input>
       </div>
-
-      <div class="flex xs12 md3 offset--md3">
-        <va-select
-          v-model="perPage"
-          :label="$t('tables.perPage')"
-          :options="perPageOptions"
-          noClear
-        />
-      </div>
     </div>
 
-    <va-data-table
-      :fields="fields"
-      :data="filteredData"
-      :per-page="parseInt(perPage)"
-      @row-clicked="showUser"
-      clickable
-    >
-      <template slot="trend" slot-scope="props">
-        <va-icon
-          :name="getTrendIcon(props.rowData)"
-          :color="getTrendColor(props.rowData)"
+    <va-data-table :fields="fields" :data="filteredData" :per-page="100">
+      <template slot="thumbnail" slot-scope="props">
+        <img :src="props.rowData.thumbnail | genreImage" class="genre-pic" />
+      </template>
+      <template slot="genreGroup" slot-scope="props">
+        <genre-group
+          :genreGroup="props.rowData.groupType"
+          :genreId="props.rowData.id"
+          @updateGenre="updateGenreArray"
         />
       </template>
-
-      <template slot="status" slot-scope="props">
-        <va-badge :color="props.rowData.color">
-          {{ props.rowData.status }}
-        </va-badge>
-      </template>
-
-      <template slot="actions" slot-scope="props">
-        <va-button
-          v-if="props.rowData.hasReport"
-          small
-          color="danger"
-          class="ma-0"
-        >
-          {{ $t('tables.report') }}
-        </va-button>
+      <template slot="genreGroup" slot-scope="props">
+        <genre-actions
+          :genreName="props.rowData.name"
+          :genreId="props.rowData.id"
+          @updateGenre="updateGenreArray"
+        />
       </template>
     </va-data-table>
   </va-card>
@@ -71,83 +37,91 @@
 
 <script>
 import { debounce } from 'lodash';
-import users from '../../data/users.json';
+import { fetchGenres } from '../../apollo/api/genres';
+import GenreGroup from './GenreGroup';
+import GenreActions from './GenreActions';
 
 export default {
+  components: {
+    GenreGroup,
+    GenreActions,
+  },
   data() {
     return {
       term: null,
-      perPage: '20',
-      perPageOptions: ['10', '20', '30', '40'],
-      mangas: users,
-      showModal: false,
+      genres: [],
     };
+  },
+  filters: {
+    genreImage: value => {
+      if (!value) {
+        return 'https://cdn.comet.shivy.co.in/images/genres/default.png';
+      }
+      return `https://cdn.comet.shivy.co.in/images/genres/${value}`;
+    },
   },
   computed: {
     fields() {
       return [
         {
-          name: '__slot:trend',
+          name: '__slot:thumbnail',
           width: '30px',
           height: '45px',
           dataClass: 'text-center',
         },
         {
-          name: 'fullName',
+          name: 'name',
           title: this.$t('tables.headings.name'),
           width: '30%',
         },
         {
-          name: '__slot:status',
-          title: this.$t('tables.headings.status'),
+          name: '__slot:genreGroup',
+          title: 'Group',
           width: '20%',
         },
         {
-          name: 'email',
-          title: this.$t('tables.headings.email'),
-          width: '30%',
-        },
-        {
           name: '__slot:actions',
+          title: 'Action',
+          width: '20%',
           dataClass: 'text-right',
         },
       ];
     },
     filteredData() {
       if (!this.term || this.term.length < 1) {
-        return this.mangas;
+        return this.genres;
       }
 
-      return this.mangas.filter(item => {
-        return item.fullName.toLowerCase().startsWith(this.term.toLowerCase());
+      return this.genres.filter(item => {
+        return item.name.toLowerCase().startsWith(this.term.toLowerCase());
       });
     },
   },
+  async mounted() {
+    await this.loadGenres();
+  },
   methods: {
-    getTrendIcon(user) {
-      if (user.trend === 'up') {
-        return 'fa fa-caret-up';
+    async loadGenres() {
+      try {
+        const { genresList } = await fetchGenres();
+        this.genres = genresList;
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
       }
-
-      if (user.trend === 'down') {
-        return 'fa fa-caret-down';
-      }
-
-      return 'fa fa-minus';
     },
-    getTrendColor(user) {
-      if (user.trend === 'up') {
-        return 'primary';
-      }
-
-      if (user.trend === 'down') {
-        return 'danger';
-      }
-
-      return 'grey';
-    },
-    showUser(user) {
-      alert(JSON.stringify(user));
+    updateGenreArray(genre) {
+      const newGenres = this.genres.map(g => {
+        if (g.id === genre.id) {
+          console.log(genre);
+          return { ...g, ...genre };
+        }
+        return g;
+      });
+      this.genres = newGenres;
     },
     search: debounce(function(term) {
       this.term = term;
@@ -155,3 +129,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.genre-pic {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #efefef;
+  border-radius: 24px;
+}
+</style>
