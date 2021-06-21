@@ -9,13 +9,24 @@ export const fetchGenres = async(limit = 120, skip = 0, sortBy = '+name') => {
   return data;
 };
 
+export const createGenre = async(name, groupType, thumbnail) => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.CREATE_GENRE,
+    variables: { name, groupType, thumbnail },
+    context: {
+      hasUpload: true,
+    },
+  });
+  return data;
+};
+
 export const updateGenre = async(id, name = null, groupType = null) => {
   const variables = { id };
   if (name !== null) variables.name = name;
   if (groupType !== null) variables.groupType = groupType;
   const { data } = await apolloClient.mutate({
     mutation: MUTATIONS.UPDATE_GENRE,
-    variables: { id, name, groupType },
+    variables,
   });
   return data;
 };

@@ -2,6 +2,9 @@
   <va-card>
     <div class="row align--center">
       <div class="flex xs12 md6">
+        <va-button @click="showModal = true">Add Genre</va-button>
+      </div>
+      <div class="flex xs12 md3 offset--md3">
         <va-input
           :value="term"
           :placeholder="$t('tables.searchByName')"
@@ -32,6 +35,7 @@
         />
       </template>
     </va-data-table>
+    <add-genre-modal :showModal="showModal" />
   </va-card>
 </template>
 
@@ -40,16 +44,19 @@ import { debounce } from 'lodash';
 import { fetchGenres } from '../../apollo/api/genres';
 import GenreGroup from './GenreGroup';
 import GenreActions from './GenreActions';
+import AddGenreModal from './AddGenreModal';
 
 export default {
   components: {
     GenreGroup,
     GenreActions,
+    AddGenreModal,
   },
   data() {
     return {
       term: null,
       genres: [],
+      showModal: false,
     };
   },
   filters: {
