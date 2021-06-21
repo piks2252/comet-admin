@@ -24,7 +24,7 @@
           @updateGenre="updateGenreArray"
         />
       </template>
-      <template slot="genreGroup" slot-scope="props">
+      <template slot="actions" slot-scope="props">
         <genre-actions
           :genreName="props.rowData.name"
           :genreId="props.rowData.id"
