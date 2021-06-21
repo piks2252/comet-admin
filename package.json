@@ -34,7 +34,6 @@
     "extend": "3.0.2",
     "flag-icon-css": "^3.4.5",
     "font-awesome": "^4.7.0",
-    "google-maps": "^3.3.0",
     "graphql": "^15.5.0",
     "ionicons": "^4.6.3",
     "leaflet-map": "^0.2.1",

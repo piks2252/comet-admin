@@ -233,10 +233,6 @@ export const navigationRoutes = {
       disabled: true,
       children: [
         {
-          name: 'google-maps',
-          displayName: 'Google Maps',
-        },
-        {
           name: 'yandex-maps',
           displayName: 'Yandex Maps',
         },
