@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { updateSubscribedLevel } from '../../apollo/api/users';
 const LEVELS = [0, 1, 2];
 
 export default {
@@ -26,9 +27,9 @@ export default {
     },
   },
   methods: {
-    toggleSubscribedLevel(value) {
+    async toggleSubscribedLevel(value) {
       const level = value.id;
-      // TODO: Update the value of user here using mutation
+      await updateSubscribedLevel(this.userId, level);
       this.$emit('updateUser', {
         id: this.userId,
         subscribedLevel: level,

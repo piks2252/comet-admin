@@ -40,4 +40,16 @@ export const MUTATIONS = {
       }
     }
   `,
+  UPDATE_SUBSCRIBED_LEVEL: gql`
+    mutation UPDATE_SUBSCRIBED_LEVEL($userId: ID!, $subscribedLevel: Int) {
+      updateReader(
+        readerData: { id: $userId, subscribedLevel: $subscribedLevel }
+      ) {
+        reader {
+          id
+          subscribedLevel
+        }
+      }
+    }
+  `,
 };

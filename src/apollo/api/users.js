@@ -24,3 +24,16 @@ export const enableUser = async userId => {
   });
   return data;
 };
+
+export const updateSubscribedLevel = async(userId, level) => {
+  const LEVELS = [0, 1, 2];
+  if (level in LEVELS) {
+    const { data } = await apolloClient.mutate({
+      mutation: MUTATIONS.UPDATE_SUBSCRIBED_LEVEL,
+      variables: { userId, subscribedLevel: level },
+    });
+    return data;
+  }
+  // Throw exception
+  throw new Error('Invalid level');
+};
