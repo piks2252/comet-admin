@@ -123,7 +123,6 @@ export default {
     updateGenreArray(genre) {
       const newGenres = this.genres.map(g => {
         if (g.id === genre.id) {
-          console.log(genre);
           return { ...g, ...genre };
         }
         return g;
