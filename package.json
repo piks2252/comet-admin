@@ -13,6 +13,7 @@
     "lint:style": "stylelint --fix src/**/*.{vue,htm,html,css,sss,less,scss}"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.20",
     "@johmun/vue-tags-input": "^2.1.0",
     "@types/jest": "^24.0.11",
     "amcharts3": "^3.21.14",
@@ -73,6 +74,7 @@
     "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-standard": "^5.0.0",
     "@vue/test-utils": "^1.0.0-beta.29",
+    "apollo-upload-client": "^16.0.0",
     "autoprefixer": "^9.7.2",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
