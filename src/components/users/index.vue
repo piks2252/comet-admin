@@ -165,7 +165,6 @@ export default {
     },
 
     updateUserArray(user) {
-      console.log(user);
       const newUsers = this.users.map(u => {
         if (u.id === user.id) {
           return { ...u, ...user };
@@ -173,9 +172,6 @@ export default {
         return u;
       });
       this.users = newUsers;
-    },
-    subscribedLevelChange(event, data) {
-      console.log(event);
     },
     showUser(user) {
       alert(JSON.stringify(user));
