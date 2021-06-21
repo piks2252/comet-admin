@@ -41,25 +41,51 @@ export default {
       this.userDisableReason = '';
     },
     async disableUserFromModal() {
-      await disableUser(this.userId, this.userDisableReason);
-      await this.$emit('updateUser', {
-        id: this.userId,
-        disabled: true,
-        disabledReason: this.userDisableReason,
-      });
+      try {
+        await disableUser(this.userId, this.userDisableReason);
+        await this.$emit('updateUser', {
+          id: this.userId,
+          disabled: true,
+          disabledReason: this.userDisableReason,
+        });
+        this.showToast('User disbaled', {
+          position: 'top-right',
+          duration: 800,
+          fullWidth: false,
+        });
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
     },
     async toggleFunction(value) {
       if (value) {
         this.resetForm();
         this.showModal = true;
       } else {
-        await enableUser(this.userId);
-        // Send new user update to the parent component
-        this.$emit('updateUser', {
-          id: this.userId,
-          disabled: value,
-          disabledReason: this.userDisableReason,
-        });
+        try {
+          await enableUser(this.userId);
+          // Send new user update to the parent component
+          this.$emit('updateUser', {
+            id: this.userId,
+            disabled: value,
+            disabledReason: this.userDisableReason,
+          });
+          this.showToast('User enabled', {
+            position: 'top-right',
+            duration: 800,
+            fullWidth: false,
+          });
+        } catch (e) {
+          this.showToast(e, {
+            position: 'top-right',
+            duration: 1200,
+            fullWidth: false,
+          });
+        }
       }
     },
   },

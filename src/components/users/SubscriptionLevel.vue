@@ -29,11 +29,24 @@ export default {
   methods: {
     async toggleSubscribedLevel(value) {
       const level = value.id;
-      await updateSubscribedLevel(this.userId, level);
-      this.$emit('updateUser', {
-        id: this.userId,
-        subscribedLevel: level,
-      });
+      try {
+        await updateSubscribedLevel(this.userId, level);
+        this.$emit('updateUser', {
+          id: this.userId,
+          subscribedLevel: level,
+        });
+        this.showToast('User updated successfully', {
+          position: 'top-right',
+          duration: 800,
+          fullWidth: false,
+        });
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
     },
   },
 };

@@ -137,31 +137,20 @@ export default {
     },
   },
   async mounted() {
-    const { readersList } = await fetchUsers();
-    this.users = readersList;
+    await this.loadUsers();
   },
   methods: {
-    getTrendIcon(user) {
-      if (user.trend === 'up') {
-        return 'fa fa-caret-up';
+    async loadUsers() {
+      try {
+        const { readersList } = await fetchUsers();
+        this.users = readersList;
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
       }
-
-      if (user.trend === 'down') {
-        return 'fa fa-caret-down';
-      }
-
-      return 'fa fa-minus';
-    },
-    getTrendColor(user) {
-      if (user.trend === 'up') {
-        return 'primary';
-      }
-
-      if (user.trend === 'down') {
-        return 'danger';
-      }
-
-      return 'grey';
     },
     updateUserArray(user) {
       const newUsers = this.users.map(u => {
@@ -171,9 +160,6 @@ export default {
         return u;
       });
       this.users = newUsers;
-    },
-    showUser(user) {
-      alert(JSON.stringify(user));
     },
     search: debounce(function(term) {
       this.term = term;
