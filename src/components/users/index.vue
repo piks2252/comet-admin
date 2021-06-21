@@ -38,7 +38,6 @@
         <va-select
           :options="getUserSubscriptionLevel"
           :value="selectedSubscriptionLevel(props.rowData.subscribedLevel)"
-          @input="subscribedLevelChange(event, data)"
         />
       </template>
       <template slot="verification" slot-scope="props">
@@ -47,20 +46,12 @@
         </va-badge>
       </template>
       <template slot="status" slot-scope="props">
-        <va-toggle
-          :value="props.rowData.disabled"
-          @input="disableToggle(props.rowData.id)"
-          small
+        <disable-toggle
+          :disabled="props.rowData.disabled"
+          :disabledReason="props.rowData.disabledReason"
+          :userId="props.rowData.id"
+          @updateUser="updateUserArray"
         />
-        <blockquote
-          class="va-blockquote"
-          :style="{ borderColor: $themes.primary }"
-          v-if="props.rowData.disabled"
-        >
-          <p>
-            {{ props.rowData.disabledReason }}
-          </p>
-        </blockquote>
       </template>
       <template slot="createdAt" slot-scope="props">
         {{ new Date(props.rowData.createdAt) | moment('DD-MM-YYYY HH:mm:ss') }}
@@ -71,8 +62,13 @@
 
 <script>
 import { debounce } from 'lodash';
+import { fetchUsers } from '../../apollo/api/users';
+import DisableToggle from './DisableToggle.vue';
 
 export default {
+  components: {
+    DisableToggle,
+  },
   data() {
     return {
       term: null,
@@ -145,8 +141,9 @@ export default {
       });
     },
   },
-  mounted() {
-    // Load users here
+  async mounted() {
+    const { readersList } = await fetchUsers();
+    this.users = readersList;
   },
   methods: {
     getTrendIcon(user) {
@@ -174,16 +171,15 @@ export default {
     selectedSubscriptionLevel(id) {
       return this.getUserSubscriptionLevel.find(e => e.id === id);
     },
-    disableToggle(userId) {
-      const currentUser = this.users.find(user.id === userId);
-      if (currentUser.disabled === true) {
-        // ENable user
-      } else {
-        // Ask for reason
-        // Disable user
-      }
-      // Toggle user with given user id
-      alert(userId);
+    updateUserArray(user) {
+      console.log(user);
+      const newUsers = this.users.map(u => {
+        if (u.id === user.id) {
+          return { ...u, ...user };
+        }
+        return u;
+      });
+      this.users = newUsers;
     },
     subscribedLevelChange(event, data) {
       console.log(event);
