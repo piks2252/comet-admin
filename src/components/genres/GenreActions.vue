@@ -29,12 +29,9 @@ export default {
       showModal: false,
     };
   },
-  created() {
-    this.name = this.genreName;
-  },
   methods: {
     resetForm() {
-      this.name = '';
+      this.name = this.genreName;
     },
     editGenre() {
       this.resetForm();
