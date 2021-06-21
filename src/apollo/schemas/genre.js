@@ -16,8 +16,8 @@ export const QUERIES = {
 export const MUTATIONS = {
   CREATE_GENRE: gql`
     mutation CREATE_GENRE(
-      $name: String
-      $groupType: String
+      $name: String!
+      $groupType: String!
       $thumbnail: Upload!
     ) {
       createGenre(
@@ -38,7 +38,7 @@ export const MUTATIONS = {
       $id: ID!
       $name: String
       $groupType: String
-      $thumbnail: Upload!
+      $thumbnail: Upload
     ) {
       updateGenre(
         genreData: { id: $id, name: $name, groupType: $groupType }
