@@ -163,7 +163,6 @@ export default {
 
       return 'grey';
     },
-
     updateUserArray(user) {
       const newUsers = this.users.map(u => {
         if (u.id === user.id) {

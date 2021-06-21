@@ -8,10 +8,35 @@ export const QUERIES = {
         name
         profilePic
         disabled
+        disabledReason
         verified
         subscribedLevel
         updatedAt
         createdAt
+      }
+    }
+  `,
+};
+
+export const MUTATIONS = {
+  TOGGLE_DISBALE: gql`
+    mutation TOGGLE_DISABLE_READER(
+      $userId: ID!
+      $disabled: Boolean
+      $disabledReason: String
+    ) {
+      updateReader(
+        readerData: {
+          id: $userId
+          disabled: $disabled
+          disabledReason: $disabledReason
+        }
+      ) {
+        reader {
+          id
+          disabled
+          disabledReason
+        }
       }
     }
   `,

@@ -16,7 +16,7 @@
       title="Disable user"
       :okText="$t('modal.confirm')"
       :cancelText="$t('modal.cancel')"
-      @ok="disableUser"
+      @ok="disableUserFromModal"
       @cancel="resetForm"
     >
       <va-input v-model="userDisableReason" removable />
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { disableUser, enableUser } from '../../apollo/api/users';
 export default {
   name: 'disable-toggle',
   props: { disabled: Boolean, disabledReason: String, userId: String },
@@ -39,20 +40,20 @@ export default {
       this.showModal = false;
       this.userDisableReason = '';
     },
-    disableUser() {
-      console.log('Disabling user:', this.userId, this.userDisableReason);
-      this.$emit('updateUser', {
+    async disableUserFromModal() {
+      await disableUser(this.userId, this.userDisableReason);
+      await this.$emit('updateUser', {
         id: this.userId,
         disabled: true,
         disabledReason: this.userDisableReason,
       });
     },
-    toggleFunction(value) {
+    async toggleFunction(value) {
       if (value) {
         this.resetForm();
         this.showModal = true;
       } else {
-        // TODO: Enable user here
+        await enableUser(this.userId);
         // Send new user update to the parent component
         this.$emit('updateUser', {
           id: this.userId,
