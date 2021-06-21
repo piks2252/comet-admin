@@ -38,6 +38,7 @@
         <va-select
           :options="getUserSubscriptionLevel"
           :value="selectedSubscriptionLevel(props.rowData.subscribedLevel)"
+          @input="subscribedLevelChange(event, data)"
         />
       </template>
       <template slot="verification" slot-scope="props">
@@ -70,7 +71,6 @@
 
 <script>
 import { debounce } from 'lodash';
-import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -79,6 +79,7 @@ export default {
       perPage: '20',
       perPageOptions: ['20', '30', '40', '50'],
       showModal: false,
+      users: [],
     };
   },
   filters: {
@@ -86,8 +87,7 @@ export default {
       if (!value) {
         return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
       }
-      value = value.toString();
-      return value.toUpperCase();
+      return `https://cdn.comet.shivy.co.in/images/profile/${value}`;
     },
   },
   computed: {
@@ -144,16 +144,9 @@ export default {
         return item.name.toLowerCase().startsWith(this.term.toLowerCase());
       });
     },
-    ...mapState({
-      users: state => state.USERS.users,
-    }),
   },
   mounted() {
-    this.$store.dispatch('fetchUsers', {
-      limit: parseInt(this.perPage),
-      skip: 0,
-      sortBy: '-id',
-    });
+    // Load users here
   },
   methods: {
     getTrendIcon(user) {
@@ -182,9 +175,18 @@ export default {
       return this.getUserSubscriptionLevel.find(e => e.id === id);
     },
     disableToggle(userId) {
+      const currentUser = this.users.find(user.id === userId);
+      if (currentUser.disabled === true) {
+        // ENable user
+      } else {
+        // Ask for reason
+        // Disable user
+      }
       // Toggle user with given user id
       alert(userId);
-      console.log(this.users);
+    },
+    subscribedLevelChange(event, data) {
+      console.log(event);
     },
     showUser(user) {
       alert(JSON.stringify(user));
@@ -195,3 +197,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #efefef;
+  border-radius: 24px;
+}
+</style>
