@@ -34,11 +34,21 @@ export const MUTATIONS = {
     }
   `,
   UPDATE_GENRE: gql`
-    mutation UPDATE_GENRE($id: ID!, $name: String, $groupType: String) {
-      updateGenre(genreData: { id: $id, name: $name, groupType: $groupType }) {
+    mutation UPDATE_GENRE(
+      $id: ID!
+      $name: String
+      $groupType: String
+      $thumbnail: Upload!
+    ) {
+      updateGenre(
+        genreData: { id: $id, name: $name, groupType: $groupType }
+        thumbnail: $thumbnail
+      ) {
         genre {
           id
+          name
           groupType
+          thumbnail
         }
       }
     }

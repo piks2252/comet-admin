@@ -18,7 +18,10 @@
 
     <va-data-table :fields="fields" :data="filteredData" :per-page="100">
       <template slot="thumbnail" slot-scope="props">
-        <img :src="props.rowData.thumbnail | genreImage" class="genre-pic" />
+        <genre-thumbnail
+          :genreId="props.rowData.id"
+          :thumbnail="props.rowData.thumbnail"
+        />
       </template>
       <template slot="genreGroup" slot-scope="props">
         <genre-group
@@ -43,12 +46,14 @@
 import { debounce } from 'lodash';
 import { fetchGenres } from '../../apollo/api/genres';
 import GenreGroup from './GenreGroup';
+import GenreThumbnail from './GenreThumbnail';
 import GenreActions from './GenreActions';
 import AddGenreModal from './AddGenreModal';
 
 export default {
   components: {
     GenreGroup,
+    GenreThumbnail,
     GenreActions,
     AddGenreModal,
   },
@@ -58,14 +63,6 @@ export default {
       genres: [],
       showModal: false,
     };
-  },
-  filters: {
-    genreImage: value => {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/genres/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/genres/${value}`;
-    },
   },
   computed: {
     fields() {

@@ -20,10 +20,16 @@ export const createGenre = async(name, groupType, thumbnail) => {
   return data;
 };
 
-export const updateGenre = async(id, name = null, groupType = null) => {
+export const updateGenre = async(
+  id,
+  name = null,
+  groupType = null,
+  thumbnail = null,
+) => {
   const variables = { id };
   if (name !== null) variables.name = name;
   if (groupType !== null) variables.groupType = groupType;
+  if (thumbnail !== null) variables.thumbnail = thumbnail;
   const { data } = await apolloClient.mutate({
     mutation: MUTATIONS.UPDATE_GENRE,
     variables,
