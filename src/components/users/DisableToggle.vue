@@ -19,7 +19,7 @@ export default {
   props: { disabled: Boolean, disabledReason: String, userId: String },
   methods: {
     toggleFunction(value) {
-      console.log(this.userId, value);
+      // TODO: Update the value of user here using mutation
       this.$emit('updateUser', {
         id: this.userId,
         disabled: value,

@@ -35,9 +35,10 @@
       </template>
 
       <template slot="subscription" slot-scope="props">
-        <va-select
-          :options="getUserSubscriptionLevel"
-          :value="selectedSubscriptionLevel(props.rowData.subscribedLevel)"
+        <subscription-level
+          :level="props.rowData.subscribedLevel"
+          :userId="props.rowData.id"
+          @updateUser="updateUserArray"
         />
       </template>
       <template slot="verification" slot-scope="props">
@@ -63,11 +64,13 @@
 <script>
 import { debounce } from 'lodash';
 import { fetchUsers } from '../../apollo/api/users';
-import DisableToggle from './DisableToggle.vue';
+import DisableToggle from './DisableToggle';
+import SubscriptionLevel from './SubscriptionLevel';
 
 export default {
   components: {
     DisableToggle,
+    SubscriptionLevel,
   },
   data() {
     return {
@@ -87,14 +90,6 @@ export default {
     },
   },
   computed: {
-    getUserSubscriptionLevel() {
-      return [0, 1, 2].map(e => {
-        return {
-          id: e,
-          text: `Level ${e}`,
-        };
-      });
-    },
     fields() {
       return [
         {
@@ -168,9 +163,7 @@ export default {
 
       return 'grey';
     },
-    selectedSubscriptionLevel(id) {
-      return this.getUserSubscriptionLevel.find(e => e.id === id);
-    },
+
     updateUserArray(user) {
       console.log(user);
       const newUsers = this.users.map(u => {
