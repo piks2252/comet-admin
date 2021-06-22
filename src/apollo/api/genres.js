@@ -33,6 +33,9 @@ export const updateGenre = async(
   const { data } = await apolloClient.mutate({
     mutation: MUTATIONS.UPDATE_GENRE,
     variables,
+    context: {
+      hasUpload: true,
+    },
   });
   return data;
 };
