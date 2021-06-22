@@ -36,19 +36,17 @@
         <img class="manga-row-thumb" :src="props.rowData.cover" />
       </template>
       <template slot="status" slot-scope="props">
-        <va-select
-          :options="statusOptions"
-          :value="getSelectedOption(props.rowData.status)"
-          clearable="false"
-          @input="toggleMangaStatus(props.rowData.id)"
+        <manga-status
+          :status="props.rowData.status"
+          :mangaId="props.rowData.id"
+          @updateManga="updateMangaArray"
         />
       </template>
-      <template slot="enabled" slot-scope="props">
-        <va-toggle
-          :value="props.rowData.enabled"
-          small
-          :color="props.rowData.enabled ? 'success' : 'danger'"
-          @input="toggleEnableManga(props.rowData.id)"
+      <template slot="disabled" slot-scope="props">
+        <manga-disabled
+          :disabled="props.rowData.disabled"
+          :mangaId="props.rowData.id"
+          @updateManga="updateMangaArray"
         />
       </template>
       <template slot="actions" slot-scope="props">
@@ -76,138 +74,21 @@
 
 <script>
 import { debounce } from 'lodash';
-
-const DUMMY_ROWS = [
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-  {
-    id: 'adada',
-    title: 'Naruto',
-    cover: 'http://fmcdn.mfcdn.net/store/manga/27105/cover.jpg',
-    enabled: true,
-    status: 1,
-  },
-];
+import { fetchMangas } from '../../apollo/api/mangas';
+import MangaDisabled from './MangaDisabled';
+import MangaStatus from './MangaStatus';
 
 export default {
-  components: {},
+  components: {
+    MangaDisabled,
+    MangaStatus,
+  },
   data() {
     return {
       term: null,
       perPage: '20',
       perPageOptions: ['10', '20', '30', '40'],
-      mangas: DUMMY_ROWS,
+      mangas: [],
       showModal: false,
     };
   },
@@ -230,8 +111,8 @@ export default {
           width: '10%',
         },
         {
-          name: '__slot:enabled',
-          title: 'Enabled',
+          name: '__slot:disabled',
+          title: 'Disabled',
           width: '10%',
         },
         {
@@ -245,32 +126,38 @@ export default {
       if (!this.term || this.term.length < 1) {
         return this.mangas;
       }
-
       return this.mangas.filter(item => {
         return item.title.toLowerCase().startsWith(this.term.toLowerCase());
       });
     },
-    statusOptions() {
-      return [
-        { id: 1, text: 'On going' },
-        { id: 2, text: 'Completed' },
-        { id: 3, text: 'Dropped' },
-      ];
-    },
+  },
+  async mounted() {
+    await this.loadMangas();
   },
   methods: {
     search: debounce(function(term) {
       this.term = term;
     }, 400),
-    getSelectedOption(status_id) {
-      const val = this.statusOptions.find(e => e.id === status_id);
-      return val;
+    async loadMangas() {
+      try {
+        const { mangasList } = await fetchMangas();
+        this.mangas = mangasList;
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
     },
-    toggleEnableManga(manga_id) {
-      console.log('manga id ', manga_id);
-    },
-    toggleMangaStatus(manga_id) {
-      console.log('manga id ', manga_id);
+    updateMangaArray(manga) {
+      const newMangas = this.mangas.map(m => {
+        if (m.id === manga.id) {
+          return { ...m, ...manga };
+        }
+        return m;
+      });
+      this.mangas = newMangas;
     },
     navigateToAddManga() {
       this.$router.push({ name: 'add-manga' });
@@ -281,7 +168,6 @@ export default {
     navigateToViewManga(manga_id) {
       this.$router.push({ name: 'view-manga', params: { id: manga_id } });
     },
-    deleteManga(manga_id) {},
   },
 };
 </script>
