@@ -2,7 +2,7 @@
   <va-card>
     <div class="row align--center">
       <div class="flex xs12 md6">
-        <va-button @click="showModal = true">Add Author</va-button>
+        <add-author-modal />
       </div>
       <div class="flex xs12 md3 offset--md3">
         <va-input
@@ -27,7 +27,6 @@
         />
       </template>
     </va-data-table>
-    <add-author-modal :showModal="showModal" />
   </va-card>
 </template>
 

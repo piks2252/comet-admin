@@ -1,6 +1,6 @@
 <template>
   <div>
-    <va-button outline color="success" small @click="editGenre">
+    <va-button outline color="success" small @click="editAuthor">
       Edit
     </va-button>
     <va-modal
@@ -29,6 +29,20 @@
           label="Author Name"
           placeholder="Author name"
         />
+        <p>
+          <va-radio-button
+            class="xs1"
+            v-model="newAuthor.peopleType"
+            :option="1"
+            label="Author"
+          />
+          <va-radio-button
+            class="xs1"
+            v-model="newAuthor.peopleType"
+            :option="2"
+            label="Artist"
+          />
+        </p>
         <va-input
           v-model="newAuthor.twitter"
           label="Twitter"
@@ -62,7 +76,6 @@ export default {
   props: { author: Object },
   filters: {
     authorImage(value) {
-      return 'https://scontent.famd4-1.fna.fbcdn.net/v/t1.6435-9/37778102_426542904533479_7450313514482139136_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=85a577&_nc_ohc=gs6t5aVBRpEAX-5Nt1-&_nc_ht=scontent.famd4-1.fna&oh=a5114e9dfa47adbae7fe18ac94a98539&oe=60D715B2';
       if (!value) {
         return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
       }
@@ -73,6 +86,7 @@ export default {
     return {
       newAuthor: {
         name: '',
+        peopleType: 1,
         twitter: '',
         instagram: '',
         patreon: '',
@@ -86,7 +100,7 @@ export default {
     resetForm() {
       this.newAuthor = { ...this.author, picture: null };
     },
-    editGenre() {
+    editAuthor() {
       this.resetForm();
       this.showModal = true;
     },
@@ -111,7 +125,6 @@ export default {
         });
         this.resetForm();
       } catch (e) {
-        console.log(e);
         this.showToast(e, {
           position: 'top-right',
           duration: 1200,
