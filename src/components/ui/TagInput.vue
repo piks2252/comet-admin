@@ -27,6 +27,10 @@ export default {
     disabled: {
       type: Boolean,
     },
+    textKey: {
+      type: String,
+      default: 'text',
+    },
   },
   model: {
     prop: 'tags',
@@ -36,13 +40,27 @@ export default {
   computed: {
     tagsLocal: {
       get: function() {
-        return this.tags;
+        if (typeof this.tags[0] === 'string') {
+          return this.tags;
+        } else {
+          return this.tags.map(t => {
+            return {
+              id: t.id,
+              text: t[this.textKey],
+            };
+          });
+        }
       },
       set: function(value) {
-        this.$emit(
-          'tagschange',
-          value.map(t => t.text)
-        );
+        let newTagsValue = value;
+        if (typeof this.tags[0] !== 'string') {
+          newTagsValue = value.map(t => {
+            const row = { ...t };
+            row[this.textKey] = t.text;
+            return row;
+          });
+        }
+        this.$emit('tagschange', newTagsValue);
       },
     },
   },
@@ -53,10 +71,7 @@ export default {
   },
   methods: {
     clearTags() {
-      this.$emit(
-        'tagschange',
-        [].map(t => t.text)
-      );
+      this.$emit('tagschange', []);
     },
   },
 };

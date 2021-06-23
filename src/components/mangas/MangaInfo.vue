@@ -6,15 +6,7 @@
           <form>
             <div class="row">
               <div class="flex md5 sm4 xs4">
-                <img
-                  src="http://fmcdn.mfcdn.net/store/manga/24095/cover.jpg"
-                  class="manga-thumb"
-                />
-                <va-file-upload
-                  type="gallery"
-                  file-types=".png, .jpg, .jpeg"
-                  v-model="tempFiles"
-                />
+                <img :src="manga.cover" class="manga-thumb" />
               </div>
               <div class="flex md4 sm6 xs12">
                 <p class="display-5">Manga Info</p>
@@ -27,7 +19,7 @@
                 <br />
                 <p class="title">Alternative titles</p>
                 <tag-input
-                  v-model="manga.alternative_titles"
+                  v-model="manga.alternativeTitles"
                   placeholder="Alternative titles"
                   :disabled="view"
                 />
@@ -35,6 +27,7 @@
                 <p class="title">Authors</p>
                 <tag-input
                   v-model="manga.authors"
+                  textKey="name"
                   placeholder="Authors"
                   :disabled="view"
                 />
@@ -43,6 +36,7 @@
                 <tag-input
                   v-model="manga.artists"
                   placeholder="Artists"
+                  textKey="name"
                   :disabled="view"
                 />
                 <br />
@@ -69,38 +63,31 @@
               </div>
               <div class="flex md3 sm6 xs12">
                 <va-toggle
-                  v-model="manga.enabled"
-                  :label="manga.enabled ? 'Disable manga' : 'Enable manga'"
+                  v-model="manga.disabled"
+                  :label="manga.disabled ? 'Enable manga' : 'Disable manga'"
                   v-if="!view"
                 />
                 <p class="display-6">Other sources</p>
                 <br />
                 <va-input
-                  v-model="manga.other_sources.isbn_code"
+                  v-model="manga.otherSources.isbnCode"
                   placeholder="ISBN code"
                   :disabled="view"
                 />
                 <va-input
-                  v-model="manga.other_sources.anilist_id"
+                  v-model="manga.otherSources.anilistId"
                   placeholder="Anilist ID"
                   :disabled="view"
                 />
                 <va-input
-                  v-model="manga.other_sources.mal_id"
+                  v-model="manga.otherSources.malId"
                   placeholder="MAL ID"
                   :disabled="view"
                 />
-                <va-input
-                  v-model="manga.other_sources.mangadex_id"
-                  placeholder="Mangadex ID"
-                  :disabled="view"
-                />
+
                 <br />
                 <p class="title">Publishing date</p>
-                <va-date-picker
-                  v-model="manga.published_date"
-                  :disabled="view"
-                />
+                <va-date-picker v-model="manga.releaseDate" :disabled="view" />
                 <br />
                 <p class="display-6">Genres and Demographics</p>
                 <br />
@@ -112,63 +99,39 @@
                 />
                 <va-checkbox
                   label="Adult"
-                  v-model="manga.is_adult"
+                  v-model="manga.isAdult"
                   :disabled="view"
                 />
                 <br />
                 <p class="title">Select theme</p>
                 <tag-input
                   v-model="manga.themes"
+                  textKey="name"
                   placeholder="Themes"
                   :disabled="view"
                 />
                 <p class="title">Select genres</p>
                 <tag-input
                   v-model="manga.genres"
+                  textKey="name"
                   placeholder="Genres"
                   :disabled="view"
                 />
                 <p class="title">Select demographics</p>
                 <tag-input
                   v-model="manga.demographics"
+                  textKey="name"
                   placeholder="Demographics"
                   :disabled="view"
                 />
               </div>
             </div>
-            <div class="row">
-              <div class="flex xs12 button-container">
-                <div class="flex mb3" v-if="!view">
-                  <va-button color="warning" @click="resetForm">
-                    Reset</va-button
-                    >
-                  <va-button
-                    color="success"
-                    @click="updateManga"
-                    v-if="manga_id"
-                  >
-                    Update manga</va-button
-                  >
-                  <va-button color="success" @click="submitForm" v-else>
-                    Add manga</va-button
-                  >
-
-                  <va-button
-                    color="danger"
-                    @click="updateManga"
-                    v-if="manga_id"
-                  >
-                    Delete manga</va-button
-                  >
-                </div>
-              </div>
-            </div>
           </form>
+          <div class="row" v-if="manga_id">
+            <h3>Here chapters will be displayed</h3>
+          </div>
         </va-card>
       </div>
-    </div>
-    <div class="row" v-if="manga_id">
-      Here chapters will be displayed
     </div>
   </div>
 </template>
@@ -176,29 +139,30 @@
 <script>
 import TagInput from '../ui/TagInput';
 import ToggleSwitch from 'vuejs-toggle-switch';
+import { fetchManga } from '../../apollo/api/mangas';
 
 const DEFAULT_MANGA = {
-  title: 'ss',
-  alternative_titles: [],
-  cover: null,
-  enabled: true,
-  description: '',
-  published_date: new Date().getUTCDate(),
+  title: '',
+  alternativeTitles: [],
+  status: 1,
   authors: [],
   artists: [],
-  status: 1,
+  cover: null,
+  description: '',
   hentai: false,
-  is_adult: false,
-  other_sources: {
-    isbn_code: '',
-    anilist_id: '',
-    mal_id: '',
-    mangadex_id: '',
-  },
+  isAdult: false,
+  type: null,
   genres: [],
   demographics: [],
   themes: [],
   tags: [],
+  releaseDate: new Date(),
+  disabled: false,
+  otherSources: {
+    isbnCode: '',
+    anilistId: '',
+    malId: '',
+  },
 };
 
 export default {
@@ -250,52 +214,18 @@ export default {
           ],
         },
       },
-      tempFiles: [],
       view: this.$route.name === 'view-manga',
-      apiLoading: false,
-      unsavedChanges: false,
     };
   },
-  mounted() {
+  async mounted() {
     if (this.manga_id) {
-      console.log('Refreshing api here');
+      await this.loadMangaDetails();
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    if (this.unsavedChanges) {
-      const answer = window.confirm(
-        'Do you really want to leave? you have unsaved changes!',
-      );
-      if (!answer) {
-        next(false);
-      }
-    }
-    next();
   },
   methods: {
-    resetForm() {
-      this.manga = DEFAULT_MANGA;
-    },
-    async submitForm() {
-      console.log(this.tempFiles);
-      console.log('Submitting form');
-    },
-    async updateManga() {
-      console.log(this.tempFiles);
-      console.log('Submitting form');
-    },
-    updateMangaState(val) {
-      switch (val.toLowerCase()) {
-        case 'on going':
-          this.manga.status = 1;
-          break;
-        case 'completed':
-          this.manga.status = 2;
-          break;
-        case 'dropped':
-          this.manga.status = 3;
-          break;
-      }
+    async loadMangaDetails() {
+      const { mangaInfo } = await fetchManga(this.manga_id);
+      this.manga = { ...this.manga, ...mangaInfo };
     },
     selectedMangaState() {
       switch (this.manga.status) {

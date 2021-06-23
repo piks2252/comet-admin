@@ -17,8 +17,38 @@ export const QUERIES = {
       mangaInfo(id: $id) {
         id
         title
+        alternativeTitles
         status
+        authors {
+          id
+          name
+        }
+        artists {
+          id
+          name
+        }
         cover
+        description
+        hentai
+        isAdult
+        type {
+          id
+          name
+        }
+        genres {
+          id
+          name
+        }
+        demographics {
+          id
+          name
+        }
+        themes {
+          id
+          name
+        }
+        tags
+        releaseDate
         disabled
       }
     }
