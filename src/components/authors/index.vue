@@ -15,8 +15,8 @@
         </va-input>
       </div>
     </div>
-
-    <va-data-table :fields="fields" :data="filteredData" :per-page="100">
+    <loader v-if="apiLoading" />
+    <va-data-table :fields="fields" :data="filteredData" :per-page="100" v-else>
       <template slot="thumbnail" slot-scope="props">
         <img :src="props.rowData.picture | authorImage" class="genre-pic" />
       </template>
@@ -35,15 +35,18 @@ import { debounce } from 'lodash';
 import { fetchAuthors } from '../../apollo/api/authors';
 import AuthorActions from './AuthorActions';
 import AddAuthorModal from './AddAuthorModal';
+import Loader from '../ui/Loader';
 
 export default {
   components: {
     AuthorActions,
     AddAuthorModal,
+    Loader,
   },
   data() {
     return {
       term: null,
+      apiLoading: false,
       authors: [],
       showModal: false,
     };
@@ -93,6 +96,7 @@ export default {
   },
   methods: {
     async loadAuthors() {
+      this.apiLoading = true;
       try {
         const { peopleList } = await fetchAuthors();
         this.authors = peopleList;
@@ -103,6 +107,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.apiLoading = false;
     },
     updateAuthorArray(author) {
       const newAuthors = this.authors.map(g => {

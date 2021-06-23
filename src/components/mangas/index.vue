@@ -26,11 +26,12 @@
         />
       </div>
     </div>
-
+    <loader v-if="apiLoading" />
     <va-data-table
       :fields="fields"
       :data="filteredData"
       :per-page="parseInt(perPage)"
+      v-else
     >
       <template slot="cover" slot-scope="props">
         <img class="manga-row-thumb" :src="props.rowData.cover" />
@@ -77,15 +78,18 @@ import { debounce } from 'lodash';
 import { fetchMangas } from '../../apollo/api/mangas';
 import MangaDisabled from './MangaDisabled';
 import MangaStatus from './MangaStatus';
+import Loader from '../ui/Loader';
 
 export default {
   components: {
     MangaDisabled,
     MangaStatus,
+    Loader,
   },
   data() {
     return {
       term: null,
+      apiLoading: false,
       perPage: '20',
       perPageOptions: ['10', '20', '30', '40'],
       mangas: [],
@@ -139,6 +143,7 @@ export default {
       this.term = term;
     }, 400),
     async loadMangas() {
+      this.apiLoading = true;
       try {
         const { mangasList } = await fetchMangas();
         this.mangas = mangasList;
@@ -149,6 +154,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.apiLoading = false;
     },
     updateMangaArray(manga) {
       const newMangas = this.mangas.map(m => {

@@ -21,11 +21,12 @@
         />
       </div>
     </div>
-
+    <loader v-if="apiLoading" />
     <va-data-table
       :fields="fields"
       :data="filteredData"
       :per-page="parseInt(perPage)"
+      v-else
     >
       <template slot="profile" slot-scope="props">
         <img
@@ -66,15 +67,18 @@ import { debounce } from 'lodash';
 import { fetchUsers } from '../../apollo/api/users';
 import DisableToggle from './DisableToggle';
 import SubscriptionLevel from './SubscriptionLevel';
+import Loader from '../ui/Loader.vue';
 
 export default {
   components: {
     DisableToggle,
     SubscriptionLevel,
+    Loader,
   },
   data() {
     return {
       term: null,
+      apiLoading: false,
       perPage: '20',
       perPageOptions: ['20', '30', '40', '50'],
       showModal: false,
@@ -141,6 +145,7 @@ export default {
   },
   methods: {
     async loadUsers() {
+      this.apiLoading = true;
       try {
         const { readersList } = await fetchUsers();
         this.users = readersList;
@@ -151,6 +156,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.apiLoading = false;
     },
     updateUserArray(user) {
       const newUsers = this.users.map(u => {

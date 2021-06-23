@@ -16,7 +16,8 @@
       </div>
     </div>
 
-    <va-data-table :fields="fields" :data="filteredData" :per-page="100">
+    <loader v-if="apiLoading" />
+    <va-data-table :fields="fields" :data="filteredData" :per-page="100" v-else>
       <template slot="thumbnail" slot-scope="props">
         <genre-thumbnail
           :genreId="props.rowData.id"
@@ -48,6 +49,7 @@ import GenreGroup from './GenreGroup';
 import GenreThumbnail from './GenreThumbnail';
 import GenreActions from './GenreActions';
 import AddGenreModal from './AddGenreModal';
+import Loader from '../ui/Loader';
 
 export default {
   components: {
@@ -55,9 +57,11 @@ export default {
     GenreThumbnail,
     GenreActions,
     AddGenreModal,
+    Loader,
   },
   data() {
     return {
+      apiLoading: false,
       term: null,
       genres: [],
     };
@@ -104,6 +108,7 @@ export default {
   },
   methods: {
     async loadGenres() {
+      this.apiLoading = true;
       try {
         const { genresList } = await fetchGenres();
         this.genres = genresList;
@@ -114,6 +119,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.apiLoading = false;
     },
     updateGenreArray(genre) {
       const newGenres = this.genres.map(g => {
