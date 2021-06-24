@@ -127,8 +127,9 @@
             </div>
           </div>
         </form>
-        <div class="row" v-if="manga_id">
+        <div class="row">
           <h3>Here chapters will be displayed</h3>
+          <chapters :mangaId="manga_id" ref="chapters" />
         </div>
       </va-card>
     </div>
@@ -137,8 +138,10 @@
 
 <script>
 import TagInput from '../ui/TagInput';
+import ToggleSwitch from 'vuejs-toggle-switch';
 import { fetchManga } from '../../apollo/api/mangas';
 import Loader from '../ui/Loader';
+import Chapters from './Chapters';
 
 const DEFAULT_MANGA = {
   title: '',
@@ -166,7 +169,7 @@ const DEFAULT_MANGA = {
 
 export default {
   name: 'manga-info',
-  components: { TagInput, Loader },
+  components: { TagInput, Loader, ToggleSwitch, Chapters },
   data() {
     return {
       apiLoading: false,
@@ -220,6 +223,11 @@ export default {
   async mounted() {
     if (this.manga_id) {
       await this.loadMangaDetails();
+
+      // Call to load chapters
+      if (this.$refs.chapters) {
+        await this.$refs.chapters.loadChapters();
+      }
     }
   },
   methods: {
@@ -227,8 +235,14 @@ export default {
       this.apiLoading = true;
       try {
         const { mangaInfo } = await fetchManga(this.manga_id);
-        this.manga = { ...this.manga, ...mangaInfo };
-      } catch (e) {}
+        this.manga = { ...DEFAULT_MANGA, ...mangaInfo };
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
       this.apiLoading = false;
     },
     selectedMangaState() {

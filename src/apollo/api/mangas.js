@@ -17,6 +17,19 @@ export const fetchManga = async id => {
   return data;
 };
 
+export const fetchChapters = async(
+  mangaId,
+  limit = 100,
+  skip = 0,
+  sortBy = '-chapter',
+) => {
+  const { data } = await apolloClient.query({
+    query: QUERIES.CHAPTERS,
+    variables: { mangaId, limit, skip, sortBy },
+  });
+  return data;
+};
+
 // export const createManga = async author => {
 //   const { data } = await apolloClient.mutate({
 //     mutation: MUTATIONS.CREATE_AUTHOR,

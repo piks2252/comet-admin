@@ -53,6 +53,26 @@ export const QUERIES = {
       }
     }
   `,
+  CHAPTERS: gql`
+    query FETCH_CHAPTERS(
+      $limit: Int
+      $skip: Int
+      $sortBy: String
+      $mangaId: String
+    ) {
+      chaptersList(
+        mangaId: $mangaId
+        limit: $limit
+        skip: $skip
+        sortBy: $sortBy
+      ) {
+        id
+        title
+        chapter
+        volume
+      }
+    }
+  `,
 };
 
 export const MUTATIONS = {
