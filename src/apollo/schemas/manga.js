@@ -126,12 +126,20 @@ export const MUTATIONS = {
           id
           title
           alternativeTitles
-          description
+          status
           authors {
             id
             name
           }
           artists {
+            id
+            name
+          }
+          cover
+          description
+          hentai
+          isAdult
+          type {
             id
             name
           }
@@ -147,16 +155,9 @@ export const MUTATIONS = {
             id
             name
           }
-          type {
-            id
-            name
-          }
           tags
-          hentai
-          isAdult
-          status
-          disabled
           releaseDate
+          disabled
         }
       }
     }
