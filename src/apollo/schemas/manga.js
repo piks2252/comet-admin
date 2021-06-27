@@ -2,8 +2,13 @@ import gql from 'graphql-tag';
 
 export const QUERIES = {
   MANGAS: gql`
-    query FETCH_MANGAS($limit: Int, $skip: Int, $sortBy: String) {
-      mangasList(limit: $limit, skip: $skip, sortBy: $sortBy) {
+    query FETCH_MANGAS(
+      $search: String
+      $limit: Int
+      $skip: Int
+      $sortBy: String
+    ) {
+      mangasList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
         id
         title
         status

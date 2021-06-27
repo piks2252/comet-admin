@@ -1,10 +1,15 @@
 import { QUERIES, MUTATIONS } from '../schemas/genre';
 import { apolloClient } from '../index';
 
-export const fetchGenres = async(limit = 120, skip = 0, sortBy = '+name') => {
+export const fetchGenres = async(
+  search = '',
+  limit = 120,
+  skip = 0,
+  sortBy = '+name',
+) => {
   const { data } = await apolloClient.query({
     query: QUERIES.GENRES,
-    variables: { limit, skip, sortBy },
+    variables: { search, limit, skip, sortBy },
   });
   return data;
 };

@@ -2,8 +2,13 @@ import gql from 'graphql-tag';
 
 export const QUERIES = {
   AUTHORS: gql`
-    query FETCH_AUTHORS($limit: Int, $skip: Int, $sortBy: String) {
-      peopleList(limit: $limit, skip: $skip, sortBy: $sortBy) {
+    query FETCH_AUTHORS(
+      $search: String
+      $limit: Int
+      $skip: Int
+      $sortBy: String
+    ) {
+      peopleList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
         id
         name
         peopleType
@@ -53,7 +58,7 @@ export const MUTATIONS = {
     }
   `,
   UPDATE_AUTHOR: gql`
-    mutation UPDATE_GENRE(
+    mutation UPDATE_AUTHOR(
       $id: ID!
       $name: String
       $peopleType: Int

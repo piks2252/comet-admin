@@ -1,10 +1,15 @@
 import { QUERIES, MUTATIONS } from '../schemas/manga';
 import { apolloClient } from '../index';
 
-export const fetchMangas = async(limit = 100, skip = 0, sortBy = '+title') => {
+export const fetchMangas = async(
+  search = '',
+  limit = 100,
+  skip = 0,
+  sortBy = '+title',
+) => {
   const { data } = await apolloClient.query({
     query: QUERIES.MANGAS,
-    variables: { limit, skip, sortBy },
+    variables: { search, limit, skip, sortBy },
   });
   return data;
 };

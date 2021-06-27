@@ -1,10 +1,15 @@
 import { QUERIES, MUTATIONS } from '../schemas/author';
 import { apolloClient } from '../index';
 
-export const fetchAuthors = async(limit = 120, skip = 0, sortBy = '+name') => {
+export const fetchAuthors = async(
+  search = '',
+  limit = 120,
+  skip = 0,
+  sortBy = '+name',
+) => {
   const { data } = await apolloClient.query({
     query: QUERIES.AUTHORS,
-    variables: { limit, skip, sortBy },
+    variables: { search, limit, skip, sortBy },
   });
   return data;
 };

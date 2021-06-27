@@ -2,8 +2,13 @@ import gql from 'graphql-tag';
 
 export const QUERIES = {
   GENRES: gql`
-    query FETCH_GENRES($limit: Int, $skip: Int, $sortBy: String) {
-      genresList(limit: $limit, skip: $skip, sortBy: $sortBy) {
+    query FETCH_GENRES(
+      $search: String
+      $limit: Int
+      $skip: Int
+      $sortBy: String
+    ) {
+      genresList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
         id
         name
         thumbnail
