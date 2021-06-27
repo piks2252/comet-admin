@@ -63,19 +63,6 @@
             />
           </div>
           <div class="flex md3 sm6 xs12">
-            <div class="manga-controls" v-if="!view">
-              <va-toggle
-                v-model="manga.disabled"
-                :label="manga.disabled ? 'Enable manga' : 'Disable manga'"
-                small
-              />
-              <va-button outline color="success" small @click="submitChanges()">
-                Save Manga
-              </va-button>
-              <va-button outline color="danger" small @click="cancelEditing">
-                Cancel
-              </va-button>
-            </div>
             <p class="display-6">Other sources</p>
             <br />
             <va-input
@@ -142,6 +129,19 @@
               :ajaxFunction="getDemographicsArray"
               :disabled="view"
             />
+            <div class="manga-controls" v-if="!view">
+              <va-toggle
+                v-model="manga.disabled"
+                :label="manga.disabled ? 'Enable manga' : 'Disable manga'"
+                small
+              />
+              <va-button outline color="success" small @click="submitChanges()">
+                Save Manga
+              </va-button>
+              <va-button outline color="danger" small @click="cancelEditing">
+                Cancel
+              </va-button>
+            </div>
           </div>
         </div>
       </div>
