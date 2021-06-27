@@ -173,6 +173,7 @@ export default {
   },
   data() {
     return {
+      isSaved: true,
       apiLoading: false,
       manga: DEFAULT_MANGA,
       toggleSwitchOptions: {

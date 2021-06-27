@@ -7,9 +7,24 @@
             {{ tab.title }}
           </va-tab>
         </va-tabs>
-        <manga-details v-if="tabValue === 0" :mangaId="mangaId" :view="view" />
-        <chapters v-if="tabValue === 1" :mangaId="mangaId" :view="view" />
-        <scrapers v-else-if="tabValue === 2" :mangaId="mangaId" :view="view" />
+        <manga-details
+          ref="mangaDetails"
+          v-if="tabValue === 0"
+          :mangaId="mangaId"
+          :view="view"
+        />
+        <chapters
+          ref="chapters"
+          v-if="tabValue === 1"
+          :mangaId="mangaId"
+          :view="view"
+        />
+        <scrapers
+          ref="scrapers"
+          v-else-if="tabValue === 2"
+          :mangaId="mangaId"
+          :view="view"
+        />
       </div>
     </div>
   </va-card>
@@ -46,6 +61,33 @@ export default {
           : null,
       view: this.$route.name === 'view-manga',
     };
+  },
+  beforeRouteLeave(to, from, next) {
+    // Check if any of the ref is present
+    let unsavedChanges = false;
+    switch (this.tabValue) {
+      case 0:
+        unsavedChanges = !this.$refs.mangaDetails.isSaved;
+        break;
+      case 1:
+        unsavedChanges = !this.$refs.chapters.isSaved;
+        break;
+      case 2:
+        unsavedChanges = !this.$refs.scrapers.isSaved;
+        break;
+    }
+    if (unsavedChanges && view === false) {
+      const answer = window.confirm(
+        'Do you really want to leave? you have unsaved changes!',
+      );
+      if (answer) {
+        next();
+      } else {
+        next(false);
+      }
+    } else {
+      next();
+    }
   },
 };
 </script>
