@@ -100,7 +100,7 @@ export const MUTATIONS = {
       $releaseDate: DateTime
       $thumbnail: Upload!
     ) {
-      updateManga(
+      createManga(
         mangaData: {
           title: $title
           alternativeTitles: $alternativeTitles

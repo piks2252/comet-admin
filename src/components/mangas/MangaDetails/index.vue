@@ -162,7 +162,11 @@
 
 <script>
 import _ from 'lodash';
-import { fetchManga, updateManga } from '../../../apollo/api/mangas';
+import {
+  fetchManga,
+  createManga,
+  updateManga,
+} from '../../../apollo/api/mangas';
 import { fetchAuthors } from '../../../apollo/api/authors';
 import { fetchGenres } from '../../../apollo/api/genres';
 import ToggleSwitch from 'vuejs-toggle-switch';
@@ -370,12 +374,15 @@ export default {
     },
     processInput(mangaInfo) {
       const manga = { ...mangaInfo };
+      manga.alternativeTitles = mangaInfo.alternativeTitles.map(e => e.text);
       manga.authors = mangaInfo.authors.map(e => e.id);
       manga.artists = mangaInfo.artists.map(e => e.id);
       manga.genres = mangaInfo.genres.map(e => e.id);
       manga.type = mangaInfo.type.id;
       manga.demographics = mangaInfo.demographics.map(e => e.id);
       manga.themes = mangaInfo.themes.map(e => e.id);
+      manga.tags = mangaInfo.tags.map(e => e.text);
+      manga.releaseDate = new Date(mangaInfo.releaseDate);
       return manga;
     },
     async submitChanges() {
@@ -387,6 +394,10 @@ export default {
         if (this.mangaId === null) {
           // Add as new manga
           response = await createManga(updatedManga, this.coverImage);
+          this.$router.push({
+            name: 'view-manga',
+            params: { id: response.manga.id },
+          });
         } else {
           response = await updateManga(
             this.mangaId,
@@ -402,6 +413,7 @@ export default {
           fullWidth: false,
         });
       } catch (e) {
+        console.log(e);
         this.showToast(e, {
           position: 'top-right',
           duration: 1200,
