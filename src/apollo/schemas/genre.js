@@ -4,11 +4,18 @@ export const QUERIES = {
   GENRES: gql`
     query FETCH_GENRES(
       $search: String
+      $groupType: String
       $limit: Int
       $skip: Int
       $sortBy: String
     ) {
-      genresList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
+      genresList(
+        search: $search
+        groupType: $groupType
+        limit: $limit
+        skip: $skip
+        sortBy: $sortBy
+      ) {
         id
         name
         thumbnail

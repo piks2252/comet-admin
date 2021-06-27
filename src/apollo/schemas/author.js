@@ -4,11 +4,18 @@ export const QUERIES = {
   AUTHORS: gql`
     query FETCH_AUTHORS(
       $search: String
+      $peopleType: Int
       $limit: Int
       $skip: Int
       $sortBy: String
     ) {
-      peopleList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
+      peopleList(
+        search: $search
+        peopleType: $peopleType
+        limit: $limit
+        skip: $skip
+        sortBy: $sortBy
+      ) {
         id
         name
         peopleType

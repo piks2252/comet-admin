@@ -3,13 +3,14 @@ import { apolloClient } from '../index';
 
 export const fetchGenres = async(
   search = '',
+  groupType = '',
   limit = 120,
   skip = 0,
   sortBy = '+name',
 ) => {
   const { data } = await apolloClient.query({
     query: QUERIES.GENRES,
-    variables: { search, limit, skip, sortBy },
+    variables: { search, groupType, limit, skip, sortBy },
   });
   return data;
 };
