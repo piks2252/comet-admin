@@ -28,6 +28,7 @@
               v-model="manga.authors"
               textKey="name"
               placeholder="Authors"
+              :ajaxFunction="getAuthorsArray"
               :disabled="view"
             />
             <br />
@@ -36,6 +37,7 @@
               v-model="manga.artists"
               placeholder="Artists"
               textKey="name"
+              :ajaxFunction="getArtistsArray"
               :disabled="view"
             />
             <br />
@@ -115,6 +117,7 @@
               v-model="manga.themes"
               textKey="name"
               placeholder="Themes"
+              :ajaxFunction="getThemesArray"
               :disabled="view"
             />
             <p class="title">Select genres</p>
@@ -122,6 +125,7 @@
               v-model="manga.genres"
               textKey="name"
               placeholder="Genres"
+              :ajaxFunction="getGenresArray"
               :disabled="view"
             />
             <p class="title">Select demographics</p>
@@ -129,6 +133,7 @@
               v-model="manga.demographics"
               textKey="name"
               placeholder="Demographics"
+              :ajaxFunction="getDemographicsArray"
               :disabled="view"
             />
           </div>
@@ -144,6 +149,8 @@ import ToggleSwitch from 'vuejs-toggle-switch';
 import _ from 'lodash';
 import { fetchManga } from '../../../apollo/api/mangas';
 import Loader from '../../ui/Loader';
+import { fetchAuthors } from '../../../apollo/api/authors';
+import { fetchGenres } from '../../../apollo/api/genres';
 
 const DEFAULT_MANGA = {
   title: '',
@@ -275,6 +282,51 @@ export default {
       } else {
         this.$router.push('/mangas/');
       }
+    },
+    async getAuthorsArray(authorPattern = '') {
+      const { peopleList } = await fetchAuthors(authorPattern, 1, 5);
+      return peopleList.map(p => {
+        return {
+          id: p.id,
+          text: p.name,
+        };
+      });
+    },
+    async getArtistsArray(artistPattern = '') {
+      const { peopleList } = await fetchAuthors(artistPattern, 2, 5);
+      return peopleList.map(p => {
+        return {
+          id: p.id,
+          text: p.name,
+        };
+      });
+    },
+    async getGenresArray(genrePattern = '') {
+      const { genresList } = await fetchGenres(genrePattern, 5);
+      return genresList.map(p => {
+        return {
+          id: p.id,
+          text: p.name,
+        };
+      });
+    },
+    async getThemesArray(genrePattern = '') {
+      const { genresList } = await fetchGenres(genrePattern, 'theme', 5);
+      return genresList.map(p => {
+        return {
+          id: p.id,
+          text: p.name,
+        };
+      });
+    },
+    async getDemographicsArray(genrePattern = '') {
+      const { genresList } = await fetchGenres(genrePattern, 'demographics', 5);
+      return genresList.map(p => {
+        return {
+          id: p.id,
+          text: p.name,
+        };
+      });
     },
   },
   beforeDestroy() {
