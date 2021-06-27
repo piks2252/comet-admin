@@ -2,7 +2,7 @@
   <div class="row">
     <div class="flex xs12">
       <loader v-if="apiLoading" />
-      <form v-else>
+      <div v-else>
         <div class="row">
           <div class="flex md5 sm4 xs4">
             <img :src="manga.cover" class="manga-thumb" />
@@ -67,7 +67,7 @@
                 :label="manga.disabled ? 'Enable manga' : 'Disable manga'"
                 small
               />
-              <va-button outline color="success" small @click="submitChanges">
+              <va-button outline color="success" small @click="submitChanges()">
                 Save Manga
               </va-button>
               <va-button outline color="danger" small @click="cancelEditing">
@@ -133,7 +133,7 @@
             />
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
