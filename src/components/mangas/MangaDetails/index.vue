@@ -112,6 +112,12 @@
               :disabled="view"
             />
             <br />
+            <p class="title">Select Format</p>
+            <va-select
+              :options="formatTypes"
+              :value="manga.type.name"
+              @input="updateMangaType"
+            />
             <p class="title">Select theme</p>
             <tag-input
               v-model="manga.themes"
@@ -231,9 +237,16 @@ export default {
           ],
         },
       },
+      mangaFormats: [],
     };
   },
+  computed: {
+    formatTypes() {
+      return this.mangaFormats.map(e => e.name);
+    },
+  },
   async mounted() {
+    await this.getFormatArray();
     if (this.mangaId) {
       await this.loadMangaDetails();
     }
@@ -267,6 +280,14 @@ export default {
     isSaved() {
       return _.isEqual(this.manga, this.loadedManga);
     },
+    updateMangaType(formatName) {
+      const selectedFormat = this.mangaFormats.find(e => e.name === formatName);
+      if (selectedFormat) {
+        this.manga.type = selectedFormat;
+      } else {
+        alert('Invalid format selected');
+      }
+    },
     async getAuthorsArray(authorPattern = '') {
       const { peopleList } = await fetchAuthors(authorPattern, 1, 5);
       return peopleList.map(p => {
@@ -285,8 +306,17 @@ export default {
         };
       });
     },
+    async getFormatArray() {
+      const { genresList } = await fetchGenres('', 'format', 10);
+      this.mangaFormats = genresList.map(g => {
+        return {
+          id: g.id,
+          name: g.name,
+        };
+      });
+    },
     async getGenresArray(genrePattern = '') {
-      const { genresList } = await fetchGenres(genrePattern, 5);
+      const { genresList } = await fetchGenres(genrePattern, '', 5);
       return genresList.map(p => {
         return {
           id: p.id,
