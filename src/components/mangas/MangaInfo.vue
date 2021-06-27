@@ -67,16 +67,16 @@ export default {
     let unsavedChanges = false;
     switch (this.tabValue) {
       case 0:
-        unsavedChanges = !this.$refs.mangaDetails.isSaved;
+        unsavedChanges = !this.$refs.mangaDetails.isSaved();
         break;
       case 1:
-        unsavedChanges = !this.$refs.chapters.isSaved;
+        unsavedChanges = !this.$refs.chapters.isSaved();
         break;
       case 2:
-        unsavedChanges = !this.$refs.scrapers.isSaved;
+        unsavedChanges = !this.$refs.scrapers.isSaved();
         break;
     }
-    if (unsavedChanges && view === false) {
+    if (unsavedChanges && this.view === false) {
       const answer = window.confirm(
         'Do you really want to leave? you have unsaved changes!',
       );

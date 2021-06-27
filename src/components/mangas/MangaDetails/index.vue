@@ -133,6 +133,7 @@
 <script>
 import TagInput from '../../ui/TagInput';
 import ToggleSwitch from 'vuejs-toggle-switch';
+import _ from 'lodash';
 import { fetchManga } from '../../../apollo/api/mangas';
 import Loader from '../../ui/Loader';
 
@@ -173,9 +174,9 @@ export default {
   },
   data() {
     return {
-      isSaved: true,
       apiLoading: false,
       manga: DEFAULT_MANGA,
+      loadedManga: DEFAULT_MANGA,
       toggleSwitchOptions: {
         layout: {
           color: 'black',
@@ -228,6 +229,7 @@ export default {
       try {
         const { mangaInfo } = await fetchManga(this.mangaId);
         this.manga = { ...DEFAULT_MANGA, ...mangaInfo };
+        this.loadedManga = { ...DEFAULT_MANGA, ...mangaInfo };
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
@@ -247,6 +249,21 @@ export default {
           return 'Dropped';
       }
     },
+    isSaved() {
+      return _.isEqual(this.manga, this.loadedManga);
+    },
+  },
+  beforeDestroy() {
+    if (this.view === false && !this.isSaved()) {
+      const answer = window.confirm(
+        'Do you really want to leave? you have unsaved changes!',
+      );
+      if (answer) {
+        next();
+      } else {
+        next(false);
+      }
+    }
   },
 };
 </script>
