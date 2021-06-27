@@ -12,10 +12,7 @@
       @cancel="resetForm"
     >
       <div class="author-pic">
-        <img
-          :src="newAuthor.picture | authorImage"
-          @click="$refs[`${author.id}_thumb`].click()"
-        />
+        <img :src="getPeoplePic" @click="$refs[`${author.id}_thumb`].click()" />
         <input
           :ref="`${author.id}_thumb`"
           type="file"
@@ -74,14 +71,7 @@ import { updateAuthor } from '../../apollo/api/authors';
 export default {
   name: 'author-actions',
   props: { author: Object },
-  filters: {
-    authorImage(value) {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
-    },
-  },
+
   data() {
     return {
       newAuthor: {
@@ -96,6 +86,17 @@ export default {
       showModal: false,
     };
   },
+  computed: {
+    getPeoplePic() {
+      if (
+        typeof this.newAuthor.picture === 'object' &&
+        this.newAuthor.picture !== null
+      ) {
+        return URL.createObjectURL(this.newAuthor.picture);
+      }
+      return this.authorImage(this.author.picture);
+    },
+  },
   methods: {
     resetForm() {
       this.newAuthor = { ...this.author, picture: null };
@@ -103,6 +104,12 @@ export default {
     editAuthor() {
       this.resetForm();
       this.showModal = true;
+    },
+    authorImage(value) {
+      if (!value) {
+        return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
+      }
+      return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
     },
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {
