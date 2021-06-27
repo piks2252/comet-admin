@@ -81,6 +81,85 @@ export const QUERIES = {
 };
 
 export const MUTATIONS = {
+  CREATE_MANGA: gql`
+    mutation CREATE_MANGA(
+      $title: String!
+      $alternativeTitles: [String]
+      $description: String
+      $authors: [String]
+      $artists: [String]
+      $genres: [Int]
+      $demographics: [Int]
+      $themes: [Int]
+      $type: Int!
+      $tags: [String]
+      $hentai: Boolean
+      $isAdult: Boolean
+      $status: Int!
+      $disabled: Boolean
+      $releaseDate: DateTime
+      $thumbnail: Upload!
+    ) {
+      updateManga(
+        mangaData: {
+          title: $title
+          alternativeTitles: $alternativeTitles
+          description: $description
+          authors: $authors
+          artists: $artists
+          genres: $genres
+          demographics: $demographics
+          themes: $themes
+          type: $type
+          tags: $tags
+          hentai: $hentai
+          isAdult: $isAdult
+          status: $status
+          disabled: $disabled
+          releaseDate: $releaseDate
+        }
+        cover: $thumbnail
+      ) {
+        manga {
+          id
+          title
+          alternativeTitles
+          status
+          authors {
+            id
+            name
+          }
+          artists {
+            id
+            name
+          }
+          cover
+          description
+          hentai
+          isAdult
+          type {
+            id
+            name
+          }
+          genres {
+            id
+            name
+          }
+          demographics {
+            id
+            name
+          }
+          themes {
+            id
+            name
+          }
+          tags
+          releaseDate
+          disabled
+        }
+      }
+    }
+  `,
   UPDATE_MANGA: gql`
     mutation UPDATE_MANGA(
       $id: ID!

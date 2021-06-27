@@ -258,13 +258,17 @@ export default {
     },
     getMangaCoverImage() {
       if (this.coverImage !== null) return URL.createObjectURL(this.coverImage);
-      return this.manga.cover;
+      if (this.manga.cover !== null) return this.manga.cover;
+      // TODO: Default manga thumbnail
+      return 'https://dummyimage.com/600x400/000/fff';
     },
   },
   async mounted() {
     await this.getFormatArray();
-    if (this.mangaId) {
+    if (this.mangaId !== null) {
       await this.loadMangaDetails();
+    } else {
+      this.manga.type = this.mangaFormats[0];
     }
   },
   methods: {
@@ -376,16 +380,23 @@ export default {
     },
     async submitChanges() {
       const updatedManga = this.processInput(this.manga);
+      let response = null;
       this.apiLoading = true;
+
       try {
-        const { updateManga: response } = await updateManga(
-          this.mangaId,
-          updatedManga,
-          this.coverImage,
-        );
+        if (this.mangaId === null) {
+          // Add as new manga
+          response = await createManga(updatedManga, this.coverImage);
+        } else {
+          response = await updateManga(
+            this.mangaId,
+            updatedManga,
+            this.coverImage,
+          );
+        }
         this.loadedManga = { ...DEFAULT_MANGA, ...response.manga };
         this.manga = { ...DEFAULT_MANGA, ...response.manga };
-        this.showToast('Manga updated successfully', {
+        this.showToast('Manga added successfully', {
           position: 'top-right',
           duration: 800,
           fullWidth: false,
