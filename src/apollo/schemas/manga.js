@@ -81,72 +81,82 @@ export const QUERIES = {
 };
 
 export const MUTATIONS = {
-  CREATE_AUTHOR: gql`
-    mutation CREATE_AUTHOR(
-      $name: String!
-      $peopleType: Int!
-      $twitter: String
-      $instagram: String
-      $patreon: String
-      $website: String
-      $picture: Upload!
-    ) {
-      createPeople(
-        peopleData: {
-          name: $name
-          peopleType: $peopleType
-          twitter: $twitter
-          instagram: $instagram
-          patreon: $patreon
-          website: $website
-        }
-        picture: $picture
-      ) {
-        people {
-          id
-          name
-          peopleType
-          picture
-          twitter
-          instagram
-          patreon
-          website
-        }
-      }
-    }
-  `,
-  UPDATE_AUTHOR: gql`
-    mutation UPDATE_GENRE(
+  UPDATE_MANGA: gql`
+    mutation UPDATE_MANGA(
       $id: ID!
-      $name: String
-      $peopleType: Int
-      $twitter: String
-      $instagram: String
-      $patreon: String
-      $website: String
-      $picture: Upload
+      $title: String
+      $alternativeTitles: [String]
+      $description: String
+      $authors: [String]
+      $artists: [String]
+      $genres: [Int]
+      $demographics: [Int]
+      $themes: [Int]
+      $type: Int
+      $tags: [String]
+      $hentai: Boolean
+      $isAdult: Boolean
+      $status: Int
+      $disabled: Boolean
+      $releaseDate: DateTime
+      $thumbnail: Upload
     ) {
-      updatePeople(
-        peopleData: {
+      updateManga(
+        mangaData: {
           id: $id
-          name: $name
-          peopleType: $peopleType
-          twitter: $twitter
-          instagram: $instagram
-          patreon: $patreon
-          website: $website
+          title: $title
+          alternativeTitles: $alternativeTitles
+          description: $description
+          authors: $authors
+          artists: $artists
+          genres: $genres
+          demographics: $demographics
+          themes: $themes
+          type: $type
+          tags: $tags
+          hentai: $hentai
+          isAdult: $isAdult
+          status: $status
+          disabled: $disabled
+          releaseDate: $releaseDate
         }
-        picture: $picture
+        cover: $thumbnail
       ) {
-        people {
+        manga {
           id
-          name
-          peopleType
-          picture
-          twitter
-          instagram
-          patreon
-          website
+          title
+          alternativeTitles
+          description
+          authors {
+            id
+            name
+          }
+          artists {
+            id
+            name
+          }
+          genres {
+            id
+            name
+          }
+          demographics {
+            id
+            name
+          }
+          themes {
+            id
+            name
+          }
+          type {
+            id
+            name
+          }
+          tags
+          hentai
+          isAdult
+          status
+          disabled
+          releaseDate
         }
       }
     }

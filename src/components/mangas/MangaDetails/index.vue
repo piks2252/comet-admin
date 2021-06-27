@@ -144,13 +144,13 @@
 </template>
 
 <script>
-import TagInput from '../../ui/TagInput';
-import ToggleSwitch from 'vuejs-toggle-switch';
 import _ from 'lodash';
-import { fetchManga } from '../../../apollo/api/mangas';
-import Loader from '../../ui/Loader';
+import { fetchManga, updateManga } from '../../../apollo/api/mangas';
 import { fetchAuthors } from '../../../apollo/api/authors';
 import { fetchGenres } from '../../../apollo/api/genres';
+import ToggleSwitch from 'vuejs-toggle-switch';
+import TagInput from '../../ui/TagInput';
+import Loader from '../../ui/Loader';
 
 const DEFAULT_MANGA = {
   title: '',
@@ -267,22 +267,6 @@ export default {
     isSaved() {
       return _.isEqual(this.manga, this.loadedManga);
     },
-    submitChanges() {
-      console.log('Submitting changes to graphql: ', this.manga);
-      // TODO: On success isSaved = true
-    },
-    cancelEditing() {
-      if (!this.isSaved()) {
-        const answer = window.confirm(
-          'Do you really want to leave? you have unsaved changes!',
-        );
-        if (answer) {
-          this.$router.push('/mangas/');
-        }
-      } else {
-        this.$router.push('/mangas/');
-      }
-    },
     async getAuthorsArray(authorPattern = '') {
       const { peopleList } = await fetchAuthors(authorPattern, 1, 5);
       return peopleList.map(p => {
@@ -327,6 +311,52 @@ export default {
           text: p.name,
         };
       });
+    },
+    processInput(mangaInfo) {
+      const manga = { ...mangaInfo };
+      manga.authors = mangaInfo.authors.map(e => e.id);
+      manga.artists = mangaInfo.artists.map(e => e.id);
+      manga.genres = mangaInfo.genres.map(e => e.id);
+      manga.type = mangaInfo.type.id;
+      manga.demographics = mangaInfo.demographics.map(e => e.id);
+      manga.themes = mangaInfo.themes.map(e => e.id);
+      return manga;
+    },
+    async submitChanges() {
+      const updatedManga = this.processInput(this.manga);
+      this.apiLoading = true;
+      try {
+        const { updateManga: response } = await updateManga(
+          this.mangaId,
+          updatedManga,
+        );
+        this.loadedManga = { ...DEFAULT_MANGA, ...response.manga };
+        this.manga = { ...DEFAULT_MANGA, ...response.manga };
+        this.showToast('Manga updated successfully', {
+          position: 'top-right',
+          duration: 800,
+          fullWidth: false,
+        });
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
+      this.apiLoading = false;
+    },
+    cancelEditing() {
+      if (!this.isSaved()) {
+        const answer = window.confirm(
+          'Do you really want to leave? you have unsaved changes!',
+        );
+        if (answer) {
+          this.$router.push('/mangas/');
+        }
+      } else {
+        this.$router.push('/mangas/');
+      }
     },
   },
   beforeDestroy() {
