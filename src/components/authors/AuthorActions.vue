@@ -27,17 +27,17 @@
           placeholder="Author name"
         />
         <p>
-          <va-radio-button
+          <va-checkbox
             class="xs1"
-            v-model="newAuthor.peopleType"
-            :option="1"
+            :value="isPersonAuthor"
+            @input="togglePersonAuthor"
             label="Author"
           />
-          <va-radio-button
+          <va-checkbox
             class="xs1"
-            v-model="newAuthor.peopleType"
-            :option="2"
-            label="Artist"
+            :value="isPersonArtist"
+            @input="togglePersonArtist"
+            label="Artists"
           />
         </p>
         <va-input
@@ -96,6 +96,12 @@ export default {
       }
       return this.authorImage(this.author.picture);
     },
+    isPersonAuthor() {
+      return this.newAuthor.peopleType === 0 || this.newAuthor.peopleType === 1;
+    },
+    isPersonArtist() {
+      return this.newAuthor.peopleType === 0 || this.newAuthor.peopleType === 2;
+    },
   },
   methods: {
     resetForm() {
@@ -110,6 +116,36 @@ export default {
         return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
       }
       return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
+    },
+    togglePersonAuthor(val) {
+      if (this.isPersonArtist) {
+        if (val) {
+          this.newAuthor.peopleType = 0;
+        } else {
+          this.newAuthor.peopleType = 2;
+        }
+      } else {
+        if (val) {
+          this.newAuthor.peopleType = 1;
+        } else {
+          alert('A person can be author, artist or both but not none');
+        }
+      }
+    },
+    togglePersonArtist(val) {
+      if (this.isPersonAuthor) {
+        if (val) {
+          this.newAuthor.peopleType = 0;
+        } else {
+          this.newAuthor.peopleType = 1;
+        }
+      } else {
+        if (val) {
+          this.newAuthor.peopleType = 2;
+        } else {
+          alert('A person can be author, artist or both but not none');
+        }
+      }
     },
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {
