@@ -61,11 +61,19 @@
             />
           </div>
           <div class="flex md3 sm6 xs12">
-            <va-toggle
-              v-model="manga.disabled"
-              :label="manga.disabled ? 'Enable manga' : 'Disable manga'"
-              v-if="!view"
-            />
+            <div class="manga-controls" v-if="!view">
+              <va-toggle
+                v-model="manga.disabled"
+                :label="manga.disabled ? 'Enable manga' : 'Disable manga'"
+                small
+              />
+              <va-button outline color="success" small @click="submitChanges">
+                Save Manga
+              </va-button>
+              <va-button outline color="danger" small @click="cancelEditing">
+                Cancel
+              </va-button>
+            </div>
             <p class="display-6">Other sources</p>
             <br />
             <va-input
@@ -252,6 +260,22 @@ export default {
     isSaved() {
       return _.isEqual(this.manga, this.loadedManga);
     },
+    submitChanges() {
+      console.log('Submitting changes to graphql: ', this.manga);
+      // TODO: On success isSaved = true
+    },
+    cancelEditing() {
+      if (!this.isSaved()) {
+        const answer = window.confirm(
+          'Do you really want to leave? you have unsaved changes!',
+        );
+        if (answer) {
+          this.$router.push('/mangas/');
+        }
+      } else {
+        this.$router.push('/mangas/');
+      }
+    },
   },
   beforeDestroy() {
     if (this.view === false && !this.isSaved()) {
@@ -282,6 +306,12 @@ export default {
 
 .row.row-inside {
   max-width: none;
+}
+
+.manga-controls {
+  border: 2px dashed #e8e5e5;
+  border-radius: 25px;
+  margin-bottom: 10px;
 }
 
 .manga-description {
