@@ -46,8 +46,11 @@ export const fetchChapters = async(
 //   return data;
 // };
 
-export const updateManga = async(id, manga) => {
+export const updateManga = async(id, manga, coverImage = null) => {
   const variables = { ...manga, id };
+  if (coverImage !== null) {
+    variables.thumbnail = coverImage;
+  }
   const { data } = await apolloClient.mutate({
     mutation: MUTATIONS.UPDATE_MANGA,
     variables,

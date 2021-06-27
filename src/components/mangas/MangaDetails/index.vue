@@ -5,7 +5,18 @@
       <div v-else>
         <div class="row">
           <div class="flex md5 sm4 xs4">
-            <img :src="manga.cover" class="manga-thumb" />
+            <img
+              :src="getMangaCoverImage"
+              class="manga-thumb"
+              @click="$refs[`${mangaId}_cover`].click()"
+            />
+            <input
+              type="file"
+              :ref="`${mangaId}_cover`"
+              style="display: none;"
+              accept="image/*"
+              @change="uploadCover"
+            />
           </div>
           <div class="flex md4 sm6 xs12">
             <p class="display-5">Manga Info</p>
@@ -238,11 +249,16 @@ export default {
         },
       },
       mangaFormats: [],
+      coverImage: null,
     };
   },
   computed: {
     formatTypes() {
       return this.mangaFormats.map(e => e.name);
+    },
+    getMangaCoverImage() {
+      if (this.coverImage !== null) return URL.createObjectURL(this.coverImage);
+      return this.manga.cover;
     },
   },
   async mounted() {
@@ -287,6 +303,12 @@ export default {
       } else {
         alert('Invalid format selected');
       }
+    },
+    uploadCover({ target: { files = [] } }) {
+      if (!files.length) {
+        return;
+      }
+      this.coverImage = files[0];
     },
     async getAuthorsArray(authorPattern = '') {
       const { peopleList } = await fetchAuthors(authorPattern, 1, 5);
@@ -359,6 +381,7 @@ export default {
         const { updateManga: response } = await updateManga(
           this.mangaId,
           updatedManga,
+          this.coverImage,
         );
         this.loadedManga = { ...DEFAULT_MANGA, ...response.manga };
         this.manga = { ...DEFAULT_MANGA, ...response.manga };
