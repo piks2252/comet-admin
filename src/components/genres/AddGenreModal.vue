@@ -10,6 +10,7 @@
       @ok="submitGenre"
       @cancel="resetForm"
     >
+      <img class="genre-thumb" :src="getGenreThumb" />
       <va-input v-model="genre.name" placeholder="Genre name" removable />
       <va-select :options="GENRE_GROUPS" v-model="genre.groupType" />
       <input type="file" accept="image/*" @change="uploadPhoto" />
@@ -35,6 +36,13 @@ export default {
   computed: {
     GENRE_GROUPS() {
       return GENRE_GROUPS_ARRAY;
+    },
+    getGenreThumb() {
+      if (this.genre.thumbnail !== null) {
+        return URL.createObjectURL(this.genre.thumbnail);
+      }
+      // TODO: Return default url
+      return '';
     },
   },
   mounted() {
@@ -78,3 +86,11 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.genre-thumb {
+  border-radius: 150px;
+  height: 150px;
+  width: 150px;
+  border: 1px solid #e8e5e5;
+}
+</style>
