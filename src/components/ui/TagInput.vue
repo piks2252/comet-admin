@@ -6,6 +6,16 @@
       @tags-changed="newTags => (tagsLocal = newTags)"
       :placeholder="placeholder"
       :disabled="disabled"
+      v-if="ajaxFunction === null"
+    />
+    <vue-tags-input
+      v-model="tagText"
+      :tags="tagsLocal"
+      @tags-changed="newTags => (tagsLocal = newTags)"
+      :autocomplete-items="items"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      v-else
     />
     <div slot="append" class="flex-center" @click="clearTags" v-if="!disabled">
       <va-icon name="fa fa-window-close" class="pointer" />
@@ -30,6 +40,10 @@ export default {
     textKey: {
       type: String,
       default: 'text',
+    },
+    ajaxFunction: {
+      type: Function,
+      default: null,
     },
   },
   model: {
@@ -64,12 +78,24 @@ export default {
       },
     },
   },
+  watch: {
+    tagText: async function(val) {
+      if (this.ajaxFunction !== null) await this.loadItemsFromAPI();
+    },
+  },
   data() {
     return {
       tagText: '',
+      items: null,
     };
   },
   methods: {
+    async loadItemsFromAPI() {
+      if (this.ajaxFunction !== null && this.tagText.length > 3) {
+        const items = await this.ajaxFunction(this.tagText);
+        this.items = items;
+      }
+    },
     clearTags() {
       this.$emit('tagschange', []);
     },
