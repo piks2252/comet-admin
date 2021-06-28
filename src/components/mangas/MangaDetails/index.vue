@@ -150,7 +150,7 @@
                 Save Manga
               </va-button>
               <va-button outline color="danger" small @click="cancelEditing">
-                Cancel
+                {{ isSaved() ? 'Back' : 'Cancel' }}
               </va-button>
             </div>
           </div>
