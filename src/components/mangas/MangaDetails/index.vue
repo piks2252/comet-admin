@@ -374,14 +374,18 @@ export default {
     },
     processInput(mangaInfo) {
       const manga = { ...mangaInfo };
-      manga.alternativeTitles = mangaInfo.alternativeTitles.map(e => e.text);
+      manga.alternativeTitles = mangaInfo.alternativeTitles.map(e =>
+        typeof e === 'object' ? e.text : e,
+      );
       manga.authors = mangaInfo.authors.map(e => e.id);
       manga.artists = mangaInfo.artists.map(e => e.id);
       manga.genres = mangaInfo.genres.map(e => e.id);
       manga.type = mangaInfo.type.id;
       manga.demographics = mangaInfo.demographics.map(e => e.id);
       manga.themes = mangaInfo.themes.map(e => e.id);
-      manga.tags = mangaInfo.tags.map(e => e.text);
+      manga.tags = mangaInfo.tags.map(e =>
+        typeof e === 'object' ? e.text : e,
+      );
       manga.releaseDate = new Date(mangaInfo.releaseDate);
       return manga;
     },
@@ -404,16 +408,19 @@ export default {
             updatedManga,
             this.coverImage,
           );
+          response = response.updateManga;
         }
         this.loadedManga = { ...DEFAULT_MANGA, ...response.manga };
         this.manga = { ...DEFAULT_MANGA, ...response.manga };
-        this.showToast('Manga added successfully', {
-          position: 'top-right',
-          duration: 800,
-          fullWidth: false,
-        });
+        this.showToast(
+          `Manga ${this.mangaId ? 'updated' : 'added'} successfully`,
+          {
+            position: 'top-right',
+            duration: 800,
+            fullWidth: false,
+          },
+        );
       } catch (e) {
-        console.log(e);
         this.showToast(e, {
           position: 'top-right',
           duration: 1200,
