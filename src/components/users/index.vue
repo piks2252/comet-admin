@@ -43,7 +43,7 @@
         />
       </template>
       <template slot="verification" slot-scope="props">
-        <va-badge :color="props.rowData.color">
+        <va-badge :color="props.rowData.verified ? 'green' : 'red'">
           {{ props.rowData.verified ? 'Verified' : 'Unverified' }}
         </va-badge>
       </template>
