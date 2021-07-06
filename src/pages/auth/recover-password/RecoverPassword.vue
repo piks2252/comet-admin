@@ -10,7 +10,9 @@
       />
     </div>
     <div class="row justify--center">
-      <va-button type="submit" class="my-0">{{ $t('auth.reset_password') }}</va-button>
+      <va-button type="submit" class="my-0">{{
+        $t('auth.reset_password')
+      }}</va-button>
     </div>
   </form>
 </template>
@@ -18,23 +20,20 @@
 <script>
 export default {
   name: 'recover-password',
-  data () {
+  data() {
     return {
       email: '',
       emailErrors: [],
-    }
+    };
   },
   methods: {
-    onsubmit () {
+    onsubmit() {
       if (!this.email) {
-        this.emailErrors = ['Email is required']
+        this.emailErrors = ['Email is required'];
       } else {
-        this.$router.push('/')
+        this.$router.push('/');
       }
     },
   },
-}
+};
 </script>
-
-<style lang="scss">
-</style>

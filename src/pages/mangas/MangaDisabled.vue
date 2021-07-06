@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { updateManga } from '../../apollo/api/mangas';
 export default {
   props: {
     disabled: Boolean,

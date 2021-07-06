@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import AuthLayout from '../components/auth/AuthLayout';
+import AuthLayout from '../pages/auth/AuthLayout';
 import AppLayout from '../components/admin/AppLayout';
 
 Vue.use(Router);
@@ -23,13 +23,13 @@ export default new Router({
         {
           name: 'login',
           path: 'login',
-          component: () => import('../components/auth/login/Login.vue'),
+          component: () => import('../pages/auth/login/Login.vue'),
         },
         {
           name: 'recover-password',
           path: 'recover-password',
           component: () =>
-            import('../components/auth/recover-password/RecoverPassword.vue'),
+            import('../pages/auth/recover-password/RecoverPassword.vue'),
         },
         {
           path: '',
@@ -45,7 +45,7 @@ export default new Router({
         {
           name: 'dashboard',
           path: 'dashboard',
-          component: () => import('../components/dashboard/Dashboard.vue'),
+          component: () => import('../pages/dashboard/Dashboard.vue'),
           default: true,
         },
         {
@@ -56,23 +56,23 @@ export default new Router({
             {
               name: 'base-manga',
               path: '/',
-              component: () => import('../components/mangas'),
+              component: () => import('../pages/mangas'),
             },
             {
               name: 'add-manga',
               path: 'add',
-              component: () => import('../components/mangas/MangaInfo.vue'),
+              component: () => import('../pages/mangas/MangaInfo.vue'),
             },
             {
               name: 'view-manga',
               path: 'view/:id',
-              component: () => import('../components/mangas/MangaInfo.vue'),
+              component: () => import('../pages/mangas/MangaInfo.vue'),
               props: true,
             },
             {
               name: 'edit-manga',
               path: 'edit/:id',
-              component: () => import('../components/mangas/MangaInfo.vue'),
+              component: () => import('../pages/mangas/MangaInfo.vue'),
               props: true,
             },
           ],
@@ -80,39 +80,39 @@ export default new Router({
         {
           name: 'users',
           path: 'users',
-          component: () => import('../components/users'),
+          component: () => import('../pages/users'),
         },
         {
           name: 'authors',
           path: 'authors',
-          component: () => import('../components/authors'),
+          component: () => import('../pages/authors'),
         },
         {
           name: 'genres',
           path: 'genres',
-          component: () => import('../components/genres'),
+          component: () => import('../pages/genres'),
         },
         {
           name: 'app-releases',
           path: 'app-releases',
-          component: () => import('../components/app-releases'),
+          component: () => import('../pages/app-releases'),
         },
         {
           name: 'discord-bot',
           path: 'discord-bot',
-          component: () => import('../components/discord-bot'),
+          component: () => import('../pages/discord-bot'),
         },
         {
           name: 'settings',
           path: 'settings',
-          component: () => import('../components/settings'),
+          component: () => import('../pages/settings'),
         },
       ],
     },
     {
       name: '404',
       path: '/404',
-      component: () => import('../components/404-page'),
+      component: () => import('../pages/404-page'),
     },
   ],
 });

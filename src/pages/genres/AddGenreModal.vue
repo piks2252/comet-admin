@@ -64,7 +64,7 @@ export default {
     },
     async submitGenre() {
       try {
-        const response = await createGenre(
+        await createGenre(
           this.genre.name,
           this.genre.groupType,
           this.genre.thumbnail,

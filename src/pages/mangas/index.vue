@@ -168,11 +168,11 @@ export default {
     navigateToAddManga() {
       this.$router.push({ name: 'add-manga' });
     },
-    navigateToEditManga(manga_id) {
-      this.$router.push({ name: 'edit-manga', params: { id: manga_id } });
+    navigateToEditManga(mangaId) {
+      this.$router.push({ name: 'edit-manga', params: { id: mangaId } });
     },
-    navigateToViewManga(manga_id) {
-      this.$router.push({ name: 'view-manga', params: { id: manga_id } });
+    navigateToViewManga(mangaId) {
+      this.$router.push({ name: 'view-manga', params: { id: mangaId } });
     },
   },
 };

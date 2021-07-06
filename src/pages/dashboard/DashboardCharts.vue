@@ -29,8 +29,6 @@
 
 <script>
 import { hex2rgb } from '../../services/vuestic-ui';
-import _ from 'lodash';
-import { getLineChartData } from '../../data/charts/LineChartData';
 import DashboardReadersList from './DashboardReadersList';
 
 export default {

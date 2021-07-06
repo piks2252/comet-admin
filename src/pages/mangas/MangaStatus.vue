@@ -23,9 +23,8 @@ export default {
     },
   },
   methods: {
-    getSelectedOption(status_id) {
-      const val = this.statusOptions.find(e => e.id === status_id);
-      return val;
+    getSelectedOption(statusId) {
+      return this.statusOptions.find(e => e.id === statusId);
     },
     async toggleMangaStatus(event) {
       const mangaStatus = event.id;

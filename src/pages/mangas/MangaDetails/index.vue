@@ -442,7 +442,7 @@ export default {
       }
     },
   },
-  beforeDestroy() {
+  beforeDestroy(__to, __from, next) {
     if (this.view === false && !this.isSaved()) {
       const answer = window.confirm(
         'Do you really want to leave? you have unsaved changes!',

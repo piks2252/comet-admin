@@ -56,7 +56,7 @@ export default {
       ],
       tabValue: 0,
       mangaId:
-        this.$route.params.id && this.$route.params.id != ''
+        this.$route.params.id && this.$route.params.id !== ''
           ? this.$route.params.id
           : null,
       view: this.$route.name === 'view-manga',
