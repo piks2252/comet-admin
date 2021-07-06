@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LineMap from '../../components/maps/line-maps/LineMap';
+import LineMap from '../../components/maps/LineMap';
 import COUNTRIES_LIST from '../../data/CountriesList';
 
 export default {
