@@ -5,63 +5,75 @@
       small
       slot="actions"
       class="mr-0"
-      :disabled="contributors.length <= step"
+      :disabled="readersStats.length <= stepSize"
       @click="showNext"
     >
-      {{ $t('dashboard.charts.showNextFive') }}
+      {{ step == 4 ? 'Reset' : 'Show next' }}
     </va-button>
-    <va-inner-loading :loading="loading">
-      <div class="mb-3" v-for="(contributor, idx) in visibleList" :key="idx">
-        <va-progress-bar
-          :value="getPercent(contributor.contributions)"
-          :color="getRandomColor()"
-        >
-          {{ contributor.contributions }} {{ 'chapters' }}
-        </va-progress-bar>
-        <p class="mt-2 user-container">
-          <img class="user-avatar" :src="contributor.avatar_url" />
-          {{ contributor.login }}
-        </p>
-      </div>
-    </va-inner-loading>
+    <!-- <va-inner-loading :loading="loading"> -->
+    <div class="mb-3" v-for="(reader, idx) in visibleList" :key="idx">
+      <va-progress-bar
+        :value="getPercent(reader.chaptersRead)"
+        :color="getRandomColor()"
+      >
+        {{ reader.chaptersRead }} {{ 'chapters' }}
+      </va-progress-bar>
+      <p class="mt-2 user-container">
+        <img class="user-avatar" :src="reader.profilePic | profilePicURL" />
+        {{ reader.name }}
+      </p>
+    </div>
+    <!-- </va-inner-loading> -->
   </va-card>
 </template>
 
 <script>
-import axios from 'axios';
-
+import _ from 'lodash';
 export default {
   name: 'DashboardReadersList',
+  props: {
+    readersStats: {
+      type: Array,
+    },
+  },
   data() {
     return {
-      contributors: [],
-      loading: false,
-      progressMax: 392,
-      visibleList: [],
-      step: 5,
+      step: 0,
+      stepSize: 5,
     };
   },
-  mounted() {
-    this.loadContributorsList();
+  computed: {
+    visibleList() {
+      return _.chunk(this.readersStats, this.stepSize)[this.step];
+    },
+    progressMax() {
+      let maxValue = -1;
+      this.readersStats.map(r => {
+        if (r.chaptersRead > maxValue) {
+          maxValue = r.chaptersRead;
+        }
+      });
+      return maxValue;
+    },
+  },
+  filters: {
+    profilePicURL(url) {
+      if (url && url.length) {
+        return `https://cdn.comet.shivy.co.in/images/profile/${url}`;
+      }
+      return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
+    },
   },
   methods: {
-    async loadContributorsList() {
-      this.loading = true;
-      const { data } = await axios.get(
-        'https://api.github.com/repos/epicmaxco/vuestic-admin/contributors'
-      );
-      this.contributors = data;
-      this.progressMax = Math.max(
-        ...this.contributors.map(({ contributions }) => contributions)
-      );
-      this.showNext();
-      this.loading = false;
-    },
     getPercent(val) {
       return (val / this.progressMax) * 100;
     },
     showNext() {
-      this.visibleList = this.contributors.splice(0, this.step);
+      if (this.step < 4) this.step++;
+      else this.resetStep();
+    },
+    resetStep() {
+      this.step = 0;
     },
     getRandomColor() {
       const keys = Object.keys(this.$themes);

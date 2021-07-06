@@ -1,17 +1,7 @@
 <template>
   <div class="row row-equal">
     <div class="flex xs12 xl6">
-      <va-card title="Downloads">
-        <va-button
-          small
-          slot="actions"
-          color="danger"
-          class="mr-0"
-          @click="deleteSection"
-          :disabled="lineChartData.labels.length < 2"
-        >
-          {{ $t('dashboard.charts.showInMoreDetail') }}
-        </va-button>
+      <va-card title="Graphs">
         <va-chart
           class="chart"
           ref="lineChart"
@@ -23,83 +13,76 @@
 
     <div class="flex xs12 md6 xl3">
       <va-card title="Mangas">
-        <va-button
-          icon="fa fa-print"
-          flat
-          slot="actions"
-          class="mr-0"
-          @click="printChart"
-        />
         <va-chart
           class="chart chart--donut"
-          :data="donutChartData"
+          :data="donutMangasData"
           type="donut"
         />
       </va-card>
     </div>
 
     <div class="flex xs12 md6 xl3">
-      <dashboard-readers-list />
+      <dashboard-readers-list :readersStats="readersStats" />
     </div>
   </div>
 </template>
 
 <script>
-import { getDonutChartData } from '../../data/charts/DonutChartData';
+import { hex2rgb } from '../../services/vuestic-ui';
+import _ from 'lodash';
 import { getLineChartData } from '../../data/charts/LineChartData';
 import DashboardReadersList from './DashboardReadersList';
 
 export default {
   name: 'dashboard-charts',
+  props: {
+    monthlyStats: {
+      type: Array,
+    },
+    mangasStats: {
+      type: Object,
+    },
+    readersStats: {
+      type: Array,
+    },
+  },
   components: { DashboardReadersList },
-  data() {
-    return {
-      lineChartData: getLineChartData(this.$themes),
-      donutChartData: getDonutChartData(this.$themes),
-      lineChartFirstMonthIndex: 0,
-    };
-  },
-  watch: {
-    '$themes.primary'() {
-      this.lineChartData = getLineChartData(this.$themes);
-      this.donutChartData = getDonutChartData(this.$themes);
-    },
-
-    '$themes.info'() {
-      this.lineChartData = getLineChartData(this.$themes);
-      this.donutChartData = getDonutChartData(this.$themes);
-    },
-
-    '$themes.danger'() {
-      this.donutChartData = getDonutChartData(this.$themes);
-    },
-  },
-  methods: {
-    deleteSection() {
-      this.lineChartFirstMonthIndex += 1;
-      this.lineChartData = getLineChartData(
-        this.$themes,
-        this.lineChartFirstMonthIndex
-      );
-      this.$refs.lineChart.$refs.chart.refresh();
-    },
-    printChart() {
-      const win = window.open('', 'Print', 'height=600,width=800');
-      win.document.write(`<br><img src='${this.donutChartDataURL}'/>`);
-      // TODO: find better solution how to remove timeout
-      setTimeout(() => {
-        win.document.close();
-        win.focus();
-        win.print();
-        win.close();
-      }, 200);
-    },
-  },
   computed: {
     donutChartDataURL() {
       return document
         .querySelector('.chart--donut canvas')
         .toDataURL('image/png');
+    },
+    donutMangasData() {
+      return {
+        labels: ['Completed', 'On-going', 'Dropped'],
+        datasets: [
+          {
+            label: 'Mangas (thousands)',
+            backgroundColor: [
+              this.$themes.danger,
+              this.$themes.info,
+              this.$themes.primary,
+            ],
+            data: [this.mangasStats.completed, this.mangasStats.onGoing, 0],
+          },
+        ],
+      };
+    },
+    lineChartData() {
+      const size = this.monthlyStats.length;
+      const generatedData = {
+        labels: this.monthlyStats.map(e => e.date).splice(0, size),
+        datasets: [
+          {
+            label: 'Chapters Read',
+            backgroundColor: hex2rgb(this.$themes.primary, 0.6).css,
+            borderColor: 'transparent',
+            data: this.monthlyStats.map(e => e.chapters).splice(0, size),
+          },
+        ],
+      };
+      return generatedData;
     },
   },
 };

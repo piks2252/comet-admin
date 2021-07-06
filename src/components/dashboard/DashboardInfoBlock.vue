@@ -2,10 +2,28 @@
   <div class="row row-equal">
     <div class="flex xl6 xs12">
       <div class="row">
-        <div class="flex xs12 sm4" v-for="(info, idx) in infoTiles" :key="idx">
-          <va-card class="mb-4" :color="info.color">
-            <p class="display-2 mb-0" style="color: white;">{{ info.value }}</p>
-            <p>{{ info.text }}</p>
+        <div class="flex xs12 sm4">
+          <va-card class="mb-4" color="success">
+            <p class="display-2 mb-0" style="color: white;">
+              {{ overAllStats.users }}
+            </p>
+            <p>Users</p>
+          </va-card>
+        </div>
+        <div class="flex xs12 sm4">
+          <va-card class="mb-4" color="info">
+            <p class="display-2 mb-0" style="color: white;">
+              {{ overAllStats.devices }}
+            </p>
+            <p>Devices</p>
+          </va-card>
+        </div>
+        <div class="flex xs12 sm4">
+          <va-card class="mb-4" color="danger">
+            <p class="display-2 mb-0" style="color: white;">
+              {{ overAllStats.issues }}
+            </p>
+            <p>Issues</p>
           </va-card>
         </div>
       </div>
@@ -15,7 +33,7 @@
         <div class="flex xs12 md6">
           <va-card>
             <p class="display-2 mb-1" :style="{ color: this.$themes.primary }">
-              372701
+              {{ totalMangas }}
             </p>
             <p class="no-wrap">
               Mangas
@@ -33,7 +51,7 @@
                   class="display-2 mb-1 text--center"
                   :style="{ color: this.$themes.primary }"
                 >
-                  3
+                  {{ todayStats.users }}
                 </p>
                 <p class="text--center mb-1">
                   users
@@ -44,7 +62,7 @@
                   class="display-2 mb-1 text--center"
                   :style="{ color: this.$themes.info }"
                 >
-                  24
+                  {{ todayStats.chapters }}
                 </p>
                 <p class="text--center no-wrap mb-1">
                   chapters
@@ -55,7 +73,7 @@
                   class="display-2 mb-1 text--center"
                   :style="{ color: this.$themes.warning }"
                 >
-                  91
+                  {{ todayStats.downloads }}
                 </p>
                 <p class="text--center mb-1">
                   downloads
@@ -72,29 +90,16 @@
 <script>
 export default {
   name: 'DashboardInfoBlock',
-  data() {
-    return {
-      infoTiles: [
-        {
-          color: 'success',
-          value: '265',
-          text: 'users',
-          icon: '',
-        },
-        {
-          color: 'info',
-          value: '142',
-          text: 'devices',
-          icon: '',
-        },
-        {
-          color: 'danger',
-          value: '14',
-          text: 'issues',
-          icon: '',
-        },
-      ],
-    };
+  props: {
+    overAllStats: {
+      type: Object,
+    },
+    totalMangas: {
+      type: Number,
+    },
+    todayStats: {
+      type: Object,
+    },
   },
 };
 </script>
