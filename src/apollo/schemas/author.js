@@ -4,21 +4,13 @@ export const QUERIES = {
   AUTHORS: gql`
     query FETCH_AUTHORS(
       $search: String
-      $peopleType: Int
       $limit: Int
       $skip: Int
       $sortBy: String
     ) {
-      peopleList(
-        search: $search
-        peopleType: $peopleType
-        limit: $limit
-        skip: $skip
-        sortBy: $sortBy
-      ) {
+      peopleList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
         id
         name
-        peopleType
         picture
         twitter
         instagram
@@ -33,7 +25,6 @@ export const MUTATIONS = {
   CREATE_AUTHOR: gql`
     mutation CREATE_AUTHOR(
       $name: String!
-      $peopleType: Int!
       $twitter: String
       $instagram: String
       $patreon: String
@@ -43,7 +34,6 @@ export const MUTATIONS = {
       createPeople(
         peopleData: {
           name: $name
-          peopleType: $peopleType
           twitter: $twitter
           instagram: $instagram
           patreon: $patreon
@@ -54,7 +44,6 @@ export const MUTATIONS = {
         people {
           id
           name
-          peopleType
           picture
           twitter
           instagram
@@ -68,7 +57,6 @@ export const MUTATIONS = {
     mutation UPDATE_AUTHOR(
       $id: ID!
       $name: String
-      $peopleType: Int
       $twitter: String
       $instagram: String
       $patreon: String
@@ -79,7 +67,6 @@ export const MUTATIONS = {
         peopleData: {
           id: $id
           name: $name
-          peopleType: $peopleType
           twitter: $twitter
           instagram: $instagram
           patreon: $patreon
@@ -90,7 +77,6 @@ export const MUTATIONS = {
         people {
           id
           name
-          peopleType
           picture
           twitter
           instagram

@@ -3,14 +3,13 @@ import { apolloClient } from '../index';
 
 export const fetchAuthors = async(
   search = '',
-  peopleType = 0,
   limit = 120,
   skip = 0,
   sortBy = '+name',
 ) => {
   const { data } = await apolloClient.query({
     query: QUERIES.AUTHORS,
-    variables: { search, peopleType, limit, skip, sortBy },
+    variables: { search, limit, skip, sortBy },
   });
   return data;
 };

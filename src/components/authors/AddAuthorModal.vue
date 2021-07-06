@@ -24,20 +24,6 @@
           label="Author Name"
           placeholder="Author name"
         />
-        <p>
-          <va-checkbox
-            class="xs1"
-            :value="isPersonAuthor"
-            @input="togglePersonAuthor"
-            label="Author"
-          />
-          <va-checkbox
-            class="xs1"
-            :value="isPersonArtist"
-            @input="togglePersonArtist"
-            label="Artists"
-          />
-        </p>
         <va-input
           v-model="author.twitter"
           label="Twitter"
@@ -72,7 +58,6 @@ export default {
     return {
       author: {
         name: '',
-        peopleType: 1,
         twitter: '',
         instagram: '',
         patreon: '',
@@ -92,18 +77,11 @@ export default {
       }
       return this.authorImage(this.author.picture);
     },
-    isPersonAuthor() {
-      return this.author.peopleType === 0 || this.author.peopleType === 1;
-    },
-    isPersonArtist() {
-      return this.author.peopleType === 0 || this.author.peopleType === 2;
-    },
   },
   methods: {
     resetForm() {
       this.author = {
         name: '',
-        peopleType: 1,
         twitter: '',
         instagram: '',
         patreon: '',
@@ -116,36 +94,6 @@ export default {
         return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
       }
       return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
-    },
-    togglePersonAuthor(val) {
-      if (this.isPersonArtist) {
-        if (val) {
-          this.author.peopleType = 0;
-        } else {
-          this.author.peopleType = 2;
-        }
-      } else {
-        if (val) {
-          this.author.peopleType = 1;
-        } else {
-          alert('A person can be author, artist or both but not none');
-        }
-      }
-    },
-    togglePersonArtist(val) {
-      if (this.isPersonAuthor) {
-        if (val) {
-          this.author.peopleType = 0;
-        } else {
-          this.author.peopleType = 1;
-        }
-      } else {
-        if (val) {
-          this.author.peopleType = 2;
-        } else {
-          alert('A person can be author, artist or both but not none');
-        }
-      }
     },
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {
