@@ -170,8 +170,8 @@ import {
 import { fetchAuthors } from '../../../apollo/api/authors';
 import { fetchGenres } from '../../../apollo/api/genres';
 import ToggleSwitch from 'vuejs-toggle-switch';
-import TagInput from '../../ui/TagInput';
-import Loader from '../../ui/Loader';
+import TagInput from '../../../components/TagInput';
+import Loader from '../../../components/Loader';
 
 const DEFAULT_MANGA = {
   title: '',

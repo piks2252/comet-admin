@@ -28,7 +28,7 @@
 
 <script>
 import draggable from 'vuedraggable';
-import Loader from '../../ui/Loader';
+import Loader from '../../../components/Loader';
 import ChapterRow from './ChapterRow';
 import { fetchChapters } from '../../../apollo/api/mangas';
 

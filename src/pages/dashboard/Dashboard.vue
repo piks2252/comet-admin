@@ -29,7 +29,7 @@ import DashboardCharts from './DashboardCharts';
 import DashboardInfoBlock from './DashboardInfoBlock';
 import DashboardMap from './DashboardMap';
 import { fetchDashboardStats } from '../../apollo/api/dashboard';
-import Loader from '../ui/Loader';
+import Loader from '../../components/Loader';
 
 export default {
   name: 'dashboard',

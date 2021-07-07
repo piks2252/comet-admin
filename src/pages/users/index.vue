@@ -67,7 +67,7 @@ import { debounce } from 'lodash';
 import { fetchUsers } from '../../apollo/api/users';
 import DisableToggle from './DisableToggle';
 import SubscriptionLevel from './SubscriptionLevel';
-import Loader from '../ui/Loader.vue';
+import Loader from '../../components/Loader';
 
 export default {
   components: {

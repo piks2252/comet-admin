@@ -35,7 +35,7 @@ import { debounce } from 'lodash';
 import { fetchAuthors } from '../../apollo/api/authors';
 import AuthorActions from './AuthorActions';
 import AddAuthorModal from './AddAuthorModal';
-import Loader from '../ui/Loader';
+import Loader from '../../components/Loader';
 
 export default {
   components: {

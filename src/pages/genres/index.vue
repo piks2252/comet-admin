@@ -49,7 +49,7 @@ import GenreGroup from './GenreGroup';
 import GenreThumbnail from './GenreThumbnail';
 import GenreActions from './GenreActions';
 import AddGenreModal from './AddGenreModal';
-import Loader from '../ui/Loader';
+import Loader from '../../components/Loader';
 
 export default {
   components: {

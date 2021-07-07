@@ -78,7 +78,7 @@ import { debounce } from 'lodash';
 import { fetchMangas } from '../../apollo/api/mangas';
 import MangaDisabled from './MangaDisabled';
 import MangaStatus from './MangaStatus';
-import Loader from '../ui/Loader';
+import Loader from '../../components/Loader';
 
 export default {
   components: {
