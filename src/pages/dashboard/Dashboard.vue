@@ -54,7 +54,6 @@ export default {
       try {
         const response = await fetchDashboardStats();
         this.data = response.dashboardStats;
-        console.log(this.data);
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
