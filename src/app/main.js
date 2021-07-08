@@ -9,7 +9,7 @@ import { ColorThemePlugin } from '../services/vuestic-ui';
 import store from '../store/index';
 import router from '../router/index';
 import apolloProvider from '../apollo';
-import { VuesticPlugin } from '../services/vuestic-ui/components';
+import { VuesticPlugin } from '../vuestic-ui/components';
 import '../i18n/index';
 import YmapPlugin from 'vue-yandex-maps';
 import VueClipboard from 'vue-clipboard2';
@@ -26,9 +26,7 @@ Vue.use(YmapPlugin);
 Vue.use(VueClipboard);
 Vue.use(VueMoment);
 
-Vue.use(ColorThemePlugin, {
-  // override colors here.
-});
+Vue.use(ColorThemePlugin, {});
 
 router.beforeEach((to, from, next) => {
   store.commit('setLoading', true);

@@ -38,7 +38,7 @@ import AppPageLayout from './AppPageLayout';
 import AppNavbar from './app-navbar/AppNavbar';
 import AppTopbar from './app-topbar/AppTopbar';
 import AppSidebar from './app-sidebar/AppSidebar';
-import theme from '../../services/vuestic-ui/theme';
+import theme from '../../vuestic-ui/theme';
 import {
   ColorThemeActionsMixin,
   ColorThemeMixin,
