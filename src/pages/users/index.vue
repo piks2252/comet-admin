@@ -30,7 +30,7 @@
     >
       <template slot="profile" slot-scope="props">
         <img
-          :src="props.rowData.profilePic | profileImage"
+          :src="props.rowData.profilePic | profilePicFilter"
           class="profile-pic"
         />
       </template>
@@ -68,6 +68,7 @@ import { fetchUsers } from '../../apollo/api/users';
 import DisableToggle from './DisableToggle';
 import SubscriptionLevel from './SubscriptionLevel';
 import Loader from '../../components/Loader';
+import { profilePicFilter } from '../../mixins/filters';
 
 export default {
   components: {
@@ -86,12 +87,7 @@ export default {
     };
   },
   filters: {
-    profileImage: value => {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/profile/${value}`;
-    },
+    profilePicFilter,
   },
   computed: {
     fields() {

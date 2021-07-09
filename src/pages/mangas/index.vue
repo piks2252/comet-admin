@@ -34,7 +34,7 @@
       v-else
     >
       <template slot="cover" slot-scope="props">
-        <img class="manga-row-thumb" :src="props.rowData.cover" />
+        <img class="thumb-pic" :src="props.rowData.cover" />
       </template>
       <template slot="status" slot-scope="props">
         <manga-status
@@ -179,13 +179,6 @@ export default {
 </script>
 
 <style lang="scss">
-.manga-row-thumb {
-  width: 40px;
-  height: 40px;
-  border: 1px solid gray;
-  border-radius: 50%;
-}
-
 .action-icon {
   margin: 5px;
   color: 'black';
