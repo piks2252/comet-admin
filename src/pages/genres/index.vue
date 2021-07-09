@@ -136,12 +136,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.genre-pic {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #efefef;
-  border-radius: 24px;
-}
-</style>

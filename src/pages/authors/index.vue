@@ -18,7 +18,7 @@
     <loader v-if="apiLoading" />
     <va-data-table :fields="fields" :data="filteredData" :per-page="100" v-else>
       <template slot="thumbnail" slot-scope="props">
-        <img :src="props.rowData.picture | authorImage" class="genre-pic" />
+        <img :src="props.rowData.picture | authorPicFilter" class="thumb-pic" />
       </template>
       <template slot="actions" slot-scope="props">
         <author-actions
@@ -36,6 +36,7 @@ import { fetchAuthors } from '../../apollo/api/authors';
 import AuthorActions from './AuthorActions';
 import AddAuthorModal from './AddAuthorModal';
 import Loader from '../../components/Loader';
+import { authorPicFilter } from '../../mixins/filters';
 
 export default {
   components: {
@@ -52,12 +53,7 @@ export default {
     };
   },
   filters: {
-    authorImage(value) {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
-    },
+    authorPicFilter,
   },
   computed: {
     fields() {

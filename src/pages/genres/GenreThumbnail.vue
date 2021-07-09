@@ -1,8 +1,8 @@
 <template>
   <div>
     <img
-      :src="thumbnail | genreImage"
-      class="genre-pic"
+      :src="thumbnail | genrePicFilter"
+      class="thumb-pic"
       @click="$refs[`${genreId}_thumb`].click()"
     />
     <input
@@ -16,17 +16,13 @@
 
 <script>
 import { updateGenre } from '../../apollo/api/genres';
+import { genrePicFilter } from '../../mixins/filters';
 
 export default {
   name: 'genre-thumbnail',
   props: { thumbnail: String, genreId: Number },
   filters: {
-    genreImage: value => {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/genres/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/genres/${value}`;
-    },
+    genrePicFilter,
   },
   methods: {
     async uploadThumbnail({ target: { files = [] } }) {

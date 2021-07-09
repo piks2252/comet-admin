@@ -51,6 +51,7 @@
 
 <script>
 import { createAuthor } from '../../apollo/api/authors';
+import { authorPicFilter } from '../../mixins/filters';
 
 export default {
   name: 'add-author-modal',
@@ -75,7 +76,7 @@ export default {
       ) {
         return URL.createObjectURL(this.author.picture);
       }
-      return this.authorImage(this.author.picture);
+      return authorPicFilter(this.author.picture);
     },
   },
   methods: {
@@ -88,12 +89,6 @@ export default {
         website: '',
         picture: null,
       };
-    },
-    authorImage(value) {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
     },
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {

@@ -53,6 +53,7 @@
 
 <script>
 import { updateAuthor } from '../../apollo/api/authors';
+import { authorPicFilter } from '../../mixins/filters';
 
 export default {
   name: 'author-actions',
@@ -79,7 +80,7 @@ export default {
       ) {
         return URL.createObjectURL(this.newAuthor.picture);
       }
-      return this.authorImage(this.author.picture);
+      return authorPicFilter(this.author.picture);
     },
   },
   methods: {
@@ -89,12 +90,6 @@ export default {
     editAuthor() {
       this.resetForm();
       this.showModal = true;
-    },
-    authorImage(value) {
-      if (!value) {
-        return 'https://cdn.comet.shivy.co.in/images/authors/default.png';
-      }
-      return `https://cdn.comet.shivy.co.in/images/authors/${value}`;
     },
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {

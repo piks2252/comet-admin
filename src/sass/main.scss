@@ -122,3 +122,11 @@ body.va-inverted-color {
     border-color: transparent transparent $vue-purple transparent;
   }
 }
+
+// Global css classes
+.thumb-pic {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #efefef;
+  border-radius: 24px;
+}
