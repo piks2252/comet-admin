@@ -2,33 +2,35 @@
   <div class="timelines">
     <div class="row">
       <div class="flex md4 xs12">
-        <va-card no-padding-v title="App releases">
-          <va-timeline vertical style="height: 550px; overflow-y: scroll;">
-            <va-timeline-item
-              active
-              v-for="release in releases"
-              :key="release.versionTag"
-            >
-              <span
-                slot="before"
-                class="title va-timeline-item__text"
-                :style="{ color: $themes.primary }"
+        <va-inner-loading :loading="this.apiLoading">
+          <va-card no-padding-v title="App releases">
+            <va-timeline vertical style="height: 550px; overflow-y: scroll;">
+              <va-timeline-item
+                active
+                v-for="release in releases"
+                :key="release.versionTag"
               >
-                {{ release.date | moment('DD MMM, YYYY') }}
-              </span>
-              <va-card
-                slot="after"
-                stripe="success"
-                class="mb-0"
-                :title="release.versionTag"
-              >
-                <a :href="release.url" target="__blank">
-                  {{ release.title }}
-                </a>
-              </va-card>
-            </va-timeline-item>
-          </va-timeline>
-        </va-card>
+                <span
+                  slot="before"
+                  class="title va-timeline-item__text"
+                  :style="{ color: $themes.primary }"
+                >
+                  {{ release.date | moment('DD MMM, YYYY') }}
+                </span>
+                <va-card
+                  slot="after"
+                  stripe="success"
+                  class="mb-0"
+                  :title="release.versionTag"
+                >
+                  <a :href="release.url" target="__blank">
+                    {{ release.title }}
+                  </a>
+                </va-card>
+              </va-timeline-item>
+            </va-timeline>
+          </va-card>
+        </va-inner-loading>
       </div>
       <!-- <div class="flex md8 xs12">
         <va-card>
