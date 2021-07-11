@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="flex xs8 md2">
-        <action-button />
+        <action-button :chapterId="chapter.id" />
       </div>
     </div>
   </div>
