@@ -1,5 +1,5 @@
 <template>
-  <div class="chapter-detail">
+  <div class="flex flex-left chapter-detail">
     Chapter edit/view item will be shown here
     <p @click="closeSelf">close me</p>
   </div>

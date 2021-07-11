@@ -5,7 +5,7 @@ import 'regenerator-runtime/runtime';
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from './App';
-import { ColorThemePlugin } from '../services/vuestic-ui';
+import { ColorThemePlugin } from '../vuestic-ui';
 import store from '../store/index';
 import router from '../router/index';
 import apolloProvider from '../apollo';

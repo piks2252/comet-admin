@@ -16,7 +16,7 @@
     />
     <div class="app-topbar-link__title">
       <slot>
-        {{title}}
+        {{ title }}
       </slot>
     </div>
     <va-icon
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { colorShiftHsl, ColorThemeMixin } from './../../../../services/vuestic-ui'
+import { colorShiftHsl, ColorThemeMixin } from './../../../../vuestic-ui';
 
 export default {
   name: 'topbar-link',
@@ -57,86 +57,92 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       isHovered: false,
-    }
+    };
   },
   computed: {
-    computedStyle () {
+    computedStyle() {
       // TODO Inverted color condition is incorrect here.
       if (this.contextConfig.invertedColor) {
         if (this.isHovered || this.isActive) {
           return {
             color: this.$themes.primary,
-            borderColor: colorShiftHsl(this.$themes.primary, { s: 13, l: -15 }).css,
-          }
+            borderColor: colorShiftHsl(this.$themes.primary, { s: 13, l: -15 })
+              .css,
+          };
         }
 
         return {
           color: this.$themes.gray,
-        }
+        };
       }
 
       if (this.isActive) {
         return {
           color: this.$themes.primary,
           borderColor: this.$themes.primary,
-          backgroundColor: colorShiftHsl(this.$themes.secondary, { s: -13, l: 15 }).css,
-        }
+          backgroundColor: colorShiftHsl(this.$themes.secondary, {
+            s: -13,
+            l: 15,
+          }).css,
+        };
       }
 
       if (this.isHovered) {
         return {
           color: this.$themes.primary,
-          backgroundColor: colorShiftHsl(this.$themes.secondary, { s: -13, l: 15 }).css,
-        }
+          backgroundColor: colorShiftHsl(this.$themes.secondary, {
+            s: -13,
+            l: 15,
+          }).css,
+        };
       }
 
       return {
         color: this.$themes.info,
-      }
+      };
     },
-    computedIconStyles () {
+    computedIconStyles() {
       if (this.contextConfig.invertedColor) {
         if (this.isHovered || this.isActive) {
           return {
             color: this.$themes.primary,
-          }
+          };
         }
 
         return {
           color: this.$themes.gray,
-        }
+        };
       }
 
       if (this.isHovered || this.isActive) {
         return {
           color: this.$themes.primary,
-        }
+        };
       }
 
       return {
         color: 'white',
-      }
+      };
     },
   },
   methods: {
-    updateHoverState (isHovered) {
-      this.isHovered = isHovered
+    updateHoverState(isHovered) {
+      this.isHovered = isHovered;
     },
-    updateActiveState () {
-      this.isActive = (this.$route.name === this.to.name) || this.activeByDefault
+    updateActiveState() {
+      this.isActive = this.$route.name === this.to.name || this.activeByDefault;
     },
-    mounted () {
-      this.updateActiveState()
+    mounted() {
+      this.updateActiveState();
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
 .app-topbar-link {
   position: relative;
   cursor: pointer;

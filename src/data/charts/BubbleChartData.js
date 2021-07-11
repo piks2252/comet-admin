@@ -1,6 +1,6 @@
-import { hex2rgb } from '../../services/vuestic-ui'
+import { hex2rgb } from '../../vuestic-ui';
 
-export const getBubbleChartData = (themes) => ({
+export const getBubbleChartData = themes => ({
   datasets: [
     {
       label: 'USA',
@@ -233,4 +233,4 @@ export const getBubbleChartData = (themes) => ({
       ],
     },
   ],
-})
+});

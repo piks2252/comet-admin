@@ -14,19 +14,18 @@
         :style="computedIconStyles"
       />
       <span class="app-topbar-link-group-item__title">
-        {{title}}
+        {{ title }}
       </span>
     </div>
   </router-link>
 </template>
 
 <script>
-import { ColorThemeMixin } from '../../../../services/vuestic-ui'
+import { ColorThemeMixin } from '../../../../vuestic-ui';
 
 export default {
   name: 'app-topbar-link-group-item',
-  components: {
-  },
+  components: {},
   mixins: [ColorThemeMixin],
   props: {
     to: [String, Array, Object],
@@ -47,38 +46,40 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       isHover: false,
-    }
+    };
   },
   methods: {
-    updateHoverState (hoverState) {
-      this.isHover = hoverState
+    updateHoverState(hoverState) {
+      this.isHover = hoverState;
     },
   },
   computed: {
-    computedStyles () {
+    computedStyles() {
       return {
-        color: (this.isHover || this.isActive) ? this.$themes.primary : 'inherit',
-      }
+        color: this.isHover || this.isActive ? this.$themes.primary : 'inherit',
+      };
     },
-    computedIconStyles () {
+    computedIconStyles() {
       return {
-        color: (this.isHover || this.isActive) ? this.$themes.primary : this.$themes.info,
-      }
+        color:
+          this.isHover || this.isActive
+            ? this.$themes.primary
+            : this.$themes.info,
+      };
     },
-    computedClass () {
+    computedClass() {
       return {
         'app-topbar-link-group-item--active': this.isActive,
-      }
+      };
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
 .app-topbar-link-group-item {
   display: inline-block;
   padding: 0.3rem 0;

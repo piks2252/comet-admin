@@ -1,9 +1,5 @@
 <template>
-  <aside
-    class="app-sidebar"
-    :class="computedClass"
-    :style="computedStyle"
-  >
+  <aside class="app-sidebar" :class="computedClass" :style="computedStyle">
     <ul class="app-sidebar__menu">
       <template v-for="(item, key) in items">
         <app-sidebar-link-group
@@ -37,10 +33,10 @@
 </template>
 
 <script>
-import { navigationRoutes } from './NavigationRoutes'
-import AppSidebarLink from './components/AppSidebarLink'
-import AppSidebarLinkGroup from './components/AppSidebarLinkGroup'
-import { ColorThemeMixin } from '../../../services/vuestic-ui'
+import { navigationRoutes } from './NavigationRoutes';
+import AppSidebarLink from './components/AppSidebarLink';
+import AppSidebarLinkGroup from './components/AppSidebarLinkGroup';
+import { ColorThemeMixin } from '../../../vuestic-ui';
 
 export default {
   name: 'app-sidebar',
@@ -60,30 +56,31 @@ export default {
       default: 'secondary',
     },
   },
-  data () {
+  data() {
     return {
       items: navigationRoutes.routes,
-    }
+    };
   },
   computed: {
-    computedClass () {
+    computedClass() {
       return {
         'app-sidebar--minimized': this.minimized,
-      }
+      };
     },
-    computedStyle () {
+    computedStyle() {
       return {
-        backgroundColor: this.contextConfig.invertedColor ? 'white' : this.colorComputed,
-      }
+        backgroundColor: this.contextConfig.invertedColor
+          ? 'white'
+          : this.colorComputed,
+      };
     },
   },
   methods: {
-    hasActiveByDefault (item) {
-      return item.children.some(child => child.name === this.$route.name)
+    hasActiveByDefault(item) {
+      return item.children.some(child => child.name === this.$route.name);
     },
   },
-}
-
+};
 </script>
 
 <style lang="scss">

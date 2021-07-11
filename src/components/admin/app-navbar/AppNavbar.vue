@@ -18,7 +18,7 @@
 
         <router-link class="app-navbar__logo mr-3" to="/">
           <span class="app-navbar__text" :style="{ color: this.$themes.gray }">
-            {{ $t("navbar.title") }}&nbsp;
+            {{ $t('navbar.title') }}&nbsp;
           </span>
         </router-link>
       </div>
@@ -33,35 +33,33 @@
 </template>
 
 <script>
-import VaIconVuestic from "../../../iconset/VaIconVuestic";
-import VaIconMenu from "../../../iconset/VaIconMenu";
-import VaIconMenuCollapsed from "../../../iconset/VaIconMenuCollapsed";
-import AppNavbarActions from "./components/AppNavbarActions";
-import { colorShiftHsl, ColorThemeMixin } from "../../../services/vuestic-ui";
+import VaIconMenu from '../../../iconset/VaIconMenu';
+import VaIconMenuCollapsed from '../../../iconset/VaIconMenuCollapsed';
+import AppNavbarActions from './components/AppNavbarActions';
+import { colorShiftHsl, ColorThemeMixin } from '../../../vuestic-ui';
 
 export default {
-  name: "app-navbar",
+  name: 'app-navbar',
   mixins: [ColorThemeMixin],
-  inject: ["contextConfig"],
+  inject: ['contextConfig'],
   components: {
-    VaIconVuestic,
     VaIconMenu,
     VaIconMenuCollapsed,
-    AppNavbarActions
+    AppNavbarActions,
   },
   props: {
     isTopBar: {
       type: Boolean,
-      required: true
+      required: true,
     },
     minimized: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      userName: "Vasili S"
+      userName: 'Vasili S',
     };
   },
   computed: {
@@ -70,24 +68,24 @@ export default {
         return this.minimized;
       },
       set(minimized) {
-        this.$emit("update:minimized", minimized);
-      }
+        this.$emit('update:minimized', minimized);
+      },
     },
     navbarStyle() {
       const style = {
-        backgroundColor: "white"
+        backgroundColor: 'white',
       };
 
       if (this.contextConfig.gradient) {
         style.backgroundColor = colorShiftHsl(this.$themes.secondary, {
           s: -13,
-          l: 15
+          l: 15,
         }).css;
       }
 
-      if (this.contextConfig.shadow === "sm") {
+      if (this.contextConfig.shadow === 'sm') {
         style.boxShadow = !this.isTopBar
-          ? "0 2px 3px 0 rgba(52, 56, 85, 0.25)"
+          ? '0 2px 3px 0 rgba(52, 56, 85, 0.25)'
           : null;
       }
       return style;
@@ -97,14 +95,14 @@ export default {
       return {
         borderTopColor: this.contextConfig.gradient
           ? colorShiftHsl(this.$themes.secondary, {
-              h: -1,
-              s: -11,
-              l: 10
-            }).css
-          : "transparent"
+            h: -1,
+            s: -11,
+            l: 10,
+          }).css
+          : 'transparent',
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

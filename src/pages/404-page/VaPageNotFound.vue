@@ -24,7 +24,7 @@
 <script>
 import MadeByComponent from './MadeByComponent';
 import Wallpaper from './Wallpaper';
-import { ColorThemeMixin } from '../../services/vuestic-ui';
+import { ColorThemeMixin } from '../../vuestic-ui';
 
 export default {
   name: 'va-page-not-found',

@@ -1,8 +1,5 @@
 <template>
-  <aside
-    class="app-topbar"
-    :style="computedStyles"
-  >
+  <aside class="app-topbar" :style="computedStyles">
     <ul class="app-topbar__menu">
       <template v-for="(item, key) in items">
         <app-topbar-link-group
@@ -10,13 +7,19 @@
           v-if="item.children"
           :key="key"
           :is-active="hasActiveByDefault(item)"
-          :icon="[ 'sidebar-menu-item-icon vuestic-iconset', item.meta.iconClass ]"
+          :icon="[
+            'sidebar-menu-item-icon vuestic-iconset',
+            item.meta.iconClass,
+          ]"
           :title="$t(item.displayName)"
           :is-multi-row="item.children.length > 10"
         >
           <app-topbar-link-group-item
             class="app-topbar__menu-group-item"
-            :class="{'app-topbar__menu-group-item--multi-row': item.children.length > 10 }"
+            :class="{
+              'app-topbar__menu-group-item--multi-row':
+                item.children.length > 10,
+            }"
             v-for="(subMenuItem, key) in item.children"
             :key="key"
             :to="{ name: subMenuItem.name }"
@@ -29,7 +32,10 @@
           v-else
           :key="key"
           :is-active="item.name === $route.name"
-          :icon="[ 'sidebar-menu-item-icon vuestic-iconset', item.meta.iconClass ]"
+          :icon="[
+            'sidebar-menu-item-icon vuestic-iconset',
+            item.meta.iconClass,
+          ]"
           :to="{ name: item.name }"
         >
           {{ $t(item.displayName) }}
@@ -40,11 +46,11 @@
 </template>
 
 <script>
-import AppTopbarLink from './components/AppTopbarLink'
-import AppTopbarLinkGroup from './components/AppTopbarLinkGroup'
-import AppTopbarLinkGroupItem from './components/AppTopbarLinkGroupItem'
-import { navigationRoutes } from '../app-sidebar/NavigationRoutes'
-import { ColorThemeMixin } from '../../../services/vuestic-ui'
+import AppTopbarLink from './components/AppTopbarLink';
+import AppTopbarLinkGroup from './components/AppTopbarLinkGroup';
+import AppTopbarLinkGroupItem from './components/AppTopbarLinkGroupItem';
+import { navigationRoutes } from '../app-sidebar/NavigationRoutes';
+import { ColorThemeMixin } from '../../../vuestic-ui';
 
 export default {
   name: 'app-topbar',
@@ -55,37 +61,35 @@ export default {
     AppTopbarLinkGroup,
     AppTopbarLinkGroupItem,
   },
-  props: {
-  },
+  props: {},
   computed: {
-    computedStyles () {
+    computedStyles() {
       if (this.contextConfig.invertedColor) {
         return {
           backgroundColor: 'white',
           boxShadow: '0 2px 3px 0 rgba(52, 56, 85, 0.25)',
-        }
+        };
       }
 
       return {
         backgroundColor: this.$themes.secondary,
-      }
+      };
     },
   },
-  data () {
+  data() {
     return {
       items: navigationRoutes.routes,
-    }
+    };
   },
   methods: {
-    hasActiveByDefault (item) {
-      return item.children.some(child => child.name === this.$route.name)
+    hasActiveByDefault(item) {
+      return item.children.some(child => child.name === this.$route.name);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
 .app-topbar {
   transition: all 0.3s ease;
   width: 100%;

@@ -1,8 +1,5 @@
 <template>
-  <li
-    class="app-sidebar-link-group"
-    :class="computedClass"
-  >
+  <li class="app-sidebar-link-group" :class="computedClass">
     <div v-if="!minimized">
       <div @click.stop.prevent="toggleMenuItem()">
         <app-sidebar-link
@@ -18,7 +15,7 @@
           v-show="expanded"
           ref="linkGroupWrapper"
         >
-          <slot/>
+          <slot />
         </ul>
       </transition-expand>
     </div>
@@ -39,20 +36,17 @@
           minimized
         />
       </div>
-      <ul
-        class="app-sidebar-link-group__submenu"
-        :style="computedSubmenuColor"
-      >
-        <slot/>
+      <ul class="app-sidebar-link-group__submenu" :style="computedSubmenuColor">
+        <slot />
       </ul>
     </va-dropdown>
   </li>
 </template>
 
 <script>
-import TransitionExpand from './TransitionExpand'
-import { colorShiftHsl, ColorThemeMixin } from '../../../../services/vuestic-ui'
-import AppSidebarLink from './AppSidebarLink'
+import TransitionExpand from './TransitionExpand';
+import { colorShiftHsl, ColorThemeMixin } from '../../../../vuestic-ui';
+import AppSidebarLink from './AppSidebarLink';
 
 export default {
   name: 'app-sidebar-link-group',
@@ -73,80 +67,83 @@ export default {
     TransitionExpand,
     AppSidebarLink,
   },
-  data () {
+  data() {
     return {
       isActive: this.activeByDefault,
       isHovered: false,
       expanded: this.expanded,
-    }
+    };
   },
   watch: {
-    $route () {
-      this.$refs.dropdown && this.$refs.dropdown.hide()
-      this.updateActiveState()
+    $route() {
+      this.$refs.dropdown && this.$refs.dropdown.hide();
+      this.updateActiveState();
     },
-    minimized (value) {
+    minimized(value) {
       if (!value) {
-        this.isActive = false
+        this.isActive = false;
       } else {
-        this.updateActiveState()
+        this.updateActiveState();
       }
     },
   },
   methods: {
-    toggleMenuItem () {
-      this.expanded = !this.expanded
+    toggleMenuItem() {
+      this.expanded = !this.expanded;
     },
-    updateHoverState () {
-      this.isHovered = !this.isHovered
+    updateHoverState() {
+      this.isHovered = !this.isHovered;
     },
-    updateActiveState () {
-      const active = this.children.some(item => item.name === this.$route.name)
+    updateActiveState() {
+      const active = this.children.some(item => item.name === this.$route.name);
 
-      this.isActive = this.minimized ? active : false
-      this.expanded = active
+      this.isActive = this.minimized ? active : false;
+      this.expanded = active;
     },
   },
   computed: {
-    computedClass () {
+    computedClass() {
       return {
         'app-sidebar-link-group--minimized': this.minimized,
         'app-sidebar-link-group--isActive': this.isActive,
-      }
+      };
     },
-    computedLinkStyles () {
+    computedLinkStyles() {
       if (this.isHovered || this.isActive) {
         return {
           color: this.$themes.primary,
-          backgroundColor: colorShiftHsl(this.$themes.secondary, { s: -13, l: 15 }).css,
+          backgroundColor: colorShiftHsl(this.$themes.secondary, {
+            s: -13,
+            l: 15,
+          }).css,
           borderColor: this.isActive ? this.$themes.primary : 'transparent',
-        }
+        };
       }
 
-      return {}
+      return {};
     },
-    computedIconStyles () {
+    computedIconStyles() {
       if (this.isHovered || this.isActive) {
         return {
           color: this.$themes.primary,
-        }
+        };
       }
 
-      return 'white'
+      return 'white';
     },
 
-    computedSubmenuColor () {
+    computedSubmenuColor() {
       return {
-        backgroundColor: this.contextConfig.invertedColor ? 'white' : this.$themes[this.color],
-      }
+        backgroundColor: this.contextConfig.invertedColor
+          ? 'white'
+          : this.$themes[this.color],
+      };
     },
   },
-}
-
+};
 </script>
 
 <style lang="scss">
-
 .app-sidebar-link-group {
   flex-direction: column;
   position: relative;

@@ -39,10 +39,7 @@ import AppNavbar from './app-navbar/AppNavbar';
 import AppTopbar from './app-topbar/AppTopbar';
 import AppSidebar from './app-sidebar/AppSidebar';
 import theme from '../../vuestic-ui/theme';
-import {
-  ColorThemeActionsMixin,
-  ColorThemeMixin,
-} from '../../services/vuestic-ui';
+import { ColorThemeActionsMixin, ColorThemeMixin } from '../../vuestic-ui';
 
 export default {
   name: 'app-layout',

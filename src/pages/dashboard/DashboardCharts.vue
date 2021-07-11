@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { hex2rgb } from '../../services/vuestic-ui';
+import { hex2rgb } from '../../vuestic-ui';
 import DashboardReadersList from './DashboardReadersList';
 
 export default {

@@ -11,26 +11,26 @@
 </template>
 
 <script>
-import ProfileDropdown from "./dropdowns/ProfileDropdown";
-import NotificationDropdown from "./dropdowns/NotificationDropdown";
-import ColorDropdown from "./dropdowns/ColorDropdown";
-import { ColorThemeMixin } from "../../../../services/vuestic-ui";
+import ProfileDropdown from './dropdowns/ProfileDropdown';
+import NotificationDropdown from './dropdowns/NotificationDropdown';
+import ColorDropdown from './dropdowns/ColorDropdown';
+import { ColorThemeMixin } from '../../../../vuestic-ui';
 
 export default {
-  name: "app-navbar-actions",
+  name: 'app-navbar-actions',
   mixins: [ColorThemeMixin],
-  inject: ["contextConfig"],
+  inject: ['contextConfig'],
   components: {
     ColorDropdown,
     NotificationDropdown,
-    ProfileDropdown
+    ProfileDropdown,
   },
   props: {
     userName: {
       type: String,
-      default: ""
-    }
-  }
+      default: '',
+    },
+  },
 };
 </script>
 
