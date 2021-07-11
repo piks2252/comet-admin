@@ -66,7 +66,6 @@ export default {
       try {
         const { chaptersList } = await fetchChapters(this.mangaId);
         this.chapters = chaptersList;
-        console.log(this.chapters);
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',

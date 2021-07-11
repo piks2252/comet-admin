@@ -123,9 +123,12 @@ export default {
       try {
         const { releasesList } = await fetchReleases();
         this.releases = releasesList;
-        console.log(this.releases);
       } catch (e) {
-        console.log(e);
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
       }
       this.apiLoading = false;
     },
