@@ -5,19 +5,19 @@
     <grid
       :draggable="true"
       :sortable="true"
-      :items="items"
+      :items="colors"
       :height="100"
       :width="100"
     >
       <template slot="cell" slot-scope="props">
-        <div>{{ props.item }}</div>
+        <div style="border: 1px solid green;">{{ props.item }}</div>
       </template>
     </grid>
   </div>
 </template>
 
 <script>
-import Grid from 'vue-js-grid';
+import Grid from 'vue-js-grid/src/Grid.vue';
 export default {
   components: { Grid },
   props: {
@@ -29,7 +29,10 @@ export default {
     },
   },
   data() {
+    const colors = this.generateRGBColors(20);
+
     return {
+      colors,
       edit: false,
       delete: false,
       apiLoading: false,
@@ -49,6 +52,18 @@ export default {
   methods: {
     closeSelf() {
       this.$emit('closePopDown');
+    },
+    randomInt(fr, to) {
+      return Math.round(fr + Math.random() * to);
+    },
+    generateRGBColors(count) {
+      return Array.apply(null, new Array(count)).map((none, i) => {
+        return {
+          r: this.randomInt(0, 255),
+          g: this.randomInt(0, 255),
+          b: this.randomInt(0, 255),
+        };
+      });
     },
   },
 };

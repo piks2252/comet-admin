@@ -20,13 +20,19 @@
               <span>↓</span>
             </va-popover>
           </h1>
-          <draggable v-model="chapters" style="margin-top: 10px;">
+          <draggable
+            v-model="chapters"
+            style="margin-top: 10px;"
+            draggable=".item"
+          >
             <transition-group>
               <chapter-row
+                :class="!chapterFocused ? 'item' : ''"
                 v-for="(chapter, index) in chapters"
                 :key="chapter.id"
                 :chapter="chapter"
                 :index="chapters.length - index"
+                @chapterSelected="chapterSelectEvent"
               />
             </transition-group>
           </draggable>
@@ -52,6 +58,7 @@ export default {
   data() {
     return {
       apiLoading: false,
+      chapterFocused: false,
       chapters: [],
     };
   },
@@ -74,6 +81,9 @@ export default {
         });
       }
       this.apiLoading = false;
+    },
+    chapterSelectEvent(val) {
+      this.chapterFocused = val;
     },
   },
 };

@@ -56,6 +56,11 @@ export default {
       type: Number,
     },
   },
+  watch: {
+    showChapterDetail(val) {
+      this.$emit('chapterSelected', val);
+    },
+  },
   methods: {
     viewChapter() {
       this.mode = 'view';
