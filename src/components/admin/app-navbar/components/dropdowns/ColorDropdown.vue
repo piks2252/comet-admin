@@ -1,8 +1,5 @@
 <template>
-  <va-dropdown
-    class="color-dropdown"
-    offset="0, 13px"
-  >
+  <va-dropdown class="color-dropdown" offset="0, 13px">
     <va-icon-color
       slot="anchor"
       class="color-dropdown__icon"
@@ -24,10 +21,7 @@
         >
           Primary
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.primary"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.primary" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -38,10 +32,7 @@
         >
           Secondary
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.secondary"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.secondary" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -52,10 +43,7 @@
         >
           Success
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.success"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.success" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -66,10 +54,7 @@
         >
           Info
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.info"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.info" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -80,10 +65,7 @@
         >
           Danger
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.danger"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.danger" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -94,10 +76,7 @@
         >
           Warning
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.warning"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.warning" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -108,10 +87,7 @@
         >
           Gray
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.gray"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.gray" />
       </va-dropdown>
 
       <va-dropdown class="color-picker-dropdown mt-1 mb-1">
@@ -122,17 +98,14 @@
         >
           Dark
         </va-badge>
-        <va-advanced-color-picker
-          class="my-1"
-          v-model="$themes.dark"
-        />
+        <va-advanced-color-picker class="my-1" v-model="$themes.dark" />
       </va-dropdown>
     </div>
   </va-dropdown>
 </template>
 
 <script>
-import VaIconColor from '../../../../../iconset/VaIconColor'
+import VaIconColor from '../../../../../iconset/VaIconColor';
 
 export default {
   inject: ['contextConfig'],
@@ -141,14 +114,14 @@ export default {
   },
   computed: {
     selectedTheme: {
-      get () {
-        return this.contextConfig.invertedColor ? 'corporate' : 'original'
+      get() {
+        return this.contextConfig.invertedColor ? 'corporate' : 'original';
       },
-      set (themeName) {
-        this.$root.$emit('change-theme', themeName)
+      set(themeName) {
+        this.$root.$emit('change-theme', themeName);
       },
     },
-    modeOptions () {
+    modeOptions() {
       return [
         {
           label: 'Original',
@@ -158,14 +131,13 @@ export default {
           label: 'Corporate',
           value: 'corporate',
         },
-      ]
+      ];
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
 .color-dropdown {
   cursor: pointer;
 

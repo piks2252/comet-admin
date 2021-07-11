@@ -1,8 +1,5 @@
 <template>
-  <li
-    class="app-topbar-link-group"
-    :class="computedClass"
-  >
+  <li class="app-topbar-link-group" :class="computedClass">
     <va-dropdown
       position="bottom"
       fixed
@@ -22,20 +19,17 @@
         :icon-right="isOpen ? 'fa fa-angle-up' : 'fa fa-angle-down'"
         :is-active="isActive"
       >
-        {{title}}
+        {{ title }}
       </app-topbar-link>
-      <ul
-        class="app-topbar-link-group__submenu"
-        :class="computedSubMenuClass"
-      >
-        <slot/>
+      <ul class="app-topbar-link-group__submenu" :class="computedSubMenuClass">
+        <slot />
       </ul>
     </va-dropdown>
   </li>
 </template>
 
 <script>
-import AppTopbarLink from './AppTopbarLink'
+import AppTopbarLink from './AppTopbarLink';
 
 export default {
   name: 'topbar-link-group',
@@ -56,62 +50,65 @@ export default {
       defaul: false,
     },
   },
-  data () {
+  data() {
     return {
       isHovered: false,
       isOpen: false,
-    }
+    };
   },
   watch: {
-    $route () {
-      this.$refs.dropdown.hide()
+    $route() {
+      this.$refs.dropdown.hide();
     },
   },
   methods: {
-    updateHoverState () {
-      this.isHovered = !this.isHovered
+    updateHoverState() {
+      this.isHovered = !this.isHovered;
     },
-    handleDropdownClick () {
-      const hasDropdownContent = this.$refs.dropdown.$el.getElementsByClassName('va-dropdown__content').length > 0
+    handleDropdownClick() {
+      const hasDropdownContent =
+        this.$refs.dropdown.$el.getElementsByClassName('va-dropdown__content')
+          .length > 0;
 
       if (hasDropdownContent) {
-        this.isOpen = true
+        this.isOpen = true;
       } else {
-        this.isOpen = false
+        this.isOpen = false;
       }
     },
-    handleOutsideClick () {
-      this.isOpen = false
+    handleOutsideClick() {
+      this.isOpen = false;
     },
   },
   computed: {
-    computedLinkClass () {
+    computedLinkClass() {
       return {
         'app-topbar-link--open': this.isOpen,
         'app-topbar-link--active': this.isActive,
-      }
+      };
     },
-    computedSubMenuClass () {
+    computedSubMenuClass() {
       return {
         'app-topbar-link-group__submenu--multi-row': this.isMultiRow,
-      }
+      };
     },
-    computedClass () {
+    computedClass() {
       return {
         'app-topbar-link-group--minimized': this.minimized,
-      }
+      };
     },
-    computedIconStyles () {
+    computedIconStyles() {
       return {
-        backgroundColor: this.contextConfig.invertedColor ? this.$themes[this.color] : 'white',
-      }
+        backgroundColor: this.contextConfig.invertedColor
+          ? this.$themes[this.color]
+          : 'white',
+      };
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
 .app-topbar-link-group {
   flex-direction: column;
 

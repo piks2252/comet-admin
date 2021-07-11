@@ -12251,6 +12251,11 @@ vue-jest@^3.0.5:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
+vue-js-grid@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vue-js-grid/-/vue-js-grid-1.0.1.tgz#3d09314d7e8108a5a585ff02bea8ef5a7aefd1ec"
+  integrity sha512-YOCRATqtab8DWzaVVRrTRD81+Q6brafsDlRro3Y6miM6aQc/Mi3dZcj1mjDooUlBnJlFcYYlC50eD6j4vaYfHA==
+
 "vue-loader-v16@npm:vue-loader@^16.1.0":
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.2.0.tgz#046a53308dd47e58efe20ddec1edec027ce3b46e"

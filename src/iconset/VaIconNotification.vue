@@ -7,7 +7,7 @@
     viewBox="0 0 20 20"
   >
     <g fill="none" fill-rule="evenodd">
-      <path d="M-2-2h24v24H-2z"/>
+      <path d="M-2-2h24v24H-2z" />
       <path
         :fill="color"
         fill-rule="nonzero"
@@ -15,7 +15,6 @@
       />
     </g>
   </svg>
-
 </template>
 
 <script>
@@ -27,13 +26,13 @@ export default {
       default: 'white',
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-  .va-icon-notification {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-  }
+.va-icon-notification {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
 </style>

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'app-page-layout',
   props: {
@@ -15,31 +14,30 @@ export default {
       default: 767,
     },
   },
-  mounted () {
-    window.addEventListener('resize', () => this.updateSidebarState())
+  mounted() {
+    window.addEventListener('resize', () => this.updateSidebarState());
 
-    this.updateSidebarState()
+    this.updateSidebarState();
   },
-  beforeDestroy () {
-    window.removeEventListener('resize', () => this.updateSidebarState())
+  beforeDestroy() {
+    window.removeEventListener('resize', () => this.updateSidebarState());
   },
   methods: {
-    checkIsDesktop () {
-      return window.matchMedia(`(min-width: ${this.mobileWidth}px)`).matches
+    checkIsDesktop() {
+      return window.matchMedia(`(min-width: ${this.mobileWidth}px)`).matches;
     },
-    updateSidebarState () {
+    updateSidebarState() {
       if (this.checkIsDesktop()) {
-        this.$emit('update:minimized', false)
+        this.$emit('update:minimized', false);
       } else {
-        this.$emit('update:minimized', true)
+        this.$emit('update:minimized', true);
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-
 .app-page-layout {
   position: fixed;
   top: 0;
