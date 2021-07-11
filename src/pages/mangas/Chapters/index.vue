@@ -10,13 +10,23 @@
       <div class="flex md10 lg11">
         <loader v-if="apiLoading" />
         <div v-else>
-          <h1>Chapters</h1>
+          <h1>
+            Chapters
+            <va-popover
+              title=""
+              message="Chapters are sorted in non-increasing order"
+              placement="left"
+            >
+              <span>↓</span>
+            </va-popover>
+          </h1>
           <draggable v-model="chapters" style="margin-top: 10px;">
             <transition-group>
               <chapter-row
-                v-for="chapter in chapters"
+                v-for="(chapter, index) in chapters"
                 :key="chapter.id"
                 :chapter="chapter"
+                :index="chapters.length - index"
               />
             </transition-group>
           </draggable>
