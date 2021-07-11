@@ -21,22 +21,14 @@
 <script>
 export default {
   props: {
-    chapterId: {
-      type: String,
+    viewChapter: {
+      type: Function,
     },
-  },
-  mounted() {
-    console.log(this.chapterId);
-  },
-  methods: {
-    viewChapter() {
-      console.log('Rtoue navigate to view chapoter ', this.chapterId);
+    editChapter: {
+      type: Function,
     },
-    editChapter() {
-      console.log('Rtoue navigate to edit chapoter ', this.chapterId);
-    },
-    deleteChapter() {
-      console.log('Rtoue navigate to delete chapoter ', this.chapterId);
+    deleteChapter: {
+      type: Function,
     },
   },
 };
