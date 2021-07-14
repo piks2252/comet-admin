@@ -35,6 +35,14 @@ export const fetchChapters = async(
   return data;
 };
 
+export const fetchChapter = async id => {
+  const { data } = await apolloClient.query({
+    query: QUERIES.CHAPTER,
+    variables: { id },
+  });
+  return data;
+};
+
 export const createManga = async(manga, coverImage) => {
   const { data } = await apolloClient.mutate({
     mutation: MUTATIONS.CREATE_MANGA,

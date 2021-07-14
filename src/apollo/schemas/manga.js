@@ -78,6 +78,23 @@ export const QUERIES = {
       }
     }
   `,
+  CHAPTER: gql`
+    query FETCH_CHAPTER($id: String) {
+      chapterItem(id: $id) {
+        id
+        chapter
+        volume
+        title
+        mangaId
+        releaseDate
+        thumbnail
+        pages
+        longStrip
+        alternateSource
+        useAltSrc
+      }
+    }
+  `,
 };
 
 export const MUTATIONS = {
