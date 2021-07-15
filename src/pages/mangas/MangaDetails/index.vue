@@ -320,7 +320,7 @@ export default {
     },
     async getAuthorsArray(authorPattern = '') {
       const { peopleList } = await fetchAuthors(authorPattern, 1, 5);
-      return peopleList.map(p => {
+      return peopleList.people.map(p => {
         return {
           id: p.id,
           text: p.name,
@@ -329,7 +329,7 @@ export default {
     },
     async getArtistsArray(artistPattern = '') {
       const { peopleList } = await fetchAuthors(artistPattern, 2, 5);
-      return peopleList.map(p => {
+      return peopleList.people.map(p => {
         return {
           id: p.id,
           text: p.name,
@@ -338,7 +338,7 @@ export default {
     },
     async getFormatArray() {
       const { genresList } = await fetchGenres('', 'format', 10);
-      this.mangaFormats = genresList.map(g => {
+      this.mangaFormats = genresList.genres.map(g => {
         return {
           id: g.id,
           name: g.name,
@@ -347,7 +347,7 @@ export default {
     },
     async getGenresArray(genrePattern = '') {
       const { genresList } = await fetchGenres(genrePattern, '', 5);
-      return genresList.map(p => {
+      return genresList.genres.map(p => {
         return {
           id: p.id,
           text: p.name,
@@ -356,7 +356,7 @@ export default {
     },
     async getThemesArray(genrePattern = '') {
       const { genresList } = await fetchGenres(genrePattern, 'theme', 5);
-      return genresList.map(p => {
+      return genresList.genres.map(p => {
         return {
           id: p.id,
           text: p.name,
@@ -365,7 +365,7 @@ export default {
     },
     async getDemographicsArray(genrePattern = '') {
       const { genresList } = await fetchGenres(genrePattern, 'demographics', 5);
-      return genresList.map(p => {
+      return genresList.genres.map(p => {
         return {
           id: p.id,
           text: p.name,

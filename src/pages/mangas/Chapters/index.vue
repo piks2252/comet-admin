@@ -72,7 +72,7 @@ export default {
       this.apiLoading = true;
       try {
         const { chaptersList } = await fetchChapters(this.mangaId);
-        this.chapters = chaptersList;
+        this.chapters = chaptersList.chapters;
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
