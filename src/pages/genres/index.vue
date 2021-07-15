@@ -6,9 +6,9 @@
       </div>
       <div class="flex xs12 md3 offset--md3">
         <va-input
-          :value="term"
+          v-model="term"
           :placeholder="$t('tables.searchByName')"
-          @input="search"
+          @keydown="searchGenre"
           removable
         >
           <va-icon name="fa fa-search" slot="prepend" />
@@ -17,7 +17,17 @@
     </div>
 
     <loader v-if="apiLoading" />
-    <va-data-table :fields="fields" :data="filteredData" :per-page="100" v-else>
+    <data-table
+      :fields="fields"
+      :data="genres"
+      :per-page="pagination.limit"
+      :total-pages="pagination.pages"
+      :currentPage="pagination.currentPage"
+      :api-mode="true"
+      :loading="apiLoading"
+      @page-selected="loadGenres"
+      v-else
+    >
       <template slot="thumbnail" slot-scope="props">
         <genre-thumbnail
           :genreId="props.rowData.id"
@@ -38,13 +48,13 @@
           @updateGenre="updateGenreArray"
         />
       </template>
-    </va-data-table>
+    </data-table>
   </va-card>
 </template>
 
 <script>
-import { debounce } from 'lodash';
 import { fetchGenres } from '../../apollo/api/genres';
+import DataTable from '../../components/DataTable';
 import GenreGroup from './GenreGroup';
 import GenreThumbnail from './GenreThumbnail';
 import GenreActions from './GenreActions';
@@ -53,6 +63,7 @@ import Loader from '../../components/Loader';
 
 export default {
   components: {
+    DataTable,
     GenreGroup,
     GenreThumbnail,
     GenreActions,
@@ -62,8 +73,14 @@ export default {
   data() {
     return {
       apiLoading: false,
-      term: null,
+      term: '',
       genres: [],
+      pagination: {
+        limit: 50,
+        currentPage: 1,
+        pages: 0,
+        total: 0,
+      },
     };
   },
   computed: {
@@ -93,25 +110,34 @@ export default {
         },
       ];
     },
-    filteredData() {
-      if (!this.term || this.term.length < 1) {
-        return this.genres;
+  },
+  watch: {
+    term: function(newVal, oldVal) {
+      if (oldVal.length > 0 && newVal.length === 0) {
+        this.loadGenres();
       }
-
-      return this.genres.filter(item => {
-        return item.name.toLowerCase().startsWith(this.term.toLowerCase());
-      });
     },
   },
   async mounted() {
-    await this.loadGenres();
+    await this.loadGenres(1);
   },
   methods: {
-    async loadGenres() {
+    async loadGenres(page = 1) {
       this.apiLoading = true;
       try {
-        const { genresList } = await fetchGenres();
-        this.genres = genresList;
+        const { genresList } = await fetchGenres(
+          this.term,
+          '',
+          this.pagination.limit,
+          page,
+        );
+        this.genres = genresList.genres;
+        this.pagination = {
+          ...this.pagination,
+          currentPage: genresList.currentPage,
+          pages: genresList.pages,
+          total: genresList.total,
+        };
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
@@ -120,6 +146,11 @@ export default {
         });
       }
       this.apiLoading = false;
+    },
+    async searchGenre(e) {
+      if (e.key === 'Enter') {
+        await this.loadGenres();
+      }
     },
     updateGenreArray(genre) {
       const newGenres = this.genres.map(g => {
@@ -130,9 +161,6 @@ export default {
       });
       this.genres = newGenres;
     },
-    search: debounce(function(term) {
-      this.term = term;
-    }, 400),
   },
 };
 </script>
