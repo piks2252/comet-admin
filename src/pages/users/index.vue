@@ -5,7 +5,7 @@
         <va-input
           :value="term"
           :placeholder="$t('tables.searchByName')"
-          @input="search"
+          @keydown="searchUser"
           removable
         >
           <va-icon name="fa fa-search" slot="prepend" />
@@ -22,10 +22,15 @@
       </div>
     </div>
     <loader v-if="apiLoading" />
-    <va-data-table
+    <data-table
       :fields="fields"
-      :data="filteredData"
-      :per-page="parseInt(perPage)"
+      :data="users"
+      :per-page="pagination.limit"
+      :total-pages="pagination.pages"
+      :currentPage="pagination.currentPage"
+      :api-mode="true"
+      :loading="apiLoading"
+      @page-selected="loadUsers"
       v-else
     >
       <template slot="profile" slot-scope="props">
@@ -58,13 +63,13 @@
       <template slot="createdAt" slot-scope="props">
         {{ new Date(props.rowData.createdAt) | moment('DD-MM-YYYY HH:mm:ss') }}
       </template>
-    </va-data-table>
+    </data-table>
   </va-card>
 </template>
 
 <script>
-import { debounce } from 'lodash';
 import { fetchUsers } from '../../apollo/api/users';
+import DataTable from '../../components/DataTable';
 import DisableToggle from './DisableToggle';
 import SubscriptionLevel from './SubscriptionLevel';
 import Loader from '../../components/Loader';
@@ -72,18 +77,25 @@ import { profilePicFilter } from '../../mixins/filters';
 
 export default {
   components: {
+    DataTable,
     DisableToggle,
     SubscriptionLevel,
     Loader,
   },
   data() {
     return {
-      term: null,
+      term: '',
       apiLoading: false,
       perPage: '20',
       perPageOptions: ['20', '30', '40', '50'],
       showModal: false,
       users: [],
+      pagination: {
+        limit: 20,
+        currentPage: 1,
+        pages: 0,
+        total: 0,
+      },
     };
   },
   filters: {
@@ -126,25 +138,37 @@ export default {
         },
       ];
     },
-    filteredData() {
-      if (!this.term || this.term.length < 1) {
-        return this.users;
+  },
+  watch: {
+    perPage: function(newVal) {
+      this.pagination.limit = parseInt(newVal);
+      this.loadUsers();
+    },
+    term: function(newVal, oldVal) {
+      if (oldVal.length > 0 && newVal.length === 0) {
+        this.loadUsers();
       }
-
-      return this.users.filter(item => {
-        return item.name.toLowerCase().startsWith(this.term.toLowerCase());
-      });
     },
   },
   async mounted() {
-    await this.loadUsers();
+    await this.loadUsers(1);
   },
   methods: {
-    async loadUsers() {
+    async loadUsers(page = 1) {
       this.apiLoading = true;
       try {
-        const { readersList } = await fetchUsers();
-        this.users = readersList;
+        const { readersList } = await fetchUsers(
+          this.term,
+          this.pagination.limit,
+          page,
+        );
+        this.users = readersList.readers;
+        this.pagination = {
+          ...this.pagination,
+          currentPage: readersList.currentPage,
+          pages: readersList.pages,
+          total: readersList.total,
+        };
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
@@ -153,6 +177,11 @@ export default {
         });
       }
       this.apiLoading = false;
+    },
+    async searchUser(e) {
+      if (e.key === 'Enter') {
+        await this.loadUsers();
+      }
     },
     updateUserArray(user) {
       const newUsers = this.users.map(u => {
@@ -163,9 +192,6 @@ export default {
       });
       this.users = newUsers;
     },
-    search: debounce(function(term) {
-      this.term = term;
-    }, 400),
   },
 };
 </script>

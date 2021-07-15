@@ -1,7 +1,12 @@
 import { QUERIES, MUTATIONS } from '../schemas/user';
 import { apolloClient } from '../index';
 
-export const fetchUsers = async(limit = 50, page = 1, sortBy = '-id') => {
+export const fetchUsers = async(
+  search = '',
+  limit = 50,
+  page = 1,
+  sortBy = '-id',
+) => {
   const { data } = await apolloClient.query({
     query: QUERIES.USERS,
     variables: { limit, page, sortBy },
