@@ -5,17 +5,22 @@ export const QUERIES = {
     query FETCH_AUTHORS(
       $search: String
       $limit: Int
-      $skip: Int
+      $page: Int
       $sortBy: String
     ) {
-      peopleList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
-        id
-        name
-        picture
-        twitter
-        instagram
-        patreon
-        website
+      peopleList(search: $search, limit: $limit, page: $page, sortBy: $sortBy) {
+        people {
+          id
+          name
+          picture
+          twitter
+          instagram
+          patreon
+          website
+        }
+        currentPage
+        pages
+        total
       }
     }
   `,

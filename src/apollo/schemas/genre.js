@@ -6,20 +6,25 @@ export const QUERIES = {
       $search: String
       $groupType: String
       $limit: Int
-      $skip: Int
+      $page: Int
       $sortBy: String
     ) {
       genresList(
         search: $search
         groupType: $groupType
         limit: $limit
-        skip: $skip
+        page: $page
         sortBy: $sortBy
       ) {
-        id
-        name
-        thumbnail
-        groupType
+        genres {
+          id
+          name
+          thumbnail
+          groupType
+        }
+        currentPage
+        pages
+        total
       }
     }
   `,

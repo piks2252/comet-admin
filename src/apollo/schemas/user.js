@@ -2,17 +2,22 @@ import gql from 'graphql-tag';
 
 export const QUERIES = {
   USERS: gql`
-    query FETCH_READERS($limit: Int, $skip: Int, $sortBy: String) {
-      readersList(limit: $limit, skip: $skip, sortBy: $sortBy) {
-        id
-        name
-        profilePic
-        disabled
-        disabledReason
-        verified
-        subscribedLevel
-        updatedAt
-        createdAt
+    query FETCH_READERS($limit: Int, $page: Int, $sortBy: String) {
+      readersList(limit: $limit, page: $page, sortBy: $sortBy) {
+        readers {
+          id
+          name
+          profilePic
+          disabled
+          disabledReason
+          verified
+          subscribedLevel
+          updatedAt
+          createdAt
+        }
+        currentPage
+        pages
+        total
       }
     }
   `,

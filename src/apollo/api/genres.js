@@ -5,12 +5,12 @@ export const fetchGenres = async(
   search = '',
   groupType = '',
   limit = 120,
-  skip = 0,
+  page = 1,
   sortBy = '+name',
 ) => {
   const { data } = await apolloClient.query({
     query: QUERIES.GENRES,
-    variables: { search, groupType, limit, skip, sortBy },
+    variables: { search, groupType, limit, page, sortBy },
   });
   return data;
 };

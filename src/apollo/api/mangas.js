@@ -4,12 +4,12 @@ import { apolloClient } from '../index';
 export const fetchMangas = async(
   search = '',
   limit = 100,
-  skip = 0,
+  page = 1,
   sortBy = '+title',
 ) => {
   const { data } = await apolloClient.query({
     query: QUERIES.MANGAS,
-    variables: { search, limit, skip, sortBy },
+    variables: { search, limit, page, sortBy },
   });
   return data;
 };
@@ -25,12 +25,12 @@ export const fetchManga = async id => {
 export const fetchChapters = async(
   mangaId,
   limit = 100,
-  skip = 0,
+  page = 1,
   sortBy = '-chapter',
 ) => {
   const { data } = await apolloClient.query({
     query: QUERIES.CHAPTERS,
-    variables: { mangaId, limit, skip, sortBy },
+    variables: { mangaId, limit, page, sortBy },
   });
   return data;
 };

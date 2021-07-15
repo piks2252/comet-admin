@@ -5,15 +5,20 @@ export const QUERIES = {
     query FETCH_MANGAS(
       $search: String
       $limit: Int
-      $skip: Int
+      $page: Int
       $sortBy: String
     ) {
-      mangasList(search: $search, limit: $limit, skip: $skip, sortBy: $sortBy) {
-        id
-        title
-        status
-        cover
-        disabled
+      mangasList(search: $search, limit: $limit, page: $page, sortBy: $sortBy) {
+        mangas {
+          id
+          title
+          status
+          cover
+          disabled
+        }
+        currentPage
+        pages
+        total
       }
     }
   `,
@@ -61,20 +66,25 @@ export const QUERIES = {
   CHAPTERS: gql`
     query FETCH_CHAPTERS(
       $limit: Int
-      $skip: Int
+      $page: Int
       $sortBy: String
       $mangaId: String
     ) {
       chaptersList(
         mangaId: $mangaId
         limit: $limit
-        skip: $skip
+        page: $page
         sortBy: $sortBy
       ) {
-        id
-        title
-        chapter
-        volume
+        chapters {
+          id
+          title
+          chapter
+          volume
+        }
+        currentPage
+        pages
+        total
       }
     }
   `,
