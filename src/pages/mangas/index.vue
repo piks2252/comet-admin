@@ -8,9 +8,9 @@
     <div class="row align--center">
       <div class="flex xs12 md6">
         <va-input
-          :value="term"
+          v-model="term"
           :placeholder="$t('tables.searchByName')"
-          @input="search"
+          @keydown="searchManga"
           removable
         >
           <va-icon name="fa fa-search" slot="prepend" />
@@ -27,10 +27,15 @@
       </div>
     </div>
     <loader v-if="apiLoading" />
-    <va-data-table
+    <data-table
       :fields="fields"
-      :data="filteredData"
-      :per-page="parseInt(perPage)"
+      :data="mangas"
+      :per-page="pagination.limit"
+      :total-pages="pagination.pages"
+      :currentPage="pagination.currentPage"
+      :api-mode="true"
+      :loading="apiLoading"
+      @page-selected="loadMangas"
       v-else
     >
       <template slot="cover" slot-scope="props">
@@ -69,31 +74,38 @@
           />
         </a>
       </template>
-    </va-data-table>
+    </data-table>
   </va-card>
 </template>
 
 <script>
-import { debounce } from 'lodash';
 import { fetchMangas } from '../../apollo/api/mangas';
+import DataTable from '../../components/DataTable';
 import MangaDisabled from './MangaDisabled';
 import MangaStatus from './MangaStatus';
 import Loader from '../../components/Loader';
 
 export default {
   components: {
+    DataTable,
     MangaDisabled,
     MangaStatus,
     Loader,
   },
   data() {
     return {
-      term: null,
+      term: '',
       apiLoading: false,
-      perPage: '20',
-      perPageOptions: ['10', '20', '30', '40'],
-      mangas: [],
       showModal: false,
+      mangas: [],
+      perPageOptions: ['10', '20', '30', '40'],
+      perPage: '20',
+      pagination: {
+        limit: 20,
+        currentPage: 1,
+        pages: 0,
+        total: 0,
+      },
     };
   },
   computed: {
@@ -126,27 +138,37 @@ export default {
         },
       ];
     },
-    filteredData() {
-      if (!this.term || this.term.length < 1) {
-        return this.mangas;
+  },
+  watch: {
+    perPage: function(newVal) {
+      this.pagination.limit = parseInt(newVal);
+      this.loadMangas();
+    },
+    term: function(newVal, oldVal) {
+      if (oldVal.length > 0 && newVal.length === 0) {
+        this.loadMangas();
       }
-      return this.mangas.filter(item => {
-        return item.title.toLowerCase().startsWith(this.term.toLowerCase());
-      });
     },
   },
   async mounted() {
-    await this.loadMangas();
+    await this.loadMangas(1);
   },
   methods: {
-    search: debounce(function(term) {
-      this.term = term;
-    }, 400),
-    async loadMangas() {
+    async loadMangas(page = 1) {
       this.apiLoading = true;
       try {
-        const { mangasList } = await fetchMangas();
-        this.mangas = mangasList;
+        const { mangasList } = await fetchMangas(
+          this.term,
+          this.pagination.limit,
+          page,
+        );
+        this.mangas = mangasList.mangas;
+        this.pagination = {
+          ...this.pagination,
+          currentPage: mangasList.currentPage,
+          pages: mangasList.pages,
+          total: mangasList.total,
+        };
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
@@ -155,6 +177,11 @@ export default {
         });
       }
       this.apiLoading = false;
+    },
+    async searchManga(e) {
+      if (e.key === 'Enter') {
+        await this.loadMangas();
+      }
     },
     updateMangaArray(manga) {
       const newMangas = this.mangas.map(m => {
