@@ -6,7 +6,12 @@
     >
       <div class="flex xs12 md6">
         <va-button>Add Chapter</va-button>
-        <va-button color="success">Update chapter list</va-button>
+        <va-button
+          color="success"
+          v-if="!isSaved"
+          @click="updateChaptersIndices"
+        >Update chapter list</va-button
+        >
       </div>
       <div class="flex xs12 md2 offset--md4">
         <va-select
@@ -86,7 +91,9 @@ export default {
       chapterFocused: false,
       perPageOptions: ['20', '40', '100', '200', '500', 'All'],
       perPage: '20',
+      isSaved: true,
       chapters: [],
+      originalChaptersIndex: [],
       pagination: {
         limit: 20,
         currentPage: 1,
@@ -109,6 +116,19 @@ export default {
       }
       this.loadChapters();
     },
+    chapters: {
+      handler: function(newVal, oldVal) {
+        const areEqual = _.isEqual(
+          newVal.map(e => e.id),
+          this.originalChaptersIndex,
+        );
+
+        if (oldVal.length && !areEqual) {
+          this.isSaved = false;
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     async loadChapters(page = 1) {
@@ -120,6 +140,7 @@ export default {
           page,
         );
         this.chapters = chaptersList.chapters;
+        this.originalChaptersIndex = this.chapters.map(c => c.id);
         this.pagination = {
           ...this.pagination,
           currentPage: chaptersList.currentPage,
@@ -137,6 +158,20 @@ export default {
     },
     chapterSelectEvent(val) {
       this.chapterFocused = val;
+    },
+    async updateChaptersIndices() {
+      const offset =
+        this.pagination.total -
+        (this.pagination.currentPage - 1) * this.pagination.limit;
+      const newChaptersIndices = this.chapters.map((ch, index) => {
+        return {
+          id: ch.id,
+          chapter: offset - index,
+        };
+      });
+
+      // TODO: Make api call and update it
+      console.log(newChaptersIndices);
     },
   },
 };
