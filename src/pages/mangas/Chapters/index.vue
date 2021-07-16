@@ -71,6 +71,8 @@ import Loader from '../../../components/Loader';
 import ChapterRow from './ChapterRow';
 import { fetchChapters } from '../../../apollo/api/mangas';
 
+const MAX_CHAPTER_COUNT = 2000;
+
 export default {
   components: { Loader, draggable, ChapterRow },
   props: {
@@ -82,11 +84,11 @@ export default {
     return {
       apiLoading: false,
       chapterFocused: false,
-      perPageOptions: ['10', '20', '30', '40'],
-      perPage: '10',
+      perPageOptions: ['20', '40', '100', '200', '500', 'All'],
+      perPage: '20',
       chapters: [],
       pagination: {
-        limit: 10,
+        limit: 20,
         currentPage: 1,
         pages: 0,
         total: 0,
@@ -100,7 +102,11 @@ export default {
   },
   watch: {
     perPage: function(newVal) {
-      this.pagination.limit = parseInt(newVal);
+      if (newVal === 'All') {
+        this.pagination.limit = MAX_CHAPTER_COUNT;
+      } else {
+        this.pagination.limit = parseInt(newVal);
+      }
       this.loadChapters();
     },
   },
