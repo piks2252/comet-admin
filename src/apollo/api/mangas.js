@@ -31,6 +31,7 @@ export const fetchChapters = async(
   const { data } = await apolloClient.query({
     query: QUERIES.CHAPTERS,
     variables: { mangaId, limit, page, sortBy },
+    errorPolicy: 'all',
   });
   return data;
 };
