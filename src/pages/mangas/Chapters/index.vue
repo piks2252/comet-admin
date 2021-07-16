@@ -1,25 +1,43 @@
 <template>
   <div>
-    <div class="row align--center">
-      <div class="flex xs12 offset--md8 offset--lg7">
-        <va-button color="success">Update chapter list</va-button>
+    <div
+      class="row align--center justify-content--start"
+      style="padding: 10px;"
+    >
+      <div class="flex xs12 md6">
         <va-button>Add Chapter</va-button>
+        <va-button color="success">Update chapter list</va-button>
+      </div>
+      <div class="flex xs12 md2 offset--md4">
+        <va-select
+          v-model="perPage"
+          :label="$t('tables.perPage')"
+          :options="perPageOptions"
+          noClear
+        />
       </div>
     </div>
     <div class="row align--center">
       <div class="flex md10 lg11">
-        <loader v-if="apiLoading" />
-        <div v-else>
-          <h1>
-            Chapters
-            <va-popover
-              title=""
-              message="Chapters are sorted in non-increasing order"
-              placement="left"
-            >
-              <span>↓</span>
-            </va-popover>
-          </h1>
+        <h1>
+          Chapters
+          <va-popover
+            title=""
+            message="Chapters are sorted in non-increasing order"
+            placement="left"
+          >
+            <span>↓</span>
+          </va-popover>
+        </h1>
+        <div v-if="pagination.pages > 1" class="va-data-table__pagination">
+          <va-pagination
+            :value="pagination.currentPage"
+            :visible-pages="3"
+            :pages="pagination.pages"
+            @input="loadChapters"
+          />
+        </div>
+        <va-inner-loading :loading="apiLoading">
           <draggable
             v-model="chapters"
             style="margin-top: 10px;"
@@ -31,18 +49,23 @@
                 v-for="(chapter, index) in chapters"
                 :key="chapter.id"
                 :chapter="chapter"
-                :index="chapters.length - index"
+                :index="
+                  pagination.total -
+                    (pagination.currentPage - 1) * pagination.limit -
+                    index
+                "
                 @chapterSelected="chapterSelectEvent"
               />
             </transition-group>
           </draggable>
-        </div>
+        </va-inner-loading>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import draggable from 'vuedraggable';
 import Loader from '../../../components/Loader';
 import ChapterRow from './ChapterRow';
@@ -59,7 +82,15 @@ export default {
     return {
       apiLoading: false,
       chapterFocused: false,
+      perPageOptions: ['10', '20', '30', '40'],
+      perPage: '10',
       chapters: [],
+      pagination: {
+        limit: 10,
+        currentPage: 1,
+        pages: 0,
+        total: 0,
+      },
     };
   },
   async mounted() {
@@ -67,12 +98,28 @@ export default {
       await this.loadChapters();
     }
   },
+  watch: {
+    perPage: function(newVal) {
+      this.pagination.limit = parseInt(newVal);
+      this.loadChapters();
+    },
+  },
   methods: {
-    async loadChapters() {
+    async loadChapters(page = 1) {
       this.apiLoading = true;
       try {
-        const { chaptersList } = await fetchChapters(this.mangaId);
+        const { chaptersList } = await fetchChapters(
+          this.mangaId,
+          this.pagination.limit,
+          page,
+        );
         this.chapters = chaptersList.chapters;
+        this.pagination = {
+          ...this.pagination,
+          currentPage: chaptersList.currentPage,
+          pages: chaptersList.pages,
+          total: chaptersList.total,
+        };
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
