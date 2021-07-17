@@ -5,11 +5,14 @@
       style="padding: 10px;"
     >
       <div class="flex xs12 md6">
+        <va-button :disabled="apiLoading" @click="refreshChaptersPage"
+        >Refresh</va-button
+        >
         <va-button>Add Chapter</va-button>
         <va-button
           color="success"
           v-if="!isSaved"
-          @click="updateChaptersIndices"
+          @click="submitChaptersIndices"
         >Update chapter list</va-button
         >
       </div>
@@ -75,7 +78,10 @@ import _ from 'lodash';
 import draggable from 'vuedraggable';
 import Loader from '../../../components/Loader';
 import ChapterRow from './ChapterRow';
-import { fetchChapters } from '../../../apollo/api/mangas';
+import {
+  fetchChapters,
+  updateChaptersIndices,
+} from '../../../apollo/api/mangas';
 
 const MAX_CHAPTER_COUNT = 2000;
 
@@ -126,6 +132,8 @@ export default {
 
         if (oldVal.length && !areEqual) {
           this.isSaved = false;
+        } else {
+          this.isSaved = true;
         }
       },
       deep: true,
@@ -157,10 +165,13 @@ export default {
       }
       this.apiLoading = false;
     },
+    async refreshChaptersPage() {
+      await this.loadChapters();
+    },
     chapterSelectEvent(val) {
       this.chapterFocused = val;
     },
-    async updateChaptersIndices() {
+    async submitChaptersIndices() {
       const offset =
         this.pagination.total -
         (this.pagination.currentPage - 1) * this.pagination.limit;
@@ -171,8 +182,29 @@ export default {
         };
       });
 
-      // TODO: Make api call and update it
       console.log(newChaptersIndices);
+
+      this.apiLoading = true;
+      try {
+        const {
+          updateChaptersIndices: { response },
+        } = await updateChaptersIndices(newChaptersIndices);
+
+        if (response === 'OK') {
+          this.showToast('Chapter list updated successfully', {
+            position: 'top-right',
+            duration: 800,
+            fullWidth: false,
+          });
+        }
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
+      this.apiLoading = false;
     },
   },
 };

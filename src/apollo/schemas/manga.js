@@ -268,4 +268,11 @@ export const MUTATIONS = {
       }
     }
   `,
+  UPDATE_CHAPTERS_INDICES: gql`
+    mutation UPDATE_CHAPTERS_INDICES($chapters: [ChapterIndexInput]) {
+      updateChaptersIndices(chapters: $chapters) {
+        response
+      }
+    }
+  `,
 };

@@ -69,3 +69,11 @@ export const updateManga = async(id, manga, coverImage = null) => {
   });
   return data;
 };
+
+export const updateChaptersIndices = async chapters => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.UPDATE_CHAPTERS_INDICES,
+    variables: { chapters },
+  });
+  return data;
+};
