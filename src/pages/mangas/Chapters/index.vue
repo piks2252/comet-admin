@@ -34,15 +34,16 @@
             <span>↓</span>
           </va-popover>
         </h1>
-        <div v-if="pagination.pages > 1" class="va-data-table__pagination">
-          <va-pagination
-            :value="pagination.currentPage"
-            :visible-pages="3"
-            :pages="pagination.pages"
-            @input="loadChapters"
-          />
-        </div>
-        <va-inner-loading :loading="apiLoading">
+        <loader v-if="apiLoading" />
+        <div v-else>
+          <div v-if="pagination.pages > 1" class="va-data-table__pagination">
+            <va-pagination
+              :value="pagination.currentPage"
+              :visible-pages="3"
+              :pages="pagination.pages"
+              @input="loadChapters"
+            />
+          </div>
           <draggable
             v-model="chapters"
             style="margin-top: 10px;"
@@ -63,7 +64,7 @@
               />
             </transition-group>
           </draggable>
-        </va-inner-loading>
+        </div>
       </div>
     </div>
   </div>
