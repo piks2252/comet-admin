@@ -167,6 +167,7 @@ export default {
     },
     async refreshChaptersPage() {
       await this.loadChapters();
+      this.chapterFocused = false;
     },
     chapterSelectEvent(val) {
       this.chapterFocused = val;
