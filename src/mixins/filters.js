@@ -25,3 +25,14 @@ export const authorPicFilter = authorId => {
   }
   return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
 };
+
+export const pageURL = pageId => {
+  if (this.chapter.useAltSrc) {
+    return pageId.replace(
+      'https://xn--cckb8hk3i.com/',
+      'https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/',
+    );
+  } else {
+    return `https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/${this.chapter.mangaId}/${this.chapterId}/${pageId}`;
+  }
+};

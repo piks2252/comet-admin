@@ -35,7 +35,7 @@
               <va-toggle
                 label="Long Strip"
                 color="primary"
-                v-model="chapter.longString"
+                v-model="chapter.longStrip"
                 small
               />
               <va-toggle
@@ -49,7 +49,13 @@
         </div>
         <div class="flex xs9 md3">
           <div class="flex flex-center">
-            <va-button outline color="success" small @click="saveChanges()">
+            <va-button
+              outline
+              color="success"
+              small
+              @click="saveChanges()"
+              v-if="!isSaved"
+            >
               Save
             </va-button>
             <va-button outline color="danger" small @click="closeSelf">
@@ -83,7 +89,10 @@
 <script>
 import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
+import _ from 'lodash';
 import { fetchChapter } from '../../../../apollo/api/mangas';
+import { pageURL } from '../../../../mixins/filters';
+
 export default {
   components: { Grid, Page },
   props: {
@@ -99,8 +108,23 @@ export default {
       edit: false,
       delete: false,
       apiLoading: false,
+      isSaved: true,
       chapter: {},
+      loadedChapter: null,
     };
+  },
+  watch: {
+    chapter: {
+      handler: function(newVal) {
+        console.log(newVal);
+        if (_.isEqual(newVal, this.loadedChapter)) {
+          this.isSaved = true;
+        } else {
+          this.isSaved = false;
+        }
+      },
+      deep: true,
+    },
   },
   created() {
     if (this.mode === 'edit') {
@@ -113,11 +137,13 @@ export default {
     await this.loadChapter();
   },
   methods: {
+    pageURL,
     async loadChapter() {
       this.apiLoading = true;
       try {
         const { chapterItem } = await fetchChapter(this.chapterId);
         this.chapter = chapterItem;
+        this.loadedChapter = { ...this.chapter };
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
@@ -127,18 +153,16 @@ export default {
       }
       this.apiLoading = false;
     },
-    pageURL(pageId) {
-      if (this.chapter.useAltSrc) {
-        return pageId.replace(
-          'https://xn--cckb8hk3i.com/',
-          'https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/',
-        );
-      } else {
-        return `https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/${this.chapter.mangaId}/${this.chapterId}/${pageId}`;
-      }
-    },
     async saveChanges() {},
     closeSelf() {
+      if (!this.isSaved) {
+        const confirmation = confirm(
+          'Unsaved changes will be not saved, are you sure?',
+        );
+        if (confirmation === false) {
+          return;
+        }
+      }
       this.$emit('closePopDown');
     },
   },
