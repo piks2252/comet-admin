@@ -4,12 +4,12 @@ import AuthLayout from '../pages/auth/AuthLayout';
 import AppLayout from '../components/admin/AppLayout';
 
 Vue.use(Router);
-
+const DEFAULT_TITLE = 'Comet Admin';
 const EmptyParentComponent = {
   template: '<router-view></router-view>',
 };
 
-export default new Router({
+const router = new Router({
   mode: process.env.VUE_APP_ROUTER_MODE_HISTORY === 'true' ? 'history' : 'hash',
   routes: [
     {
@@ -47,6 +47,7 @@ export default new Router({
           path: '',
           component: () => import('../pages/dashboard/Dashboard.vue'),
           default: true,
+          meta: { title: 'Dashboard' },
         },
         {
           name: 'mangas',
@@ -57,11 +58,13 @@ export default new Router({
               name: 'base-manga',
               path: '/',
               component: () => import('../pages/mangas'),
+              meta: { title: 'Mangas' },
             },
             {
               name: 'add-manga',
               path: 'add',
               component: () => import('../pages/mangas/MangaInfo.vue'),
+              meta: { title: 'Add new manga' },
             },
             {
               name: 'view-manga',
@@ -81,31 +84,37 @@ export default new Router({
           name: 'users',
           path: 'users',
           component: () => import('../pages/users'),
+          meta: { title: 'Users' },
         },
         {
           name: 'authors',
           path: 'authors',
           component: () => import('../pages/authors'),
+          meta: { title: 'Authors' },
         },
         {
           name: 'genres',
           path: 'genres',
           component: () => import('../pages/genres'),
+          meta: { title: 'Genres' },
         },
         {
           name: 'app-releases',
           path: 'app-releases',
           component: () => import('../pages/app-releases'),
+          meta: { title: 'Github app release' },
         },
         {
           name: 'discord-bot',
           path: 'discord-bot',
           component: () => import('../pages/discord-bot'),
+          meta: { title: 'Discord bot' },
         },
         {
           name: 'settings',
           path: 'settings',
           component: () => import('../pages/settings'),
+          meta: { title: 'Settings' },
         },
       ],
     },
@@ -116,3 +125,15 @@ export default new Router({
     },
   ],
 });
+
+router.afterEach((to, from) => {
+  // Use next tick to handle router history correctly
+  // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
+  Vue.nextTick(() => {
+    document.title = to.meta.title
+      ? `${DEFAULT_TITLE} - ${to.meta.title}`
+      : DEFAULT_TITLE;
+  });
+});
+
+export default router;
