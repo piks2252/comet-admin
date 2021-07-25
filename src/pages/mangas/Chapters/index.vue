@@ -76,6 +76,7 @@
 <script>
 import _ from 'lodash';
 import draggable from 'vuedraggable';
+import { setTitle } from '../../../mixins/utils';
 import Loader from '../../../components/Loader';
 import ChapterRow from './ChapterRow';
 import {
@@ -89,6 +90,9 @@ export default {
   components: { Loader, draggable, ChapterRow },
   props: {
     mangaId: {
+      type: String,
+    },
+    mangaTitle: {
       type: String,
     },
   },
@@ -108,6 +112,9 @@ export default {
         total: 0,
       },
     };
+  },
+  created() {
+    setTitle(`Chapters - ${this.mangaTitle}`);
   },
   async mounted() {
     if (this.mangaId) {

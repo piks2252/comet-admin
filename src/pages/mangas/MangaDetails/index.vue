@@ -167,6 +167,7 @@ import {
   createManga,
   updateManga,
 } from '../../../apollo/api/mangas';
+import { setTitle } from '../../../mixins/utils';
 import { fetchAuthors } from '../../../apollo/api/authors';
 import { fetchGenres } from '../../../apollo/api/genres';
 import ToggleSwitch from 'vuejs-toggle-switch';
@@ -282,6 +283,7 @@ export default {
         const { mangaInfo } = await fetchManga(this.mangaId);
         this.manga = { ...DEFAULT_MANGA, ...mangaInfo };
         this.loadedManga = { ...DEFAULT_MANGA, ...mangaInfo };
+        setTitle(`${this.manga.title} - ${this.view ? 'View' : 'Edit'}`);
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',

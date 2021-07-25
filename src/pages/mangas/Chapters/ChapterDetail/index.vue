@@ -69,6 +69,9 @@
           <p class="display-4" style="margin-bottom: 10px;">
             Pages
           </p>
+          <va-button outline color="success" small @click="updatePageOrder">
+            Update page order
+          </va-button>
           <grid
             :draggable="true"
             :sortable="true"
@@ -91,7 +94,6 @@ import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
 import _ from 'lodash';
 import { fetchChapter } from '../../../../apollo/api/mangas';
-import { pageURL } from '../../../../mixins/filters';
 
 export default {
   components: { Grid, Page },
@@ -137,7 +139,16 @@ export default {
     await this.loadChapter();
   },
   methods: {
-    pageURL,
+    pageURL(pageId) {
+      if (this.chapter.useAltSrc) {
+        return pageId.replace(
+          'https://xn--cckb8hk3i.com/',
+          'https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/',
+        );
+      } else {
+        return `https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/${this.chapter.mangaId}/${this.chapterId}/${pageId}`;
+      }
+    },
     async loadChapter() {
       this.apiLoading = true;
       try {
@@ -153,6 +164,7 @@ export default {
       }
       this.apiLoading = false;
     },
+    async updatePageOrder() {},
     async saveChanges() {},
     closeSelf() {
       if (!this.isSaved) {
