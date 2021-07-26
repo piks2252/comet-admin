@@ -17,11 +17,19 @@ const state = {
     },
   },
   isLoading: true,
+  backgroundLoading: false,
+  currentPage: 'dashboard',
 };
 
 const mutations = {
   setLoading(state, isLoading) {
     state.isLoading = isLoading;
+  },
+  setBackgroundLoading(state, isLoading) {
+    state.backgroundLoading = isLoading;
+  },
+  setCurrentPage(state, currentPage) {
+    state.currentPage = currentPage;
   },
 };
 

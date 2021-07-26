@@ -34,6 +34,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
+  store.commit('setCurrentPage', to.name);
   store.commit('setLoading', false);
 });
 

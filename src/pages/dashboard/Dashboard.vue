@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loader v-if="apiLoading" />
+    <loader v-if="isLoading" />
     <div class="dashboard" v-else>
       <h2 class="display-1" v-if="data === null">No data found</h2>
       <dashboard-info-block
@@ -30,6 +30,7 @@ import DashboardInfoBlock from './DashboardInfoBlock';
 import DashboardMap from './DashboardMap';
 import { fetchDashboardStats } from '../../apollo/api/dashboard';
 import Loader from '../../components/Loader';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'dashboard',
@@ -41,16 +42,19 @@ export default {
   },
   data() {
     return {
-      apiLoading: false,
       data: null,
     };
+  },
+  computed: {
+    ...mapGetters(['isLoading']),
   },
   async mounted() {
     await this.loadDashboardStats();
   },
   methods: {
+    ...mapMutations(['setLoading']),
     async loadDashboardStats() {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const response = await fetchDashboardStats();
         this.data = response.dashboardStats;
@@ -61,7 +65,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
   },
 };

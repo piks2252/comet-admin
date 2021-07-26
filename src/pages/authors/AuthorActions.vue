@@ -52,23 +52,17 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+import { NEW_AUTHOR } from '../../constants/defaultValues';
 import { updateAuthor } from '../../apollo/api/authors';
 import { authorPicFilter } from '../../mixins/filters';
 
 export default {
   name: 'author-actions',
   props: { author: Object },
-
   data() {
     return {
-      newAuthor: {
-        name: '',
-        twitter: '',
-        instagram: '',
-        patreon: '',
-        website: '',
-        picture: null,
-      },
+      newAuthor: NEW_AUTHOR,
       showModal: false,
     };
   },
@@ -84,6 +78,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     resetForm() {
       this.newAuthor = { ...this.author, picture: null };
     },
@@ -98,6 +93,7 @@ export default {
       this.newAuthor.picture = files[0];
     },
     async updateAuthorFromLocal() {
+      this.setBackgroundLoading(true);
       try {
         const { updatePeople } = await updateAuthor(
           this.author.id,
@@ -118,6 +114,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

@@ -2,7 +2,7 @@
   <div class="timelines">
     <div class="row">
       <div class="flex md4 xs12">
-        <va-inner-loading :loading="this.apiLoading">
+        <va-inner-loading :loading="isLoading">
           <va-card no-padding-v title="App releases">
             <va-timeline vertical style="height: 550px; overflow-y: scroll;">
               <va-timeline-item
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import { fetchReleases } from '../../apollo/api/releases';
 export default {
   name: 'app-releases',
@@ -113,15 +114,18 @@ export default {
     return {
       releases: [],
       newRelease: {},
-      apiLoading: false,
     };
+  },
+  computed: {
+    ...mapGetters(['isLoading']),
   },
   async mounted() {
     await this.loadReleases();
   },
   methods: {
+    ...mapMutations(['setLoading']),
     async loadReleases() {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const { releasesList } = await fetchReleases();
         this.releases = releasesList;
@@ -132,7 +136,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
   },
 };

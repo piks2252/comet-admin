@@ -7,8 +7,9 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { updateGenre } from '../../apollo/api/genres';
-const GENRE_GROUPS_ARRAY = ['genre', 'theme', 'demographics', 'format'];
+import { GENRE_GROUPS_ARRAY } from '../../constants/defaultValues';
 
 export default {
   name: 'genre-group',
@@ -19,7 +20,9 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     async updateGenreType(genreType) {
+      this.setBackgroundLoading(true);
       try {
         await updateGenre(this.genreId, null, genreType);
         this.$emit('updateGenre', { id: this.genreId, groupType: genreType });
@@ -35,6 +38,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

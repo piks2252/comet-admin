@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { updateGenre } from '../../apollo/api/genres';
 import { genrePicFilter } from '../../mixins/filters';
 
@@ -25,11 +26,13 @@ export default {
     genrePicFilter,
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {
         return;
       }
       const thumbnailFile = files[0];
+      this.setBackgroundLoading(true);
       try {
         const response = await updateGenre(
           this.genreId,
@@ -51,6 +54,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

@@ -25,3 +25,10 @@ export const authorPicFilter = authorId => {
   }
   return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
 };
+
+export const profilePicURL = url => {
+  if (url && url.length) {
+    return `https://cdn.comet.shivy.co.in/images/profile/${url}`;
+  }
+  return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
+};

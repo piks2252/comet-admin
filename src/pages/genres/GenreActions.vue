@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { updateGenre } from '../../apollo/api/genres';
 
 export default {
@@ -30,6 +31,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     resetForm() {
       this.name = this.genreName;
     },
@@ -38,6 +40,7 @@ export default {
       this.showModal = true;
     },
     async updateGenreName() {
+      this.setBackgroundLoading(true);
       try {
         await updateGenre(this.genreId, this.name);
         this.$emit('updateGenre', { id: this.genreId, name: this.name });
@@ -54,6 +57,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

@@ -50,21 +50,16 @@
 </template>
 
 <script>
+import { NEW_AUTHOR } from '../../constants/defaultValues';
 import { createAuthor } from '../../apollo/api/authors';
 import { authorPicFilter } from '../../mixins/filters';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'add-author-modal',
   data() {
     return {
-      author: {
-        name: '',
-        twitter: '',
-        instagram: '',
-        patreon: '',
-        website: '',
-        picture: null,
-      },
+      author: NEW_AUTHOR,
       showModal: false,
     };
   },
@@ -80,15 +75,9 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     resetForm() {
-      this.author = {
-        name: '',
-        twitter: '',
-        instagram: '',
-        patreon: '',
-        website: '',
-        picture: null,
-      };
+      this.author = NEW_AUTHOR;
     },
     async uploadThumbnail({ target: { files = [] } }) {
       if (!files.length) {
@@ -97,6 +86,7 @@ export default {
       this.author.picture = files[0];
     },
     async submitNewAuthor() {
+      this.setBackgroundLoading(true);
       try {
         const { createPeople } = await createAuthor(this.author);
 
@@ -114,6 +104,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

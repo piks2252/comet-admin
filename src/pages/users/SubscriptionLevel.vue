@@ -7,15 +7,16 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { updateSubscribedLevel } from '../../apollo/api/users';
-const LEVELS = [0, 1, 2];
+import { USER_SUBSCRIPTIONS_LEVELS } from '../../constants/defaultValues';
 
 export default {
   name: 'subscription-level',
   props: { level: Number, userId: String },
   computed: {
     getUserSubscriptionLevel() {
-      return LEVELS.map(e => {
+      return USER_SUBSCRIPTIONS_LEVELS.map(e => {
         return {
           id: e,
           text: `Level ${e}`,
@@ -27,8 +28,10 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     async toggleSubscribedLevel(value) {
       const level = value.id;
+      this.setBackgroundLoading(true);
       try {
         await updateSubscribedLevel(this.userId, level);
         this.$emit('updateUser', {
@@ -47,6 +50,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

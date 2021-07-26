@@ -25,7 +25,9 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import { disableUser, enableUser } from '../../apollo/api/users';
+
 export default {
   name: 'disable-toggle',
   props: { disabled: Boolean, disabledReason: String, userId: String },
@@ -36,11 +38,13 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     resetForm() {
       this.showModal = false;
       this.userDisableReason = '';
     },
     async disableUserFromModal() {
+      this.setBackgroundLoading(true);
       try {
         await disableUser(this.userId, this.userDisableReason);
         await this.$emit('updateUser', {
@@ -60,12 +64,14 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
     async toggleFunction(value) {
       if (value) {
         this.resetForm();
         this.showModal = true;
       } else {
+        this.setBackgroundLoading(true);
         try {
           await enableUser(this.userId);
           // Send new user update to the parent component
@@ -86,6 +92,7 @@ export default {
             fullWidth: false,
           });
         }
+        this.setBackgroundLoading(false);
       }
     },
   },

@@ -29,6 +29,7 @@
 
 <script>
 import _ from 'lodash';
+import { profilePicURL } from '../../mixins/filters';
 export default {
   name: 'DashboardReadersList',
   props: {
@@ -57,12 +58,7 @@ export default {
     },
   },
   filters: {
-    profilePicURL(url) {
-      if (url && url.length) {
-        return `https://cdn.comet.shivy.co.in/images/profile/${url}`;
-      }
-      return 'https://cdn.comet.shivy.co.in/images/profile/default.png';
-    },
+    profilePicURL,
   },
   methods: {
     getPercent(val) {

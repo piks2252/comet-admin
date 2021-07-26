@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <loader v-if="apiLoading" />
+    <loader v-if="isLoading" />
     <data-table
       :fields="fields"
       :data="genres"
@@ -24,7 +24,6 @@
       :total-pages="pagination.pages"
       :currentPage="pagination.currentPage"
       :api-mode="true"
-      :loading="apiLoading"
       @page-selected="loadGenres"
       v-else
     >
@@ -53,7 +52,9 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import { fetchGenres } from '../../apollo/api/genres';
+import { GENRES_TABLE_FIELD } from '../../constants/tableFields';
 import DataTable from '../../components/DataTable';
 import GenreGroup from './GenreGroup';
 import GenreThumbnail from './GenreThumbnail';
@@ -72,7 +73,6 @@ export default {
   },
   data() {
     return {
-      apiLoading: false,
       term: '',
       genres: [],
       pagination: {
@@ -85,31 +85,9 @@ export default {
   },
   computed: {
     fields() {
-      return [
-        {
-          name: '__slot:thumbnail',
-          width: '30px',
-          height: '45px',
-          dataClass: 'text-center',
-        },
-        {
-          name: 'name',
-          title: this.$t('tables.headings.name'),
-          width: '30%',
-        },
-        {
-          name: '__slot:genreGroup',
-          title: 'Group',
-          width: '20%',
-        },
-        {
-          name: '__slot:actions',
-          title: 'Action',
-          width: '20%',
-          dataClass: 'text-right',
-        },
-      ];
+      return GENRES_TABLE_FIELD;
     },
+    ...mapGetters(['isLoading']),
   },
   watch: {
     term: function(newVal, oldVal) {
@@ -122,8 +100,9 @@ export default {
     await this.loadGenres(1);
   },
   methods: {
+    ...mapMutations(['setLoading']),
     async loadGenres(page = 1) {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const { genresList } = await fetchGenres(
           this.term,
@@ -145,7 +124,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
     async searchGenre(e) {
       if (e.key === 'Enter') {

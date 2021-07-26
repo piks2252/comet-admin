@@ -6,7 +6,7 @@
 
 <script>
 import LineMap from '../../components/maps/LineMap';
-import COUNTRIES_LIST from '../../data/CountriesList';
+import COUNTRIES_LIST from '../../constants/CountriesList';
 
 export default {
   name: 'dashboard-map',

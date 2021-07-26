@@ -19,17 +19,14 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import { createGenre } from '../../apollo/api/genres';
-const GENRE_GROUPS_ARRAY = ['genre', 'theme', 'demographics', 'format'];
+import { GENRE_GROUPS_ARRAY, NEW_GENRE } from '../../constants/defaultValues';
 
 export default {
   data() {
     return {
-      genre: {
-        name: '',
-        groupType: '',
-        thumbnail: null,
-      },
+      genre: NEW_GENRE,
       showModal: false,
     };
   },
@@ -44,17 +41,15 @@ export default {
       // TODO: Return default url
       return '';
     },
+    ...mapGetters(['isLoading']),
   },
   mounted() {
     this.resetForm();
   },
   methods: {
+    ...mapMutations(['setLoading']),
     resetForm() {
-      this.genre = {
-        name: '',
-        groupType: '',
-        thumbnail: null,
-      };
+      this.genre = NEW_GENRE;
     },
     uploadPhoto({ target: { files = [] } }) {
       if (!files.length) {
@@ -63,6 +58,7 @@ export default {
       this.genre.thumbnail = files[0];
     },
     async submitGenre() {
+      setLoading(true);
       try {
         await createGenre(
           this.genre.name,
@@ -74,6 +70,7 @@ export default {
           duration: 800,
           fullWidth: false,
         });
+        setLoading(false);
         window.location.reload();
       } catch (e) {
         this.showToast(e, {
@@ -82,6 +79,7 @@ export default {
           fullWidth: false,
         });
       }
+      setLoading(false);
     },
   },
 };

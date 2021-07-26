@@ -1,5 +1,9 @@
 const setLoading = (state, payload) => {
-  state.app.isLoading += payload.isLoading;
+  state.app.isLoading = payload;
 };
 
-export { setLoading };
+const setBackgroundLoading = (state, payload) => {
+  state.app.backgroundLoading = payload;
+};
+
+export { setLoading, setBackgroundLoading };

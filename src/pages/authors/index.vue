@@ -15,7 +15,7 @@
         </va-input>
       </div>
     </div>
-    <loader v-if="apiLoading" />
+    <loader v-if="isLoading" />
     <data-table
       :fields="fields"
       :data="authors"
@@ -23,7 +23,6 @@
       :total-pages="pagination.pages"
       :currentPage="pagination.currentPage"
       :api-mode="true"
-      :loading="apiLoading"
       @page-selected="loadAuthors"
       v-else
     >
@@ -41,7 +40,9 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import { fetchAuthors } from '../../apollo/api/authors';
+import { AUTHORS_TABLE_FIELD } from '../../constants/tableFields';
 import DataTable from '../../components/DataTable';
 import AuthorActions from './AuthorActions';
 import AddAuthorModal from './AddAuthorModal';
@@ -57,7 +58,6 @@ export default {
   },
   data() {
     return {
-      apiLoading: false,
       showModal: false,
       term: '',
       authors: [],
@@ -74,26 +74,9 @@ export default {
   },
   computed: {
     fields() {
-      return [
-        {
-          name: '__slot:thumbnail',
-          width: '30px',
-          height: '45px',
-          dataClass: 'text-center',
-        },
-        {
-          name: 'name',
-          title: this.$t('tables.headings.name'),
-          width: '30%',
-        },
-        {
-          name: '__slot:actions',
-          title: 'Action',
-          width: '20%',
-          dataClass: 'text-right',
-        },
-      ];
+      return AUTHORS_TABLE_FIELD;
     },
+    ...mapGetters(['isLoading']),
   },
   watch: {
     term: function(newVal, oldVal) {
@@ -106,8 +89,9 @@ export default {
     await this.loadAuthors(1);
   },
   methods: {
+    ...mapMutations(['setLoading']),
     async loadAuthors(page = 1) {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const { peopleList } = await fetchAuthors(
           this.term,
@@ -128,7 +112,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
     async searchAuthor(e) {
       if (e.key === 'Enter') {

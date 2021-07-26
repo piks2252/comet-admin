@@ -26,7 +26,7 @@
         />
       </div>
     </div>
-    <loader v-if="apiLoading" />
+    <loader v-if="isLoading" />
     <data-table
       :fields="fields"
       :data="mangas"
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import { fetchMangas } from '../../apollo/api/mangas';
 import DataTable from '../../components/DataTable';
 import MangaDisabled from './MangaDisabled';
@@ -138,6 +139,7 @@ export default {
         },
       ];
     },
+    ...mapGetters(['isLoading']),
   },
   watch: {
     perPage: function(newVal) {
@@ -154,8 +156,11 @@ export default {
     await this.loadMangas(1);
   },
   methods: {
+    ...mapMutations(['setLoading']),
     async loadMangas(page = 1) {
-      this.apiLoading = true;
+      if (this.isLoading) return;
+      this.setLoading(true);
+
       try {
         const { mangasList } = await fetchMangas(
           this.term,
@@ -176,7 +181,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
     async searchManga(e) {
       if (e.key === 'Enter') {

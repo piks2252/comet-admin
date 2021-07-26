@@ -21,7 +21,7 @@
         />
       </div>
     </div>
-    <loader v-if="apiLoading" />
+    <loader v-if="isLoading" />
     <data-table
       :fields="fields"
       :data="users"
@@ -29,7 +29,6 @@
       :total-pages="pagination.pages"
       :currentPage="pagination.currentPage"
       :api-mode="true"
-      :loading="apiLoading"
       @page-selected="loadUsers"
       v-else
     >
@@ -69,6 +68,8 @@
 
 <script>
 import { fetchUsers } from '../../apollo/api/users';
+import { mapGetters, mapMutations } from 'vuex';
+import { USERS_TABLE_FIELD } from '../../constants/tableFields';
 import DataTable from '../../components/DataTable';
 import DisableToggle from './DisableToggle';
 import SubscriptionLevel from './SubscriptionLevel';
@@ -85,7 +86,6 @@ export default {
   data() {
     return {
       term: '',
-      apiLoading: false,
       perPage: '20',
       perPageOptions: ['20', '30', '40', '50'],
       showModal: false,
@@ -103,41 +103,9 @@ export default {
   },
   computed: {
     fields() {
-      return [
-        {
-          name: '__slot:profile',
-          width: '30px',
-          height: '45px',
-          dataClass: 'text-center',
-        },
-        {
-          name: 'name',
-          title: this.$t('tables.headings.name'),
-          width: '30%',
-        },
-        {
-          name: '__slot:subscription',
-          title: 'Subscribed Level',
-          width: '20%',
-        },
-        {
-          name: '__slot:verification',
-          title: 'Verification',
-          width: '20%',
-        },
-        {
-          name: '__slot:status',
-          title: 'Status',
-          width: '10%',
-        },
-        {
-          name: '__slot:createdAt',
-          title: 'Created At',
-          width: '30%',
-          dataClass: 'text-right',
-        },
-      ];
+      return USERS_TABLE_FIELD;
     },
+    ...mapGetters(['isLoading']),
   },
   watch: {
     perPage: function(newVal) {
@@ -154,8 +122,9 @@ export default {
     await this.loadUsers(1);
   },
   methods: {
+    ...mapMutations(['setLoading']),
     async loadUsers(page = 1) {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const { readersList } = await fetchUsers(
           this.term,
@@ -176,7 +145,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
     async searchUser(e) {
       if (e.key === 'Enter') {
