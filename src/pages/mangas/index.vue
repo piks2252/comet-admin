@@ -81,6 +81,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import { fetchMangas } from '../../apollo/api/mangas';
+import { MANGA_TABLE_FIELDS } from '../../constants/tableFields';
 import DataTable from '../../components/DataTable';
 import MangaDisabled from './MangaDisabled';
 import MangaStatus from './MangaStatus';
@@ -111,33 +112,7 @@ export default {
   },
   computed: {
     fields() {
-      return [
-        {
-          name: '__slot:cover',
-          width: '40px',
-          height: '40px',
-          dataClass: 'text-center',
-        },
-        {
-          name: 'title',
-          title: 'Title',
-        },
-        {
-          name: '__slot:status',
-          title: 'Status',
-          width: '10%',
-        },
-        {
-          name: '__slot:disabled',
-          title: 'Disabled',
-          width: '10%',
-        },
-        {
-          name: '__slot:actions',
-          title: 'Actions',
-          width: '15%',
-        },
-      ];
+      return MANGA_TABLE_FIELDS;
     },
     ...mapGetters(['isLoading']),
   },

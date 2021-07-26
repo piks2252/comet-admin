@@ -8,15 +8,18 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
   props: {
     disabled: Boolean,
     mangaId: String,
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     async toggleDisableManga(event) {
+      this.setBackgroundLoading(true);
       try {
-        // await updateManga(this.userId, this.userDisableReason);
+        // TODO: Update manga toggle disable
         await this.$emit('updateManga', {
           id: this.mangaId,
           disabled: event,
@@ -33,6 +36,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };

@@ -77,3 +77,31 @@ export const USERS_TABLE_FIELD = [
     dataClass: 'text-right',
   },
 ];
+
+export const MANGA_TABLE_FIELDS = [
+  {
+    name: '__slot:cover',
+    width: '40px',
+    height: '40px',
+    dataClass: 'text-center',
+  },
+  {
+    name: 'title',
+    title: 'Title',
+  },
+  {
+    name: '__slot:status',
+    title: 'Status',
+    width: '10%',
+  },
+  {
+    name: '__slot:disabled',
+    title: 'Disabled',
+    width: '10%',
+  },
+  {
+    name: '__slot:actions',
+    title: 'Actions',
+    width: '15%',
+  },
+];

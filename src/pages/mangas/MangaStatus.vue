@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+import { MANGA_STATUSES } from '../../constants/defaultValues';
 export default {
   props: {
     status: Number,
@@ -15,21 +17,19 @@ export default {
   },
   computed: {
     statusOptions() {
-      return [
-        { id: 1, text: 'On going' },
-        { id: 2, text: 'Completed' },
-        { id: 3, text: 'Dropped' },
-      ];
+      return MANGA_STATUSES;
     },
   },
   methods: {
+    ...mapMutations(['setBackgroundLoading']),
     getSelectedOption(statusId) {
       return this.statusOptions.find(e => e.id === statusId);
     },
     async toggleMangaStatus(event) {
       const mangaStatus = event.id;
+      this.setBackgroundLoading(true);
       try {
-        // await updateManga(this.userId, this.userDisableReason);
+        // TODO: Update manga toggle status
         await this.$emit('updateManga', {
           id: this.mangaId,
           status: mangaStatus,
@@ -46,6 +46,7 @@ export default {
           fullWidth: false,
         });
       }
+      this.setBackgroundLoading(false);
     },
   },
 };
