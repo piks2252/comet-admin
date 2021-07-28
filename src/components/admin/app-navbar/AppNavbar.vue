@@ -25,7 +25,7 @@
 
       <app-navbar-actions
         class="app-navbar__actions md5 lg4"
-        :user-name="userName"
+        :user-name="user.name"
       />
     </div>
     <div class="app-navbar__shape" :style="shapeStyle"></div>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VaIconMenu from '../../../iconset/VaIconMenu';
 import VaIconMenuCollapsed from '../../../iconset/VaIconMenuCollapsed';
 import AppNavbarActions from './components/AppNavbarActions';
@@ -90,7 +91,6 @@ export default {
       }
       return style;
     },
-
     shapeStyle() {
       return {
         borderTopColor: this.contextConfig.gradient
@@ -102,6 +102,7 @@ export default {
           : 'transparent',
       };
     },
+    ...mapGetters(['user']),
   },
 };
 </script>

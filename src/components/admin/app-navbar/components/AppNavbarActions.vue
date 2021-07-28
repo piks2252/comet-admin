@@ -1,29 +1,23 @@
 <template>
   <div class="app-navbar-actions">
     <notification-dropdown class="app-navbar-actions__item" />
-    <profile-dropdown
-      class="app-navbar-actions__item app-navbar-actions__item--profile"
-    >
+    <div class="app-navbar-actions__item app-navbar-actions__item--profile">
       <span>{{ userName }}</span>
-    </profile-dropdown>
-    <color-dropdown class="app-navbar-actions__item" />
+      <router-link :to="{ name: 'logout' }" class="profile-logout">
+        <va-icon name="fa fa-share" color="white" size="100" />
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-import ProfileDropdown from './dropdowns/ProfileDropdown';
 import NotificationDropdown from './dropdowns/NotificationDropdown';
-import ColorDropdown from './dropdowns/ColorDropdown';
-import { ColorThemeMixin } from '../../../../vuestic-ui';
 
 export default {
   name: 'app-navbar-actions',
-  mixins: [ColorThemeMixin],
   inject: ['contextConfig'],
   components: {
-    ColorDropdown,
     NotificationDropdown,
-    ProfileDropdown,
   },
   props: {
     userName: {
@@ -37,6 +31,7 @@ export default {
 <style lang="scss">
 .app-navbar-actions {
   display: flex;
+  margin-right: 50px;
 
   &__item {
     margin-top: 0.3rem;
@@ -73,6 +68,17 @@ export default {
         margin: auto;
       }
     }
+  }
+}
+
+.profile-logout {
+  margin-left: 10px;
+  padding: 3px;
+  border: 2px solid white;
+  border-radius: 5px;
+
+  &:hover {
+    border: 2px solid #efefef;
   }
 }
 </style>

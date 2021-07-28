@@ -16,6 +16,10 @@ const state = {
       lighterGray: '#ddd',
     },
   },
+  user: {
+    name: 'admin',
+    roles: [],
+  },
   isLoading: true,
   backgroundLoading: false,
   currentPage: 'dashboard',
