@@ -55,26 +55,12 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // Check if any of the ref is present
-    let unsavedChanges = false;
-    switch (this.tabValue) {
-      case 0:
-        unsavedChanges = !this.$refs.mangaDetails.isSaved();
-        break;
-      case 1:
-        unsavedChanges = !this.$refs.chapters.isSaved();
-        break;
-      case 2:
-        unsavedChanges = !this.$refs.scrapers.isSaved();
-        break;
-    }
-    if (unsavedChanges && this.view === false) {
+    if (!this.isMangaSaved || !this.isChapterSaved) {
       const answer = window.confirm(
         'Do you really want to leave? you have unsaved changes!',
       );
       if (answer) {
         next();
-      } else {
-        next(false);
       }
     } else {
       next();

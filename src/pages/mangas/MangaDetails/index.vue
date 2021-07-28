@@ -8,11 +8,11 @@
             <img
               :src="getMangaCoverImage"
               class="manga-thumb"
-              @click="$refs[`${mangaId}_cover`].click()"
+              @click="$refs[`${selectedMangaId}_cover`].click()"
             />
             <input
               type="file"
-              :ref="`${mangaId}_cover`"
+              :ref="`${selectedMangaId}_cover`"
               style="display: none;"
               accept="image/*"
               @change="uploadCover"
@@ -150,7 +150,7 @@
                 Save Manga
               </va-button>
               <va-button outline color="danger" small @click="cancelEditing">
-                {{ isSaved() ? 'Back' : 'Cancel' }}
+                {{ isMangaSaved ? 'Back' : 'Cancel' }}
               </va-button>
             </div>
           </div>
@@ -236,7 +236,12 @@ export default {
       // TODO: Default manga thumbnail
       return 'https://dummyimage.com/600x400/000/fff';
     },
-    ...mapGetters(['isLoading', 'selectedMangaId', 'selectedMangaMode']),
+    ...mapGetters([
+      'isLoading',
+      'selectedMangaId',
+      'selectedMangaMode',
+      'isMangaSaved',
+    ]),
     view() {
       return this.selectedMangaMode === 'view';
     },
@@ -249,8 +254,20 @@ export default {
       this.manga.type = this.mangaFormats[0];
     }
   },
+  watch: {
+    manga: {
+      handler: function(newVal, oldVal) {
+        if (!_.isEqual(this.manga, this.loadedManga)) {
+          this.setSavedState(false);
+        } else {
+          this.setSavedState(true);
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
-    ...mapMutations(['setLoading', 'setBackgroundLoading']),
+    ...mapMutations(['setLoading', 'setBackgroundLoading', 'setSavedState']),
     async loadMangaDetails() {
       this.setLoading(true);
       try {
@@ -276,9 +293,6 @@ export default {
         case 3:
           return 'Dropped';
       }
-    },
-    isSaved() {
-      return _.isEqual(this.manga, this.loadedManga);
     },
     updateMangaType(formatName) {
       const selectedFormat = this.mangaFormats.find(e => e.name === formatName);
@@ -418,29 +432,9 @@ export default {
       this.setLoading(true);
     },
     cancelEditing() {
-      if (!this.isSaved()) {
-        const answer = window.confirm(
-          'Do you really want to leave? you have unsaved changes!',
-        );
-        if (answer) {
-          this.$router.push('/mangas/');
-        }
-      } else {
-        this.$router.push('/mangas/');
-      }
+      // Page check will be handled by the component, let it go...
+      this.$router.push('/mangas/');
     },
-  },
-  beforeDestroy(__to, __from, next) {
-    if (this.view === false && !this.isSaved()) {
-      const answer = window.confirm(
-        'Do you really want to leave? you have unsaved changes!',
-      );
-      if (answer) {
-        next();
-      } else {
-        next(false);
-      }
-    }
   },
 };
 </script>
