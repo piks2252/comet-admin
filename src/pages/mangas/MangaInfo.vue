@@ -43,15 +43,26 @@ export default {
       tabValue: 0,
     };
   },
+  computed: {
+    ...mapGetters(['selectedMangaId', 'isMangaSaved', 'isChapterSaved']),
+  },
   created() {
     const mode = this.$route.name === 'view-manga' ? 'view' : 'edit';
     this.setSelectedManga({ id: this.$route.params.id, mode });
+
+    // Load default tab from localstorage
+    if (localStorage.getItem(this.selectedMangaId) === null) {
+      localStorage.setItem(this.selectedMangaId, this.tabValue);
+    }
+    this.tabValue = parseInt(localStorage.getItem(this.selectedMangaId));
+  },
+  watch: {
+    tabValue(newVal) {
+      localStorage.setItem(this.selectedMangaId, newVal);
+    },
   },
   methods: {
     ...mapMutations(['setSelectedManga']),
-  },
-  computed: {
-    ...mapGetters(['isMangaSaved', 'isChapterSaved']),
   },
   beforeRouteLeave(to, from, next) {
     // Check if any of the ref is present
@@ -60,9 +71,11 @@ export default {
         'Do you really want to leave? you have unsaved changes!',
       );
       if (answer) {
+        localStorage.removeItem(this.selectedMangaId);
         next();
       }
     } else {
+      localStorage.removeItem(this.selectedMangaId);
       next();
     }
   },
