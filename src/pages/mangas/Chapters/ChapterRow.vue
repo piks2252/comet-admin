@@ -14,7 +14,8 @@
         </div>
         <div class="flex xs8 md2">
           <action-button
-            v-if="!showChapterDetail"
+            v-if="selectedChapterId === null"
+            :mode="selectedMangaMode"
             :viewChapter="viewChapter"
             :editChapter="editChapter"
             :deleteChapter="deleteChapter"
@@ -24,9 +25,9 @@
     </div>
     <transition name="slide">
       <chapter-detail
-        v-if="showChapterDetail"
-        :chapterId="chapter.id"
-        :mode="mode"
+        v-if="selectedChapterId !== null"
+        :chapterId="selectedChapterId"
+        :mode="selectedChapterMode"
         @closePopDown="closeDetailPage"
       />
     </transition>
@@ -34,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import ActionButton from './ActionButton';
 import ChapterDetail from './ChapterDetail';
 
@@ -42,11 +44,12 @@ export default {
     ActionButton,
     ChapterDetail,
   },
-  data() {
-    return {
-      showChapterDetail: false,
-      mode: 'view',
-    };
+  computed: {
+    ...mapGetters([
+      'selectedMangaMode',
+      'selectedChapterMode',
+      'selectedChapterId',
+    ]),
   },
   props: {
     chapter: {
@@ -56,27 +59,38 @@ export default {
       type: Number,
     },
   },
-  watch: {
-    showChapterDetail(val) {
-      this.$emit('chapterSelected', val);
-    },
-  },
   methods: {
+    ...mapMutations(['setSelectedChapter']),
     viewChapter() {
-      this.mode = 'view';
-      this.showChapterDetail = true;
+      this.setSelectedChapter({ id: this.chapter.id, mode: 'view' });
     },
     editChapter() {
-      this.mode = 'edit';
-      this.showChapterDetail = true;
+      if (this.selectedMangaMode !== 'view') {
+        this.setSelectedChapter({ id: this.chapter.id, mode: 'edit' });
+      } else {
+        // Manga is in view mode
+        this.showToast('Selected manga is opened in view mode', {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
     },
     deleteChapter() {
-      this.mode = 'delete';
-      this.showChapterDetail = true;
+      if (this.selectedMangaMode !== 'view') {
+        this.setSelectedChapter({ id: this.chapter.id, mode: 'delete' });
+        // TODO: Add delete modal
+      } else {
+        // Manga is in view mode
+        this.showToast('Selected manga is opened in view mode', {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
     },
     closeDetailPage() {
-      this.mode = 'view';
-      this.showChapterDetail = false;
+      this.setSelectedChapter({ id: null, mode: 'view' });
     },
   },
 };

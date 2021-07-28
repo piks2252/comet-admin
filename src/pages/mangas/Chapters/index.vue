@@ -54,7 +54,7 @@
           >
             <transition-group>
               <chapter-row
-                :class="!chapterFocused ? 'item' : ''"
+                :class="!selectedChapterId !== null ? 'item' : ''"
                 v-for="(chapter, index) in chapters"
                 :key="chapter.id"
                 :chapter="chapter"
@@ -63,7 +63,6 @@
                     (pagination.currentPage - 1) * pagination.limit -
                     index
                 "
-                @chapterSelected="chapterSelectEvent"
               />
             </transition-group>
           </draggable>
@@ -91,7 +90,6 @@ export default {
   components: { Loader, draggable, ChapterRow },
   data() {
     return {
-      chapterFocused: false,
       perPageOptions: ['20', '40', '100', '200', '500', 'All'],
       perPage: '20',
       chapters: [],
@@ -105,7 +103,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isLoading', 'selectedMangaId', 'isChapterSaved']),
+    ...mapGetters([
+      'isLoading',
+      'selectedMangaId',
+      'isChapterSaved',
+      'selectedChapterId',
+    ]),
   },
   created() {
     setTitle(`Chapters - ${this.mangaTitle}`);
@@ -168,10 +171,6 @@ export default {
     },
     async refreshChaptersPage() {
       await this.loadChapters();
-      this.chapterFocused = false;
-    },
-    chapterSelectEvent(val) {
-      this.chapterFocused = val;
     },
     async submitChaptersIndices() {
       const offset =

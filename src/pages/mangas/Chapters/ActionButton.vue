@@ -4,10 +4,10 @@
       <va-icon name="fa fa-eye" :size="21" class="action-icon pointer" />
     </div>
 
-    <div @click="editChapter">
+    <div @click="editChapter" v-if="mode !== 'view'">
       <va-icon name="fa fa-edit" :size="21" class="action-icon pointer" />
     </div>
-    <div @click="deleteChapter">
+    <div @click="deleteChapter" v-if="mode !== 'view'">
       <va-icon
         name="fa fa-trash-o"
         :size="21"
@@ -21,6 +21,10 @@
 <script>
 export default {
   props: {
+    mode: {
+      type: String,
+      default: 'view',
+    },
     viewChapter: {
       type: Function,
     },
