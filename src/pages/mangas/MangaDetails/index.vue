@@ -258,16 +258,20 @@ export default {
     manga: {
       handler: function(newVal, oldVal) {
         if (!_.isEqual(this.manga, this.loadedManga)) {
-          this.setSavedState(false);
+          this.setMangaSavedState(false);
         } else {
-          this.setSavedState(true);
+          this.setMangaSavedState(true);
         }
       },
       deep: true,
     },
   },
   methods: {
-    ...mapMutations(['setLoading', 'setBackgroundLoading', 'setSavedState']),
+    ...mapMutations([
+      'setLoading',
+      'setBackgroundLoading',
+      'setMangaSavedState',
+    ]),
     async loadMangaDetails() {
       this.setLoading(true);
       try {

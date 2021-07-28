@@ -5,13 +5,13 @@
       style="padding: 10px;"
     >
       <div class="flex xs12 md6">
-        <va-button :disabled="apiLoading" @click="refreshChaptersPage"
+        <va-button :disabled="isLoading" @click="refreshChaptersPage"
         >Refresh</va-button
         >
         <va-button>Add Chapter</va-button>
         <va-button
           color="success"
-          v-if="!isSaved"
+          v-if="!isChapterSaved"
           @click="submitChaptersIndices"
         >Update chapter list</va-button
         >
@@ -37,7 +37,7 @@
             <span>↓</span>
           </va-popover>
         </h1>
-        <loader v-if="apiLoading" />
+        <loader v-if="isLoading" />
         <div v-else>
           <div v-if="pagination.pages > 1" class="va-data-table__pagination">
             <va-pagination
@@ -83,26 +83,17 @@ import {
   fetchChapters,
   updateChaptersIndices,
 } from '../../../apollo/api/mangas';
+import { mapGetters, mapMutations } from 'vuex';
 
 const MAX_CHAPTER_COUNT = 2000;
 
 export default {
   components: { Loader, draggable, ChapterRow },
-  props: {
-    mangaId: {
-      type: String,
-    },
-    mangaTitle: {
-      type: String,
-    },
-  },
   data() {
     return {
-      apiLoading: false,
       chapterFocused: false,
       perPageOptions: ['20', '40', '100', '200', '500', 'All'],
       perPage: '20',
-      isSaved: true,
       chapters: [],
       originalChaptersIndex: [],
       pagination: {
@@ -113,11 +104,14 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(['isLoading', 'selectedMangaId', 'isChapterSaved']),
+  },
   created() {
     setTitle(`Chapters - ${this.mangaTitle}`);
   },
   async mounted() {
-    if (this.mangaId) {
+    if (this.selectedMangaId) {
       await this.loadChapters();
     }
   },
@@ -136,22 +130,22 @@ export default {
           newVal.map(e => e.id),
           this.originalChaptersIndex,
         );
-
         if (oldVal.length && !areEqual) {
-          this.isSaved = false;
+          this.setChapterSavedState(false);
         } else {
-          this.isSaved = true;
+          this.setChapterSavedState(true);
         }
       },
       deep: true,
     },
   },
   methods: {
+    ...mapMutations(['setLoading', 'setChapterSavedState']),
     async loadChapters(page = 1) {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const { chaptersList } = await fetchChapters(
-          this.mangaId,
+          this.selectedMangaId,
           this.pagination.limit,
           page,
         );
@@ -170,7 +164,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
     async refreshChaptersPage() {
       await this.loadChapters();
@@ -190,9 +184,7 @@ export default {
         };
       });
 
-      console.log(newChaptersIndices);
-
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
         const {
           updateChaptersIndices: { response },
@@ -212,7 +204,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
   },
 };

@@ -13,8 +13,22 @@ const setSelectedManga = (state, payload) => {
   state.manga.selectedManga.mode = payload.mode;
 };
 
-const setSavedState = (state, val) => {
-  if (state.manga.selectedManga.mode !== 'view') { state.manga.selectedManga.isSaved = val; }
+const setMangaSavedState = (state, val) => {
+  if (state.manga.selectedManga.mode !== 'view') {
+    state.manga.selectedManga.isSaved = val;
+  }
 };
 
-export { setLoading, setBackgroundLoading, setSelectedManga, setSavedState };
+const setChapterSavedState = (state, val) => {
+  if (state.manga.selectedManga.mode !== 'view') {
+    state.manga.selectedChapter.isSaved = val;
+  }
+};
+
+export {
+  setLoading,
+  setBackgroundLoading,
+  setSelectedManga,
+  setMangaSavedState,
+  setChapterSavedState,
+};
