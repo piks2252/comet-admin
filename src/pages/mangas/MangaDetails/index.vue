@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="flex xs12">
-      <loader v-if="apiLoading" />
+      <loader v-if="isLoading" />
       <div v-else>
         <div class="row">
           <div class="flex md5 sm4 xs4">
@@ -167,51 +167,20 @@ import {
   createManga,
   updateManga,
 } from '../../../apollo/api/mangas';
+import { DEFAULT_MANGA } from '../../../constants/defaultValues';
 import { setTitle } from '../../../mixins/utils';
 import { fetchAuthors } from '../../../apollo/api/authors';
 import { fetchGenres } from '../../../apollo/api/genres';
 import ToggleSwitch from 'vuejs-toggle-switch';
 import TagInput from '../../../components/TagInput';
 import Loader from '../../../components/Loader';
-
-const DEFAULT_MANGA = {
-  title: '',
-  alternativeTitles: [],
-  status: 1,
-  authors: [],
-  artists: [],
-  cover: null,
-  description: '',
-  hentai: false,
-  isAdult: false,
-  type: null,
-  genres: [],
-  demographics: [],
-  themes: [],
-  tags: [],
-  releaseDate: new Date(),
-  disabled: false,
-  otherSources: {
-    isbnCode: '',
-    anilistId: '',
-    malId: '',
-  },
-};
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'manga-details',
   components: { TagInput, Loader, ToggleSwitch },
-  props: {
-    mangaId: {
-      type: String,
-    },
-    view: {
-      type: Boolean,
-    },
-  },
   data() {
     return {
-      apiLoading: false,
       manga: DEFAULT_MANGA,
       loadedManga: DEFAULT_MANGA,
       toggleSwitchOptions: {
@@ -267,20 +236,25 @@ export default {
       // TODO: Default manga thumbnail
       return 'https://dummyimage.com/600x400/000/fff';
     },
+    ...mapGetters(['isLoading', 'selectedMangaId', 'selectedMangaMode']),
+    view() {
+      return this.selectedMangaMode === 'view';
+    },
   },
   async mounted() {
     await this.getFormatArray();
-    if (this.mangaId !== null) {
+    if (this.selectedMangaId !== null) {
       await this.loadMangaDetails();
     } else {
       this.manga.type = this.mangaFormats[0];
     }
   },
   methods: {
+    ...mapMutations(['setLoading', 'setBackgroundLoading']),
     async loadMangaDetails() {
-      this.apiLoading = true;
+      this.setLoading(true);
       try {
-        const { mangaInfo } = await fetchManga(this.mangaId);
+        const { mangaInfo } = await fetchManga(this.selectedMangaId);
         this.manga = { ...DEFAULT_MANGA, ...mangaInfo };
         this.loadedManga = { ...DEFAULT_MANGA, ...mangaInfo };
         setTitle(`${this.manga.title} - ${this.view ? 'View' : 'Edit'}`);
@@ -291,7 +265,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(false);
     },
     selectedMangaState() {
       switch (this.manga.status) {
@@ -321,7 +295,9 @@ export default {
       this.coverImage = files[0];
     },
     async getAuthorsArray(authorPattern = '') {
+      this.setBackgroundLoading(true);
       const { peopleList } = await fetchAuthors(authorPattern, 1, 5);
+      this.setBackgroundLoading(true);
       return peopleList.people.map(p => {
         return {
           id: p.id,
@@ -330,7 +306,9 @@ export default {
       });
     },
     async getArtistsArray(artistPattern = '') {
+      this.setBackgroundLoading(true);
       const { peopleList } = await fetchAuthors(artistPattern, 2, 5);
+      this.setBackgroundLoading(true);
       return peopleList.people.map(p => {
         return {
           id: p.id,
@@ -339,7 +317,9 @@ export default {
       });
     },
     async getFormatArray() {
+      this.setBackgroundLoading(true);
       const { genresList } = await fetchGenres('', 'format', 10);
+      this.setBackgroundLoading(true);
       this.mangaFormats = genresList.genres.map(g => {
         return {
           id: g.id,
@@ -348,7 +328,9 @@ export default {
       });
     },
     async getGenresArray(genrePattern = '') {
+      this.setBackgroundLoading(true);
       const { genresList } = await fetchGenres(genrePattern, '', 5);
+      this.setBackgroundLoading(true);
       return genresList.genres.map(p => {
         return {
           id: p.id,
@@ -357,7 +339,9 @@ export default {
       });
     },
     async getThemesArray(genrePattern = '') {
+      this.setBackgroundLoading(true);
       const { genresList } = await fetchGenres(genrePattern, 'theme', 5);
+      this.setBackgroundLoading(true);
       return genresList.genres.map(p => {
         return {
           id: p.id,
@@ -366,7 +350,9 @@ export default {
       });
     },
     async getDemographicsArray(genrePattern = '') {
+      this.setBackgroundLoading(true);
       const { genresList } = await fetchGenres(genrePattern, 'demographics', 5);
+      this.setBackgroundLoading(true);
       return genresList.genres.map(p => {
         return {
           id: p.id,
@@ -394,10 +380,10 @@ export default {
     async submitChanges() {
       const updatedManga = this.processInput(this.manga);
       let response = null;
-      this.apiLoading = true;
+      this.setLoading(true);
 
       try {
-        if (this.mangaId === null) {
+        if (this.selectedMangaId === null) {
           // Add as new manga
           response = await createManga(updatedManga, this.coverImage);
           this.$router.push({
@@ -406,7 +392,7 @@ export default {
           });
         } else {
           response = await updateManga(
-            this.mangaId,
+            this.selectedMangaId,
             updatedManga,
             this.coverImage,
           );
@@ -415,7 +401,7 @@ export default {
         this.loadedManga = { ...DEFAULT_MANGA, ...response.manga };
         this.manga = { ...DEFAULT_MANGA, ...response.manga };
         this.showToast(
-          `Manga ${this.mangaId ? 'updated' : 'added'} successfully`,
+          `Manga ${this.selectedMangaId ? 'updated' : 'added'} successfully`,
           {
             position: 'top-right',
             duration: 800,
@@ -429,7 +415,7 @@ export default {
           fullWidth: false,
         });
       }
-      this.apiLoading = false;
+      this.setLoading(true);
     },
     cancelEditing() {
       if (!this.isSaved()) {

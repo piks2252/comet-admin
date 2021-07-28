@@ -22,3 +22,27 @@ export const MANGA_STATUSES = [
   { id: 2, text: 'Completed' },
   { id: 3, text: 'Dropped' },
 ];
+
+export const DEFAULT_MANGA = {
+  title: '',
+  alternativeTitles: [],
+  status: 1,
+  authors: [],
+  artists: [],
+  cover: null,
+  description: '',
+  hentai: false,
+  isAdult: false,
+  type: null,
+  genres: [],
+  demographics: [],
+  themes: [],
+  tags: [],
+  releaseDate: new Date(),
+  disabled: false,
+  otherSources: {
+    isbnCode: '',
+    anilistId: '',
+    malId: '',
+  },
+};

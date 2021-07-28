@@ -7,30 +7,16 @@
             {{ tab.title }}
           </va-tab>
         </va-tabs>
-        <manga-details
-          ref="mangaDetails"
-          v-if="tabValue === 0"
-          :mangaId="mangaId"
-          :view="view"
-        />
-        <chapters
-          ref="chapters"
-          v-if="tabValue === 1"
-          :mangaId="mangaId"
-          :view="view"
-        />
-        <scrapers
-          ref="scrapers"
-          v-else-if="tabValue === 2"
-          :mangaId="mangaId"
-          :view="view"
-        />
+        <manga-details ref="mangaDetails" v-if="tabValue === 0" />
+        <chapters ref="chapters" v-if="tabValue === 1" />
+        <scrapers ref="scrapers" v-else-if="tabValue === 2" />
       </div>
     </div>
   </va-card>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import MangaDetails from './MangaDetails';
 import Chapters from './Chapters';
 import Scrapers from './Scrapers';
@@ -55,12 +41,17 @@ export default {
         },
       ],
       tabValue: 0,
-      mangaId:
-        this.$route.params.id && this.$route.params.id !== ''
-          ? this.$route.params.id
-          : null,
-      view: this.$route.name === 'view-manga',
     };
+  },
+  created() {
+    const mode = this.$route.name === 'view-manga' ? 'view' : 'edit';
+    this.setSelectedManga({ id: this.$route.params.id, mode });
+  },
+  methods: {
+    ...mapMutations(['setSelectedManga']),
+  },
+  computed: {
+    ...mapGetters(['isMangaSaved', 'isChapterSaved']),
   },
   beforeRouteLeave(to, from, next) {
     // Check if any of the ref is present

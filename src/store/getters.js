@@ -8,8 +8,10 @@ const user = state => state.app.user;
 
 // Getters from modules/manga.js
 const selectedMangaId = state => state.manga.selectedManga.id;
+const selectedMangaMode = state => state.manga.selectedManga.mode;
 const isMangaSaved = state => state.manga.selectedManga.isSaved;
 const selectedChapterId = state => state.manga.selectedChapter.id;
+const selectedChapterMode = state => state.manga.selectedChapter.mode;
 const isChapterSaved = state => state.manga.selectedChapter.isSaved;
 const isPagesSaved = state => state.manga.selectedChapter.pagesSaved;
 
@@ -21,8 +23,10 @@ export {
   currentPage,
   user,
   selectedMangaId,
+  selectedMangaMode,
   isMangaSaved,
   selectedChapterId,
+  selectedChapterMode,
   isChapterSaved,
   isPagesSaved,
 };
