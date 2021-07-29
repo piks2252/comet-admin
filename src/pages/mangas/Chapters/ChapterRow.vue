@@ -25,10 +25,8 @@
     </div>
     <transition name="slide">
       <chapter-detail
-        v-if="selectedChapterId !== null"
-        :chapterId="selectedChapterId"
-        :mode="selectedChapterMode"
-        @closePopDown="closeDetailPage"
+        v-if="selectedChapterId === chapter.id"
+        :chapterId="chapter.id"
       />
     </transition>
   </div>
@@ -88,9 +86,6 @@ export default {
           fullWidth: false,
         });
       }
-    },
-    closeDetailPage() {
-      this.setSelectedChapter({ id: null, mode: 'view' });
     },
   },
 };
