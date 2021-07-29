@@ -103,7 +103,7 @@ import moment from 'moment';
 import { mapGetters, mapMutations } from 'vuex';
 import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
-import { fetchChapter } from '../../../../apollo/api/mangas';
+import { fetchChapter, updateChapterInfo } from '../../../../apollo/api/mangas';
 
 export default {
   components: { Grid, Page },
@@ -184,14 +184,25 @@ export default {
           volume: this.chapter.volume,
           chapter: this.chapter.chapter,
           title: this.chapter.title,
-          releaseDate: this.chapter.releaseDate,
+          releaseDate: new Date(this.chapter.releaseDate),
           longStrip: this.chapter.longStrip,
           useAltSrc: this.chapter.useAltSrc,
         };
-        console.log(chapterBody);
-        // const { chapterItem } = await fetchChapter(this.chapterId);
-        // this.chapter = chapterItem;
-        // this.loadedChapter = { ...this.chapter };
+
+        const response = await updateChapterInfo(chapterBody);
+        this.chapter = {
+          ...this.chapter,
+          ...response.updateChapterInfo.chapter,
+        };
+        this.loadedChapter = {
+          ...this.chapter,
+          ...response.updateChapterInfo.chapter,
+        };
+        this.showToast('Chapter info updated successfully', {
+          position: 'top-right',
+          duration: 800,
+          fullWidth: false,
+        });
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',

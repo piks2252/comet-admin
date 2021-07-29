@@ -77,3 +77,11 @@ export const updateChaptersIndices = async chapters => {
   });
   return data;
 };
+
+export const updateChapterInfo = async chapter => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.UPDATE_CHAPTER_INFO,
+    variables: { ...chapter },
+  });
+  return data;
+};

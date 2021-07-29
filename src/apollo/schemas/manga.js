@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 
 export const QUERIES = {
+  /** Manga queries */
   MANGAS: gql`
     query FETCH_MANGAS(
       $search: String
@@ -63,6 +64,7 @@ export const QUERIES = {
       }
     }
   `,
+  /** Chapter queries */
   CHAPTERS: gql`
     query FETCH_CHAPTERS(
       $limit: Int
@@ -108,6 +110,7 @@ export const QUERIES = {
 };
 
 export const MUTATIONS = {
+  /** Manga mutations */
   CREATE_MANGA: gql`
     mutation CREATE_MANGA(
       $title: String!
@@ -268,10 +271,44 @@ export const MUTATIONS = {
       }
     }
   `,
+  /** Chapter mutations */
   UPDATE_CHAPTERS_INDICES: gql`
     mutation UPDATE_CHAPTERS_INDICES($chapters: [ChapterIndexInput]) {
       updateChaptersIndices(chapters: $chapters) {
         response
+      }
+    }
+  `,
+  UPDATE_CHAPTER_INFO: gql`
+    mutation UPDATE_CHAPTER_INFO(
+      $id: ID
+      $title: String
+      $chapter: Int
+      $volume: String
+      $longStrip: Boolean
+      $useAltSrc: Boolean
+      $releaseDate: DateTime
+    ) {
+      updateChapterInfo(
+        chapterData: {
+          id: $id
+          title: $title
+          chapter: $chapter
+          volume: $volume
+          longStrip: $longStrip
+          useAltSrc: $useAltSrc
+          releaseDate: $releaseDate
+        }
+      ) {
+        chapter {
+          id
+          chapter
+          volume
+          title
+          releaseDate
+          longStrip
+          useAltSrc
+        }
       }
     }
   `,
