@@ -5,10 +5,13 @@
       style="padding: 10px;"
     >
       <div class="flex xs12 md6">
-        <va-button :disabled="isLoading" @click="refreshChaptersPage"
+        <va-button
+          v-if="selectedMangaMode !== 'view'"
+          :disabled="isLoading"
+          @click="refreshChaptersPage"
         >Refresh</va-button
         >
-        <va-button>Add Chapter</va-button>
+        <va-button v-if="selectedMangaMode !== 'view'">Add Chapter</va-button>
         <va-button
           color="success"
           v-if="!isChapterSaved"
@@ -106,6 +109,7 @@ export default {
     ...mapGetters([
       'isLoading',
       'selectedMangaId',
+      'selectedMangaMode',
       'isChapterSaved',
       'selectedChapterId',
     ]),
