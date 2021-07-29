@@ -62,7 +62,7 @@
               color="success"
               small
               @click="saveChanges()"
-              :disabled="!isChapterSaved"
+              :disabled="isChapterSaved"
             >
               Save
             </va-button>
@@ -98,10 +98,11 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import moment from 'moment';
 import { mapGetters, mapMutations } from 'vuex';
 import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
-import _ from 'lodash';
 import { fetchChapter } from '../../../../apollo/api/mangas';
 
 export default {
@@ -126,11 +127,20 @@ export default {
   },
   watch: {
     chapter: {
-      handler: function(newVal) {
-        if (_.isEqual(newVal, this.loadedChapter)) {
-          this.setChapterSavedState(true);
-        } else {
-          this.setChapterSavedState(false);
+      handler: function(newVal, oldVal) {
+        if (!this.apiLoading && !_.isEmpty(oldVal, true)) {
+          // Need to use temp variable to store copy of original chapter data
+          // With using chapter.releaseDate as model in va-date-picker it converts
+          // ISO date format to YYYY-MM-DD hence need to make a custom object for comparision
+          const valueToCompare = { ...this.loadedChapter };
+          valueToCompare.releaseDate = moment(
+            valueToCompare.releaseDate,
+          ).format('YYYY-MM-DD');
+          if (_.isEqual(newVal, valueToCompare)) {
+            this.setChapterSavedState(true);
+          } else {
+            this.setChapterSavedState(false);
+          }
         }
       },
       deep: true,
@@ -166,7 +176,31 @@ export default {
       }
       this.apiLoading = false;
     },
-    async saveChanges() {},
+    async saveChanges() {
+      this.apiLoading = true;
+      try {
+        const chapterBody = {
+          id: this.chapter.id,
+          volume: this.chapter.volume,
+          chapter: this.chapter.chapter,
+          title: this.chapter.title,
+          releaseDate: this.chapter.releaseDate,
+          longStrip: this.chapter.longStrip,
+          useAltSrc: this.chapter.useAltSrc,
+        };
+        console.log(chapterBody);
+        // const { chapterItem } = await fetchChapter(this.chapterId);
+        // this.chapter = chapterItem;
+        // this.loadedChapter = { ...this.chapter };
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
+      this.apiLoading = false;
+    },
     closeSelf() {
       if (!this.isChapterSaved && !this.isViewMode) {
         const confirmation = confirm(
