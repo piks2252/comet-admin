@@ -168,7 +168,7 @@ export default {
     },
     async saveChanges() {},
     closeSelf() {
-      if (!this.isChapterSaved) {
+      if (!this.isChapterSaved && !this.isViewMode) {
         const confirmation = confirm(
           'Unsaved changes will be not saved, are you sure?',
         );
