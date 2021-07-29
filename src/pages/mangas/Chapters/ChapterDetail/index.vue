@@ -3,7 +3,7 @@
     <div class="flex flex-left chapter-detail">
       <div class="row">
         <div class="flex xs12 md9">
-          <p class="display-4">{{ this.edit ? 'Edit' : 'View' }} Chapter</p>
+          <p class="display-4">{{ isViewMode ? 'View' : 'Edit' }} Chapter</p>
           <div class="row">
             <div class="flex xs6 md5">
               <va-input
@@ -11,50 +11,58 @@
                 placeholder="Volume"
                 type="number"
                 v-model="chapter.volume"
-                :disabled="!edit"
+                :disabled="isViewMode"
               />
               <va-input
                 label="Index"
                 placeholder="Index"
                 type="number"
                 v-model="chapter.chapter"
-                :disabled="!edit"
+                :disabled="isViewMode"
               />
               <va-input
                 label="Title"
                 placeholder="Title"
                 v-model="chapter.title"
-                :disabled="!edit"
+                :disabled="isViewMode"
               />
             </div>
             <div class="flex xs6 md4">
               <va-date-picker
                 label="Release Date"
                 v-model="chapter.releaseDate"
+                :disabled="isViewMode"
               />
               <va-toggle
                 label="Long Strip"
                 color="primary"
                 v-model="chapter.longStrip"
+                :disable="isViewMode"
                 small
               />
               <va-toggle
                 label="Use alternative source"
                 color="success"
                 v-model="chapter.useAltSrc"
+                :disable="isViewMode"
                 small
               />
             </div>
           </div>
         </div>
         <div class="flex xs9 md3">
-          <div class="flex flex-center">
+          <div class="flex flex-center" v-if="isViewMode">
+            <va-button outline color="danger" small @click="closeSelf">
+              Close
+            </va-button>
+          </div>
+          <div class="flex flex-center" v-else>
             <va-button
               outline
               color="success"
               small
               @click="saveChanges()"
-              v-if="!isSaved"
+              :disabled="!isChapterSaved"
             >
               Save
             </va-button>
@@ -64,7 +72,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="flex xs12 md12">
           <p class="display-4" style="margin-bottom: 10px;">
             Pages
@@ -84,12 +92,13 @@
             </template>
           </grid>
         </div>
-      </div>
+      </div> -->
     </div>
   </va-inner-loading>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
 import _ from 'lodash';
@@ -101,44 +110,37 @@ export default {
     chapterId: {
       type: String,
     },
-    mode: {
-      type: String,
-    },
   },
   data() {
     return {
-      edit: false,
-      delete: false,
       apiLoading: false,
-      isSaved: true,
       chapter: {},
       loadedChapter: null,
     };
   },
+  computed: {
+    ...mapGetters(['selectedChapterMode', 'isChapterSaved']),
+    isViewMode() {
+      return this.selectedChapterMode === 'view';
+    },
+  },
   watch: {
     chapter: {
       handler: function(newVal) {
-        console.log(newVal);
         if (_.isEqual(newVal, this.loadedChapter)) {
-          this.isSaved = true;
+          this.setChapterSavedState(true);
         } else {
-          this.isSaved = false;
+          this.setChapterSavedState(false);
         }
       },
       deep: true,
     },
   },
-  created() {
-    if (this.mode === 'edit') {
-      this.edit = true;
-    } else if (this.mode === 'delete') {
-      this.delete = true;
-    }
-  },
   async mounted() {
     await this.loadChapter();
   },
   methods: {
+    ...mapMutations(['setSelectedChapter', 'setChapterSavedState']),
     pageURL(pageId) {
       if (this.chapter.useAltSrc) {
         return pageId.replace(
@@ -164,10 +166,9 @@ export default {
       }
       this.apiLoading = false;
     },
-    async updatePageOrder() {},
     async saveChanges() {},
     closeSelf() {
-      if (!this.isSaved) {
+      if (!this.isChapterSaved) {
         const confirmation = confirm(
           'Unsaved changes will be not saved, are you sure?',
         );
@@ -175,7 +176,7 @@ export default {
           return;
         }
       }
-      this.$emit('closePopDown');
+      this.setSelectedChapter({ id: null, mode: 'view' });
     },
   },
 };

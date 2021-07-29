@@ -54,7 +54,7 @@
           >
             <transition-group>
               <chapter-row
-                :class="!selectedChapterId !== null ? 'item' : ''"
+                :class="!selectedChapterId ? 'item' : ''"
                 v-for="(chapter, index) in chapters"
                 :key="chapter.id"
                 :chapter="chapter"
