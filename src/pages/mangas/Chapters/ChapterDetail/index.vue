@@ -72,27 +72,48 @@
           </div>
         </div>
       </div>
-      <!-- <div class="row">
+      <div class="row">
         <div class="flex xs12 md12">
-          <p class="display-4" style="margin-bottom: 10px;">
-            Pages
-          </p>
-          <va-button outline color="success" small @click="updatePageOrder">
-            Update page order
-          </va-button>
-          <grid
-            :draggable="true"
-            :sortable="true"
-            :items="chapter.useAltSrc ? chapter.alternateSource : chapter.pages"
-            :cellWidth="200"
-            :cellHeight="300"
-          >
-            <template slot="cell" slot-scope="props">
-              <Page :imageSource="pageURL(props.item)" />
-            </template>
-          </grid>
+          <div class="row align--center">
+            <div class="flex xs12 md2">
+              <p class="display-4" style="margin-bottom: 10px;">
+                Pages
+              </p>
+            </div>
+
+            <div class="flex xs12 md2 offset--md4" v-if="!isViewMode">
+              <va-button outline color="success" small @click="updatePageOrder">
+                Update page order
+              </va-button>
+            </div>
+            <div class="flex x12 md4" v-if="!isViewMode">
+              <va-button-group flat color="secondary">
+                <va-button size="large" @click="submitZipFile">
+                  Add zip file</va-button
+                  >
+                <va-button size="large" @click="addMangaPages">
+                  Add pages</va-button
+                >
+              </va-button-group>
+            </div>
+          </div>
+          <div class="row">
+            <grid
+              :draggable="true"
+              :sortable="true"
+              :items="
+                chapter.useAltSrc ? chapter.alternateSource : chapter.pages
+              "
+              :cellWidth="200"
+              :cellHeight="300"
+            >
+              <template slot="cell" slot-scope="props">
+                <Page :imageSource="pageURL(props.item)" />
+              </template>
+            </grid>
+          </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </va-inner-loading>
 </template>
@@ -212,6 +233,9 @@ export default {
       }
       this.apiLoading = false;
     },
+    async updatePageOrder() {},
+    async submitZipFile() {},
+    async submitMangaPages() {},
     closeSelf() {
       if (!this.isChapterSaved && !this.isViewMode) {
         const confirmation = confirm(
