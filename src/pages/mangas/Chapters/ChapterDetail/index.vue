@@ -290,13 +290,14 @@ export default {
           this.chapter.pages = this.pages;
         }
 
-        // TODO: Maybe check if response.updateChapterPageIndices.response is "OK" or not
-        this.setChapterPagesSavedState(true);
-        this.showToast('Chapter pages updates successfully', {
-          position: 'top-right',
-          duration: 800,
-          fullWidth: false,
-        });
+        if (response.updateChapterPageIndices.response === 'OK') {
+          this.setChapterPagesSavedState(true);
+          this.showToast('Chapter pages updates successfully', {
+            position: 'top-right',
+            duration: 800,
+            fullWidth: false,
+          });
+        }
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',

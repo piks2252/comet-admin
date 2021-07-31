@@ -26,7 +26,7 @@ const mutations = {
     state.selectedChapter.id = chapterId;
   },
   setChapterMode(state, mode) {
-    if (state.selectedManga.mode == 'edit') {
+    if (state.selectedManga.mode === 'edit') {
       state.selectedChapter.mode = mode;
     }
   },
