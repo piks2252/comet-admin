@@ -72,57 +72,11 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="flex xs12 md12">
-          <div class="row align--center">
-            <div class="flex xs12 md2">
-              <p class="display-4" style="margin-bottom: 10px;">
-                Pages
-              </p>
-            </div>
-            <div class="flex xs12 md6 offset--md4" v-if="!isViewMode">
-              <va-button-group
-                flat
-                color="secondary"
-                style="display: inline-block;"
-              >
-                <va-button small @click="submitZipFile">
-                  Add zip file</va-button
-                  >
-                <va-button small @click="submitMangaPages">
-                  Add pages</va-button
-                >
-              </va-button-group>
-              <va-button
-                outline
-                color="success"
-                small
-                @click="updatePageOrder"
-                style="display: inline-block;"
-                v-if="!isPagesSaved"
-              >
-                Update page order
-              </va-button>
-            </div>
-          </div>
-          <div class="row">
-            <grid
-              :draggable="true"
-              :sortable="true"
-              :items="
-                chapter.useAltSrc ? chapter.alternateSource : chapter.pages
-              "
-              :cellWidth="200"
-              :cellHeight="300"
-              @dragend="pageReorder"
-            >
-              <template slot="cell" slot-scope="props">
-                <Page :imageSource="pageURL(props.item)" />
-              </template>
-            </grid>
-          </div>
-        </div>
-      </div>
+      <page-section
+        :pages="chapterPages"
+        :useAltSrc="chapter.useAltSrc"
+        @refreshChapterPages="changePageOrder"
+      />
     </div>
   </va-inner-loading>
 </template>
@@ -131,16 +85,11 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { mapGetters, mapMutations } from 'vuex';
-import Grid from 'vue-js-grid/src/Grid';
-import Page from './Page';
-import {
-  fetchChapter,
-  updateChapterInfo,
-  updateChapterPageOrder,
-} from '../../../../apollo/api/mangas';
+import { fetchChapter, updateChapterInfo } from '../../../../apollo/api/mangas';
+import PageSection from './PageSection/index.vue';
 
 export default {
-  components: { Grid, Page },
+  components: { PageSection },
   props: {
     chapterId: {
       type: String,
@@ -158,6 +107,11 @@ export default {
     ...mapGetters(['selectedChapterMode', 'isChapterSaved', 'isPagesSaved']),
     isViewMode() {
       return this.selectedChapterMode === 'view';
+    },
+    chapterPages() {
+      return this.chapter.useAltSrc
+        ? this.chapter.alternateSource
+        : this.chapter.pages;
     },
   },
   watch: {
@@ -180,17 +134,6 @@ export default {
       },
       deep: true,
     },
-    newPageArray(newVal) {
-      const arrayToCheck = this.chapter.useAltSrc
-        ? this.chapter.alternateSource
-        : this.chapter.pages;
-
-      if (_.isEqual(newVal, arrayToCheck)) {
-        this.setChapterPagesSavedState(true);
-      } else {
-        this.setChapterPagesSavedState(false);
-      }
-    },
   },
   async mounted() {
     await this.loadChapter();
@@ -201,18 +144,9 @@ export default {
       'setChapterSavedState',
       'setChapterPagesSavedState',
     ]),
-    pageURL(pageId) {
-      if (this.chapter.useAltSrc) {
-        return pageId.replace(
-          'https://xn--cckb8hk3i.com/',
-          'https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/',
-        );
-      } else {
-        return `https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/${this.chapter.mangaId}/${this.chapterId}/${pageId}`;
-      }
-    },
-    pageReorder(e) {
-      this.newPageArray = e.items.map(p => p.item);
+    changePageOrder(pages) {
+      if (this.useAltSrc) this.chapter.alternateSource = pages;
+      else this.chapter.pages = pages;
     },
     async loadChapter() {
       this.apiLoading = true;
@@ -266,49 +200,6 @@ export default {
       }
       this.apiLoading = false;
     },
-    async updatePageOrder() {
-      this.apiLoading = true;
-      try {
-        let response = null;
-        if (this.chapter.useAltSrc) {
-          response = await updateChapterPageOrder(
-            this.chapterId,
-            undefined,
-            this.newPageArray,
-          );
-        } else {
-          response = await updateChapterPageOrder(
-            this.chapterId,
-            this.newPageArray,
-          );
-        }
-
-        // Update pages of the model here
-        if (this.chapter.useAltSrc) {
-          this.chapter.alternateSource = this.newPageArray;
-        } else {
-          this.chapter.pages = this.pages;
-        }
-
-        if (response.updateChapterPageIndices.response === 'OK') {
-          this.setChapterPagesSavedState(true);
-          this.showToast('Chapter pages updates successfully', {
-            position: 'top-right',
-            duration: 800,
-            fullWidth: false,
-          });
-        }
-      } catch (e) {
-        this.showToast(e, {
-          position: 'top-right',
-          duration: 1200,
-          fullWidth: false,
-        });
-      }
-      this.apiLoading = false;
-    },
-    async submitZipFile() {},
-    async submitMangaPages() {},
     closeSelf() {
       if (!this.isChapterSaved && !this.isViewMode) {
         const confirmation = confirm(
