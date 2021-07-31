@@ -283,8 +283,20 @@ export default {
           );
         }
 
+        // Update pages of the model here
+        if (this.chapter.useAltSrc) {
+          this.chapter.alternateSource = this.newPageArray;
+        } else {
+          this.chapter.pages = this.pages;
+        }
+
         // TODO: Maybe check if response.updateChapterPageIndices.response is "OK" or not
         this.setChapterPagesSavedState(true);
+        this.showToast('Chapter pages updates successfully', {
+          position: 'top-right',
+          duration: 800,
+          fullWidth: false,
+        });
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
