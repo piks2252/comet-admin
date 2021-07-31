@@ -8,14 +8,7 @@
           </p>
         </div>
         <div class="flex xs12 md6 offset--md4" v-if="!isViewMode">
-          <va-button-group
-            flat
-            color="secondary"
-            style="display: inline-block;"
-          >
-            <va-button small @click="submitZipFile"> Add zip file</va-button>
-            <va-button small @click="submitMangaPages"> Add pages</va-button>
-          </va-button-group>
+          <add-file-modal />
           <va-button
             outline
             color="success"
@@ -52,9 +45,10 @@ import { mapGetters, mapMutations } from 'vuex';
 import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
 import { updateChapterPageOrder } from '../../../../../apollo/api/mangas';
+import AddFileModal from './AddFileModal.vue';
 
 export default {
-  components: { Grid, Page },
+  components: { Grid, Page, AddFileModal },
   props: {
     pages: {
       type: Array,
@@ -146,8 +140,6 @@ export default {
       }
       this.apiLoading = false;
     },
-    async submitZipFile() {},
-    async submitMangaPages() {},
   },
 };
 </script>
