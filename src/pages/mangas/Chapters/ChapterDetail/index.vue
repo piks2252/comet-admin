@@ -80,21 +80,29 @@
                 Pages
               </p>
             </div>
-
-            <div class="flex xs12 md2 offset--md4" v-if="!isViewMode">
-              <va-button outline color="success" small @click="updatePageOrder">
-                Update page order
-              </va-button>
-            </div>
-            <div class="flex x12 md4" v-if="!isViewMode">
-              <va-button-group flat color="secondary">
-                <va-button size="large" @click="submitZipFile">
+            <div class="flex xs12 md6 offset--md4" v-if="!isViewMode">
+              <va-button-group
+                flat
+                color="secondary"
+                style="display: inline-block;"
+              >
+                <va-button small @click="submitZipFile">
                   Add zip file</va-button
                   >
-                <va-button size="large" @click="addMangaPages">
+                <va-button small @click="submitMangaPages">
                   Add pages</va-button
                 >
               </va-button-group>
+              <va-button
+                outline
+                color="success"
+                small
+                @click="updatePageOrder"
+                style="display: inline-block;"
+                v-if="!isPagesSaved"
+              >
+                Update page order
+              </va-button>
             </div>
           </div>
           <div class="row">
@@ -106,6 +114,7 @@
               "
               :cellWidth="200"
               :cellHeight="300"
+              @dragend="pageReorder"
             >
               <template slot="cell" slot-scope="props">
                 <Page :imageSource="pageURL(props.item)" />
@@ -124,7 +133,11 @@ import moment from 'moment';
 import { mapGetters, mapMutations } from 'vuex';
 import Grid from 'vue-js-grid/src/Grid';
 import Page from './Page';
-import { fetchChapter, updateChapterInfo } from '../../../../apollo/api/mangas';
+import {
+  fetchChapter,
+  updateChapterInfo,
+  updateChapterPageOrder,
+} from '../../../../apollo/api/mangas';
 
 export default {
   components: { Grid, Page },
@@ -138,10 +151,11 @@ export default {
       apiLoading: false,
       chapter: {},
       loadedChapter: null,
+      newPageArray: [],
     };
   },
   computed: {
-    ...mapGetters(['selectedChapterMode', 'isChapterSaved']),
+    ...mapGetters(['selectedChapterMode', 'isChapterSaved', 'isPagesSaved']),
     isViewMode() {
       return this.selectedChapterMode === 'view';
     },
@@ -166,12 +180,27 @@ export default {
       },
       deep: true,
     },
+    newPageArray(newVal) {
+      const arrayToCheck = this.chapter.useAltSrc
+        ? this.chapter.alternateSource
+        : this.chapter.pages;
+
+      if (_.isEqual(newVal, arrayToCheck)) {
+        this.setChapterPagesSavedState(true);
+      } else {
+        this.setChapterPagesSavedState(false);
+      }
+    },
   },
   async mounted() {
     await this.loadChapter();
   },
   methods: {
-    ...mapMutations(['setSelectedChapter', 'setChapterSavedState']),
+    ...mapMutations([
+      'setSelectedChapter',
+      'setChapterSavedState',
+      'setChapterPagesSavedState',
+    ]),
     pageURL(pageId) {
       if (this.chapter.useAltSrc) {
         return pageId.replace(
@@ -181,6 +210,9 @@ export default {
       } else {
         return `https://s3.eu-central-1.wasabisys.com/xn--cckb8hk3i.com/${this.chapter.mangaId}/${this.chapterId}/${pageId}`;
       }
+    },
+    pageReorder(e) {
+      this.newPageArray = e.items.map(p => p.item);
     },
     async loadChapter() {
       this.apiLoading = true;
@@ -219,6 +251,7 @@ export default {
           ...this.chapter,
           ...response.updateChapterInfo.chapter,
         };
+        this.setChapterSavedState(true);
         this.showToast('Chapter info updated successfully', {
           position: 'top-right',
           duration: 800,
@@ -233,7 +266,34 @@ export default {
       }
       this.apiLoading = false;
     },
-    async updatePageOrder() {},
+    async updatePageOrder() {
+      this.apiLoading = true;
+      try {
+        let response = null;
+        if (this.chapter.useAltSrc) {
+          response = await updateChapterPageOrder(
+            this.chapterId,
+            undefined,
+            this.newPageArray,
+          );
+        } else {
+          response = await updateChapterPageOrder(
+            this.chapterId,
+            this.newPageArray,
+          );
+        }
+
+        // TODO: Maybe check if response.updateChapterPageIndices.response is "OK" or not
+        this.setChapterPagesSavedState(true);
+      } catch (e) {
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
+      this.apiLoading = false;
+    },
     async submitZipFile() {},
     async submitMangaPages() {},
     closeSelf() {

@@ -32,6 +32,12 @@ const setChapterSavedState = (state, val) => {
   }
 };
 
+const setChapterPagesSavedState = (state, val) => {
+  if (state.manga.selectedChapter.mode !== 'view') {
+    state.manga.selectedChapter.pagesSaved = val;
+  }
+};
+
 export {
   setLoading,
   setBackgroundLoading,
@@ -39,4 +45,5 @@ export {
   setMangaSavedState,
   setSelectedChapter,
   setChapterSavedState,
+  setChapterPagesSavedState,
 };

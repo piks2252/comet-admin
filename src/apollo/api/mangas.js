@@ -85,3 +85,14 @@ export const updateChapterInfo = async chapter => {
   });
   return data;
 };
+
+export const updateChapterPageOrder = async(id, pages, alternateSource) => {
+  const variables = { id };
+  if (pages) variables.pages = pages;
+  if (alternateSource) variables.alternateSource = alternateSource;
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.UPDATE_CHAPTER_PAGE_ORDER,
+    variables,
+  });
+  return data;
+};

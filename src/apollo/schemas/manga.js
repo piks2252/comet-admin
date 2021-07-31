@@ -312,4 +312,19 @@ export const MUTATIONS = {
       }
     }
   `,
+  UPDATE_CHAPTER_PAGE_ORDER: gql`
+    mutation UPDATE_CHAPTER_PAGE_ORDER(
+      $id: ID
+      $pages: [String]
+      $alternateSource: [String]
+    ) {
+      updateChapterPageIndices(
+        id: $id
+        pages: $pages
+        alternateSource: $alternateSource
+      ) {
+        response
+      }
+    }
+  `,
 };
