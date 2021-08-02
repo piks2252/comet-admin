@@ -10,6 +10,10 @@ const state = {
     pagesSaved: true,
     mode: 'view',
   },
+  newChapter: {
+    chapter: 1,
+    volume: 1,
+  },
 };
 
 const mutations = {

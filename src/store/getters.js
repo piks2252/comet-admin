@@ -14,6 +14,7 @@ const selectedChapterId = state => state.manga.selectedChapter.id;
 const selectedChapterMode = state => state.manga.selectedChapter.mode;
 const isChapterSaved = state => state.manga.selectedChapter.isSaved;
 const isPagesSaved = state => state.manga.selectedChapter.pagesSaved;
+const baseNewChapter = state => state.manga.newChapter;
 
 export {
   config,
@@ -29,4 +30,5 @@ export {
   selectedChapterMode,
   isChapterSaved,
   isPagesSaved,
+  baseNewChapter,
 };

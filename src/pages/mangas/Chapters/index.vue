@@ -11,7 +11,7 @@
           @click="refreshChaptersPage"
         >Refresh</va-button
         >
-        <va-button v-if="selectedMangaMode !== 'view'">Add Chapter</va-button>
+        <add-chapter-modal v-if="selectedMangaMode !== 'view'" />
         <va-button
           color="success"
           v-if="!isChapterSaved"
@@ -81,6 +81,7 @@ import draggable from 'vuedraggable';
 import { setTitle } from '../../../mixins/utils';
 import Loader from '../../../components/Loader';
 import ChapterRow from './ChapterRow';
+import AddChapterModal from './AddChapterModal.vue';
 import {
   fetchChapters,
   updateChaptersIndices,
@@ -90,7 +91,7 @@ import { mapGetters, mapMutations } from 'vuex';
 const MAX_CHAPTER_COUNT = 2000;
 
 export default {
-  components: { Loader, draggable, ChapterRow },
+  components: { Loader, draggable, ChapterRow, AddChapterModal },
   data() {
     return {
       perPageOptions: ['20', '40', '100', '200', '500', 'All'],
@@ -147,7 +148,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setLoading', 'setChapterSavedState']),
+    ...mapMutations(['setLoading', 'setChapterSavedState', 'setNewChapter']),
     async loadChapters(page = 1) {
       this.setLoading(true);
       try {
@@ -164,6 +165,13 @@ export default {
           pages: chaptersList.pages,
           total: chaptersList.total,
         };
+
+        // Set new chapter template in vuex state
+        const baseChapter = { chapter: chaptersList.total + 1, volume: 1 };
+        if (this.chapters.length > 0) {
+          baseChapter.volume = this.chapters[0].volume;
+        }
+        this.setNewChapter(baseChapter);
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
