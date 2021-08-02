@@ -272,6 +272,37 @@ export const MUTATIONS = {
     }
   `,
   /** Chapter mutations */
+  ADD_CHAPTER_INFO: gql`
+    mutation ADD_CHAPTER_INFO(
+      $title: String
+      $chapter: Int
+      $volume: String
+      $longStrip: Boolean
+      $releaseDate: DateTime
+      $mangaId: ID
+    ) {
+      addChapterInfo(
+        mangaId: $mangaId
+        chapterData: {
+          title: $title
+          chapter: $chapter
+          volume: $volume
+          longStrip: $longStrip
+          releaseDate: $releaseDate
+        }
+      ) {
+        chapter {
+          id
+          chapter
+          volume
+          title
+          releaseDate
+          longStrip
+          useAltSrc
+        }
+      }
+    }
+  `,
   UPDATE_CHAPTERS_INDICES: gql`
     mutation UPDATE_CHAPTERS_INDICES($chapters: [ChapterIndexInput]) {
       updateChaptersIndices(chapters: $chapters) {

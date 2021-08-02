@@ -7,7 +7,7 @@
       v-model="showModal"
       okText="Add chapter"
       :cancelText="$t('modal.cancel')"
-      @onOk="submitChapter"
+      @ok="submitChapter()"
     >
       <div class="flex">
         <div class="row">
@@ -57,6 +57,7 @@
 <script>
 import moment from 'moment';
 import { mapGetters } from 'vuex';
+import { addChapterInfo } from '../../../apollo/api/mangas';
 export default {
   name: 'AddChapterModal',
   data() {
@@ -91,8 +92,24 @@ export default {
     ...mapGetters(['baseNewChapter', 'isLoading']),
   },
   methods: {
-    submitChapter() {
+    async submitChapter() {
       this.apiLoading = true;
+      try {
+        const response = await addChapterInfo(this.newChapter);
+        console.log(response);
+        this.showToast('Chapter added successfully', {
+          position: 'top-right',
+          duration: 800,
+          fullWidth: false,
+        });
+      } catch (e) {
+        console.log(e);
+        this.showToast(e, {
+          position: 'top-right',
+          duration: 1200,
+          fullWidth: false,
+        });
+      }
 
       this.apiLoading = false;
     },
