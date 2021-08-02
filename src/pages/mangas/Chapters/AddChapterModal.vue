@@ -89,19 +89,27 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['baseNewChapter', 'isLoading']),
+    ...mapGetters(['selectedMangaId', 'baseNewChapter', 'isLoading']),
   },
   methods: {
     async submitChapter() {
       this.apiLoading = true;
       try {
-        const response = await addChapterInfo(this.newChapter);
-        console.log(response);
-        this.showToast('Chapter added successfully', {
-          position: 'top-right',
-          duration: 800,
-          fullWidth: false,
+        const releaseDate = moment(this.newChapter.releaseDate, 'YYYY-MM-DD');
+        const { addChapter } = await addChapterInfo({
+          ...this.newChapter,
+          releaseDate,
+          mangaId: this.selectedMangaId,
         });
+
+        if (addChapter.chapter) {
+          this.showToast('Chapter added successfully', {
+            position: 'top-right',
+            duration: 800,
+            fullWidth: false,
+          });
+          this.$router.go();
+        }
       } catch (e) {
         console.log(e);
         this.showToast(e, {

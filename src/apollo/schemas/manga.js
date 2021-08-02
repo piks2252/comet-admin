@@ -281,7 +281,7 @@ export const MUTATIONS = {
       $releaseDate: DateTime
       $mangaId: ID
     ) {
-      addChapterInfo(
+      addChapter(
         mangaId: $mangaId
         chapterData: {
           title: $title
