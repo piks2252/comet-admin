@@ -104,3 +104,33 @@ export const updateChapterPageOrder = async(id, pages, alternateSource) => {
   });
   return data;
 };
+
+export const addChapterPages = async(id, pages) => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.ADD_CHAPTER_PAGES,
+    variables: { id, pages },
+    context: {
+      hasUpload: true,
+    },
+  });
+  return data;
+};
+
+export const updateChapterPage = async(id, pageId, page) => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.UPDATE_CHAPTER_PAGE,
+    variables: { id, pageId, page },
+    context: {
+      hasUpload: true,
+    },
+  });
+  return data;
+};
+
+export const deleteChapterPage = async(id, pages) => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.DELETE_CHAPTER_PAGES,
+    variables: { id, pages },
+  });
+  return data;
+};

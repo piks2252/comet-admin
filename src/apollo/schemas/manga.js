@@ -356,4 +356,25 @@ export const MUTATIONS = {
       }
     }
   `,
+  ADD_CHAPTER_PAGES: gql`
+    mutation ADD_CHAPTER_PAGES($id: ID, $pages: [Upload]) {
+      addChapterPages(id: $id, pages: $pages) {
+        response
+      }
+    }
+  `,
+  UPDATE_CHAPTER_PAGE: gql`
+    mutation UPDATE_CHAPTER_PAGE($id: ID, $pageId: String, $page: Upload) {
+      updateChapterPage(id: $id, pageId: $pageId, page: $page) {
+        response
+      }
+    }
+  `,
+  DELETE_CHAPTER_PAGES: gql`
+    mutation DELETE_CHAPTER_PAGES($id: ID, $pages: [String]) {
+      deleteChapterPages(id: $id, pages: $pages) {
+        response
+      }
+    }
+  `,
 };

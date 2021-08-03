@@ -13,14 +13,14 @@
             color="success"
             @click="updatePageOrder"
             style="display: inline-block;"
-            v-if="!isPagesSaved"
+            v-if="!isPagesSaved && !!pages && pages.length > 0"
           >
             Update page order
           </va-button>
         </div>
       </div>
       <div class="row">
-        <div class="flex xs12 md12" v-if="pages.length == 0">
+        <div class="flex xs12 md12" v-if="!!pages && pages.length == 0">
           <p class="display-6">No pages have been uploaded</p>
         </div>
         <grid
