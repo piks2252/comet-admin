@@ -10,9 +10,7 @@
         <div class="flex xs12 md6 offset--md4" v-if="!isViewMode">
           <add-file-modal />
           <va-button
-            outline
             color="success"
-            small
             @click="updatePageOrder"
             style="display: inline-block;"
             v-if="!isPagesSaved"
@@ -22,12 +20,16 @@
         </div>
       </div>
       <div class="row">
+        <div class="flex xs12 md12" v-if="pages.length == 0">
+          <p class="display-6">No pages have been uploaded</p>
+        </div>
         <grid
           :draggable="true"
           :sortable="true"
           :items="pages"
           :cellWidth="200"
           :cellHeight="300"
+          v-else
           @dragend="pageReorder"
         >
           <template slot="cell" slot-scope="props">
