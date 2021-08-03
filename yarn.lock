@@ -12320,6 +12320,11 @@ vue-toasted@^1.1.25:
   resolved "https://registry.yarnpkg.com/vue-toasted/-/vue-toasted-1.1.28.tgz#dbabb83acc89f7a9e8765815e491d79f0dc65c26"
   integrity sha512-UUzr5LX51UbbiROSGZ49GOgSzFxaMHK6L00JV8fir/CYNJCpIIvNZ5YmS4Qc8Y2+Z/4VVYRpeQL2UO0G800Raw==
 
+vue-upload-drop-images@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/vue-upload-drop-images/-/vue-upload-drop-images-1.0.7.tgz#25618e874fef37ddd55d29575c0a4e4d53d39068"
+  integrity sha512-O1G+iy0oTK9EaD6XHI5vjZQzdy+PeVCui7ty5Ja8ipw3bBWcY1o5+7JxofMZSXPQbr++Go0hWHtyb7xwQZOpQA==
+
 vue-yandex-maps@^0.8.14:
   version "0.8.18"
   resolved "https://registry.yarnpkg.com/vue-yandex-maps/-/vue-yandex-maps-0.8.18.tgz#f5f04f420768323e245b40b2804695f3d1e4839c"
