@@ -364,8 +364,8 @@ export const MUTATIONS = {
     }
   `,
   UPDATE_CHAPTER_THUMBNAIL: gql`
-    mutation SET_CHAPTER_THUMBAIL($id: ID, $thumbnail: String) {
-      setChapterThumbnail(id: $id, thumbnail: $thumbnail) {
+    mutation SET_CHAPTER_THUMBAIL($id: ID, $thumbnail: String!) {
+      updateChapterThumbnail(id: $id, thumbnail: $thumbnail) {
         response
       }
     }
