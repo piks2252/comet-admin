@@ -8,7 +8,7 @@
           </p>
         </div>
         <div class="flex xs12 md6 offset--md4" v-if="!isViewMode">
-          <add-file-modal />
+          <add-file-modal v-if="!useAltSrc" />
           <va-button
             color="success"
             @click="updatePageOrder"
@@ -33,7 +33,7 @@
           @dragend="pageReorder"
         >
           <template slot="cell" slot-scope="props">
-            <Page :imageSource="pageURL(props.item)" />
+            <Page :imageSource="pageURL(props.item)" :useAltSrc="useAltSrc" />
           </template>
         </grid>
       </div>
