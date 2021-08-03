@@ -53,7 +53,7 @@
 import { NEW_AUTHOR } from '../../constants/defaultValues';
 import { createAuthor } from '../../apollo/api/authors';
 import { authorPicFilter } from '../../mixins/filters';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'add-author-modal',

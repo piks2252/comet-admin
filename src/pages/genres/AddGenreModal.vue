@@ -58,7 +58,7 @@ export default {
       this.genre.thumbnail = files[0];
     },
     async submitGenre() {
-      setLoading(true);
+      this.setLoading(true);
       try {
         await createGenre(
           this.genre.name,
@@ -70,8 +70,8 @@ export default {
           duration: 800,
           fullWidth: false,
         });
-        setLoading(false);
-        window.location.reload();
+        this.setLoading(false);
+        this.$router.go();
       } catch (e) {
         this.showToast(e, {
           position: 'top-right',
@@ -79,7 +79,7 @@ export default {
           fullWidth: false,
         });
       }
-      setLoading(false);
+      this.setLoading(false);
     },
   },
 };

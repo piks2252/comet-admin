@@ -2,6 +2,9 @@
   <div style="padding: 4px; height: 300px;">
     <div class="page-container">
       <va-inner-loading :loading="imageLoading">
+        <div class="delete-box">Delete me</div>
+        <div class="delete-box">Select me</div>
+        <div class="delete-box">Update me</div>
         <img
           class="page-thumbnail"
           :src="imageSource"

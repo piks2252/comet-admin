@@ -46,7 +46,7 @@ export default {
       this.pages = files;
     },
     async uploadPages() {
-      if (this.pages.length == 0) {
+      if (this.pages.length === 0) {
         this.showToast('At least add one page', {
           position: 'top-right',
           duration: 800,
