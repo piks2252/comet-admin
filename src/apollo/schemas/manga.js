@@ -363,6 +363,13 @@ export const MUTATIONS = {
       }
     }
   `,
+  UPDATE_CHAPTER_THUMBNAIL: gql`
+    mutation SET_CHAPTER_THUMBAIL($id: ID, $thumbnail: String) {
+      setChapterThumbnail(id: $id, thumbnail: $thumbnail) {
+        response
+      }
+    }
+  `,
   UPDATE_CHAPTER_PAGE: gql`
     mutation UPDATE_CHAPTER_PAGE($id: ID, $pageId: String, $page: Upload) {
       updateChapterPage(id: $id, pageId: $pageId, page: $page) {

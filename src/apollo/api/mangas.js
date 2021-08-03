@@ -116,6 +116,14 @@ export const addChapterPages = async(id, pages) => {
   return data;
 };
 
+export const setChapterThumbnail = async(id, thumbnail) => {
+  const { data } = await apolloClient.mutate({
+    mutation: MUTATIONS.UPDATE_CHAPTER_THUMBNAIL,
+    variables: { id, thumbnail },
+  });
+  return data;
+};
+
 export const updateChapterPage = async(id, pageId, page) => {
   const { data } = await apolloClient.mutate({
     mutation: MUTATIONS.UPDATE_CHAPTER_PAGE,
