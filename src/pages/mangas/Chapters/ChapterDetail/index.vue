@@ -40,13 +40,6 @@
                 :disable="isViewMode"
                 small
               />
-              <va-toggle
-                label="Use alternative source"
-                color="success"
-                v-model="chapter.useAltSrc"
-                :disable="isViewMode"
-                small
-              />
             </div>
           </div>
         </div>
@@ -173,7 +166,6 @@ export default {
           title: this.chapter.title,
           releaseDate: new Date(this.chapter.releaseDate),
           longStrip: this.chapter.longStrip,
-          useAltSrc: this.chapter.useAltSrc,
         };
 
         const response = await updateChapterInfo(chapterBody);

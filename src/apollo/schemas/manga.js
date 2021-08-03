@@ -317,7 +317,6 @@ export const MUTATIONS = {
       $chapter: Int
       $volume: String
       $longStrip: Boolean
-      $useAltSrc: Boolean
       $releaseDate: DateTime
     ) {
       updateChapterInfo(
@@ -327,7 +326,6 @@ export const MUTATIONS = {
           chapter: $chapter
           volume: $volume
           longStrip: $longStrip
-          useAltSrc: $useAltSrc
           releaseDate: $releaseDate
         }
       ) {
