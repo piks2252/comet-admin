@@ -5,6 +5,9 @@
         <va-button @click="navigateToAddManga()">Add Manga</va-button>
       </div>
     </div>
+    <div class="row">
+      <image-gallery :images="images"/>
+    </div>
     <div class="row align--center">
       <div class="flex xs12 md6">
         <va-input
@@ -86,6 +89,7 @@ import DataTable from '../../components/DataTable';
 import MangaDisabled from './MangaDisabled';
 import MangaStatus from './MangaStatus';
 import Loader from '../../components/Loader';
+import ImageGallery from './Chapters/ChapterDetail/PageSection/ImageGallery.vue';
 
 export default {
   components: {
@@ -93,6 +97,7 @@ export default {
     MangaDisabled,
     MangaStatus,
     Loader,
+    ImageGallery,
   },
   data() {
     return {
@@ -108,6 +113,19 @@ export default {
         pages: 0,
         total: 0,
       },
+      images: [
+        'https://placem.at/places?w=800&h=800&random=1',
+        'https://placem.at/places?w=800&h=600&random=1',
+        'https://placem.at/places?w=1200&h=400&random=2',
+        'https://placem.at/places?w=800&h=800&random=3',
+        'https://placem.at/places?w=600&h=800&random=4',
+        'https://placem.at/places?w=400&h=800&random=5',
+        'https://placem.at/places?w=800&h=800&random=6',
+        'https://placem.at/places?w=800&h=800&random=7',
+        'https://placem.at/places?w=800&h=800&random=8',
+        'https://placem.at/places?w=800&h=800&random=9',
+        'https://placem.at/places?w=800&h=800&random=10',
+      ],
     };
   },
   computed: {
